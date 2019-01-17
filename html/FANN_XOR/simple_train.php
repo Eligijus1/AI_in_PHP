@@ -1,4 +1,8 @@
 <?php
+/**
+ * XOR - Exclusive or or exclusive disjunction is a logical operation that outputs true only when inputs differ
+ *       (one is true, the other is false).
+ */
 
 // Define application start time:
 $milliseconds = round(microtime(true) * 1000);
