@@ -13,7 +13,7 @@ $num_layers = 3;
 // Number of neurons in the first layer:
 $num_input = 2;
 
-// Number of neurons in the second layer:
+// Number of neurons in the second layer (experimental way to decide):
 $num_neurons_hidden = 3;
 
 // Number of neurons in the 3rd (Third) layer - output:
@@ -21,7 +21,7 @@ $num_output = 1;
 
 $desired_error = 0.001;
 
-// The maximum number of epochs the training should continue:
+// The maximum number of epochs the training should continue (experimental way to decide):
 $max_epochs = 500000;
 
 // The number of epochs between calling a user function.
