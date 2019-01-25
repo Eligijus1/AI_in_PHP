@@ -1,6 +1,5 @@
 .idea
 .vagrant
 ubuntu-bionic-18.04-cloudimg-console.log
-*.fann
 html/FANN_NUMBER_RECOGNIZE/data
-
+html/FANN_NUMBER_RECOGNIZE/*.fann
