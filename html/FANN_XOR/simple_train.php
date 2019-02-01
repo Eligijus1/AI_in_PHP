@@ -19,6 +19,7 @@ $num_neurons_hidden = 3;
 // Number of neurons in the 3rd (Third) layer - output:
 $num_output = 1;
 
+// It mean 1 error in 1000 samples, like 1 mistake in 1000 tries:
 $desired_error = 0.001;
 
 // The maximum number of epochs the training should continue (experimental way to decide):
