@@ -1,32 +1,35 @@
 <?php
 require('utils.php');
 
-// Load the trained model:
+// Define network configuration file:
 $modelFile = dirname(__FILE__) . '/checkpoints/mnist.net';
-
-
 if (!file_exists($modelFile)) {
     quit('MNIST model not found!');
 }
 
-// Recreate the network saved state
+// Constructs a backpropagation neural network from a configuration file:
 $nn = fann_create_from_file($modelFile);
+
+// Check if neural network created:
 if ($nn) {
     $valFile = dirname(__FILE__) . '/val.fann';
     if (!file_exists($valFile)) {
         quit($valFile . ' not found!');
     }
+
     println('Running inference on ' . $valFile);
     $features = [];
     $labels = [];
     $errors = 0;
     $correct = 0;
-    // Open the val file for inference
+
+    // Open the val file for inference:
     if ($file = fopen($valFile, "r")) {
         while (!feof($file)) {
             $line = trim(fgets($file));
             $line = explode(' ', $line);
             $lineSize = count($line);
+
             // If the line is an input...
             if ($lineSize == fann_get_num_input($nn)) {
                 $features = $line;
@@ -51,8 +54,12 @@ if ($nn) {
         }
         fclose($file);
     }
+
     fann_destroy($nn);
+
     $total = $errors + $correct;
+
+    // Output result:
     println('Total samples: ' . $total);
     println('Errors: ' . $errors);
     println('Correct: ' . $correct);
