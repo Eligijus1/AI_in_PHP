@@ -1,6 +1,9 @@
 <?php
 require('utils.php');
 
+// Define application start:
+$milliseconds = round(microtime(true) * 1000);
+
 // Define network configuration file:
 $modelFile = dirname(__FILE__) . '/checkpoints/mnist.net';
 if (!file_exists($modelFile)) {
@@ -40,11 +43,14 @@ if ($nn) {
                     $pred = argmax($output);
                     $true_pred = argmax($labels);
                     $confidence = amax($output);
-                    println('I think this number is ' . $pred . ' with ' . round($confidence * 100,
-                            2) . '% confidence');
-                    println('REAL VALUE: ' . $true_pred);
+
+                    // Check if guess value is equal to real:
                     if ($true_pred != $pred) {
                         $errors += 1;
+
+                        // Print info:
+                        println('I think this number is ' . $pred . ' with ' . round($confidence * 100, 2) . '% confidence');
+                        println('REAL VALUE: ' . $true_pred);
                     } else {
                         $correct += 1;
                     }
@@ -64,4 +70,5 @@ if ($nn) {
     println('Errors: ' . $errors);
     println('Correct: ' . $correct);
     println('Accuracy: ' . ($correct / $total));
+    println('Total time: ' . ($correct / $total) . ' milliseconds');
 }
