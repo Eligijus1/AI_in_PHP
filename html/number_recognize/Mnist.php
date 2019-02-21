@@ -15,7 +15,11 @@ $STEPS = 1000;
 $trainImagePath = 'data/train-images-idx3-ubyte';
 $trainLabelPath = 'data/train-labels-idx1-ubyte';
 
-echo 'Loading training dataset (may take a while)...' . PHP_EOL;
+// TESTING:
+// MnistDataSetReaderTesting::createPngTest();
+MnistDataSetReaderTesting::readImages('data\t10k-images.idx3-ubyte');
+
+// echo 'Loading training dataset (may take a while)...' . PHP_EOL;
 
 //try {
 //    $trainDataset = MnistDataSetReader::fromFiles($trainImagePath, $trainLabelPath);
@@ -23,4 +27,12 @@ echo 'Loading training dataset (may take a while)...' . PHP_EOL;
 //    echo "ERROR: {$e->getCode()} {$e->getMessage()}" . PHP_EOL;
 //}
 
-MnistDataSetReaderTesting::readImages('data\t10k-images.idx3-ubyte');
+//MnistDataSetReaderTesting::readImages('data\t10k-images.idx3-ubyte');
+
+
+/*
+$data = fopen ($image, 'rb');
+$size=filesize ($image);
+$contents= fread ($data, $size);
+fclose ($data);
+ */
