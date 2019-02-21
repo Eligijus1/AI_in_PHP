@@ -8,31 +8,34 @@ use number_recognize\MnistDataSetReaderTesting;
 require_once 'MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';
 
+//system('cls');
+//system('clear');
+
+const COLOR_WHITE = "\033[0m";
+const COLOR_RED = "\033[31m";
+const COLOR_GREEN = "\033[32m";
+
 $BATCH_SIZE = 100;
 $STEPS = 1000;
 
 // Load Training Dataset
-$trainImagePath = 'data/train-images-idx3-ubyte';
-$trainLabelPath = 'data/train-labels-idx1-ubyte';
+$trainImagePath = 'data/mnist/train-images-idx3-ubyte';
+$trainLabelPath = 'data/mnist/train-labels-idx1-ubyte';
 
-// TESTING:
-// MnistDataSetReaderTesting::createPngTest();
-MnistDataSetReaderTesting::readImages('data\t10k-images.idx3-ubyte');
+// Check specified arguments:
+if (empty($argv[1])) {
+	echo "\nERROR: Please specify action.\n";
+    return;
+}
 
-// echo 'Loading training dataset (may take a while)...' . PHP_EOL;
+// Handling first argument:
+switch ($argv[1]) {
+    case 'generate_images':
+        MnistDataSetReaderTesting::generateImages('data/mnist/t10k-images.idx3-ubyte');
+        break;
+    default:
+		echo "\nERROR: Unhandled action '" . $argv[1] . "'.\n";
+		return;
+}
 
-//try {
-//    $trainDataset = MnistDataSetReader::fromFiles($trainImagePath, $trainLabelPath);
-//} catch (Exception $e) {
-//    echo "ERROR: {$e->getCode()} {$e->getMessage()}" . PHP_EOL;
-//}
 
-//MnistDataSetReaderTesting::readImages('data\t10k-images.idx3-ubyte');
-
-
-/*
-$data = fopen ($image, 'rb');
-$size=filesize ($image);
-$contents= fread ($data, $size);
-fclose ($data);
- */
