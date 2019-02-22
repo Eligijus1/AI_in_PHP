@@ -1,12 +1,34 @@
-document.getElementById("buttonClear").onclick = function () {
-    d.clear();
+document.getElementById("buttonSave").onclick = function (bt) {
+    let http = new XMLHttpRequest();
+    let vector = d.calculate(true);
+    let data = new FormData();
+
+    http.open('POST', 'MnistIndex.php', true);
+    http.onreadystatechange = function () {//Call a function when the state changes.
+        if (http.readyState == 4 && http.status == 200) {
+            //var responseObject = JSON.parse(http.responseText);
+            console.info('Response: ', http.responseText);
+        }
+    };
+
+    data.append('image', JSON.stringify(vector));
+    http.send(data);
+
+    document.getElementById("buttonSave").disabled = true;
 };
 
+document.getElementById("buttonClear").onclick = function () {
+    d.clear();
+    document.getElementById("buttonSave").disabled = false;
+};
+
+/*
 document.getElementById("buttonShowGrid").onclick = function () {
     vector = d.calculate(true);
     console.log("vector: ", vector);
 };
-
+*/
+/*
 document.getElementById("buttonGetNumber").onclick = function () {
     let http = new XMLHttpRequest();
     let vector = d.calculate(true);
@@ -18,17 +40,12 @@ document.getElementById("buttonGetNumber").onclick = function () {
             //var responseObject = JSON.parse(http.responseText);
             console.info('Response: ', http.responseText);
         }
-        /*
-        else {
-            console.error('Request failed. Returned status of ' + http.status);
-        }
-        */
     };
-    //http.send('user=person&pwd=password&organization=place&requiredkey=aaa');
-    //http.send(JSON.stringify(vector));
+    http.send('user=person&pwd=password&organization=place&requiredkey=aaa');
+    http.send(JSON.stringify(vector));
 
-    //console.debug('vector: ', vector);
-    //console.debug('JSON.stringify(vector): ', JSON.stringify(vector));
+    console.debug('vector: ', vector);
+    console.debug('JSON.stringify(vector): ', JSON.stringify(vector));
 
     data.append('image', JSON.stringify(vector));
     http.send(data);
