@@ -19,8 +19,8 @@ function DCanvas(el) {
     };
 
     this.drawCell = function (x, y, w, h) {
-        ctx.fillStyle = 'blue';
-        ctx.strokeStyle = 'blue';
+        ctx.fillStyle = 'black';
+        ctx.strokeStyle = 'black';
         ctx.lineJoin = 'miter';
         ctx.lineWidth = 1;
         ctx.rect(x, y, w, h);
