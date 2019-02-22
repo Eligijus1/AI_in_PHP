@@ -37,5 +37,3 @@ switch ($argv[1]) {
 		echo "\nERROR: Unhandled action '" . $argv[1] . "'.\n";
 		return;
 }
-
-
