@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace number_recognize;
 
-class NeuralNetworkTraining
+class MnistNeuralNetwork
 {
     // This will be a one dimensional array (vector) [10]:
     private $b;
@@ -30,6 +30,10 @@ class NeuralNetworkTraining
 
     /**
      * The softmax layer maps an array of activations to a probability vector.
+     *
+     * @param array $activations
+     *
+     * @return array
      */
     private function softmax(array $activations): array
     {
@@ -47,6 +51,10 @@ class NeuralNetworkTraining
     /**
      * Forward propagate through the neural network to calculate the activation
      * vector for an image.
+     *
+     * @param array $image
+     *
+     * @return array
      */
     public function hypothesis(array $image): array
     {
@@ -66,6 +74,13 @@ class NeuralNetworkTraining
      * from the dataset.
      *
      * Returns the contribution to the loss value from this example.
+     *
+     * @param array $image
+     * @param array $bGrad
+     * @param array $WGrad
+     * @param int   $label
+     *
+     * @return float
      */
     private function gradientUpdate(array $image, array &$bGrad, array &$WGrad, int $label): float
     {
@@ -88,6 +103,11 @@ class NeuralNetworkTraining
      * provided dataset.
      *
      * Returns the total loss for the network on the provided dataset.
+     *
+     * @param MnistDataset $dataset
+     * @param float        $learningRate
+     *
+     * @return float
      */
     public function trainingStep(MnistDataset $dataset, float $learningRate): float
     {
@@ -96,43 +116,46 @@ class NeuralNetworkTraining
         $WGrad = array_fill(0, MnistDataset::LABELS, array_fill(0, MnistDataset::IMAGE_SIZE, 0));
         $totalLoss = 0;
         $size = $dataset->getSize();
-        // Calculate the gradients and loss
+
+        // Calculate the gradients and loss:
         for ($i = 0; $i < $size; $i++) {
             $totalLoss += $this->gradientUpdate($dataset->getImage($i), $bGrad, $WGrad, $dataset->getLabel($i));
         }
-        // Adjust the weights and bias vector using the gradient and the learning rate
+
+        // Adjust the weights and bias vector using the gradient and the learning rate:
         for ($i = 0; $i < MnistDataset::LABELS; $i++) {
             $this->b[$i] -= $learningRate * $bGrad[$i] / $size;
             for ($j = 0; $j < MnistDataset::IMAGE_SIZE; $j++) {
                 $this->W[$i][$j] -= $learningRate * $WGrad[$i][$j] / $size;
             }
         }
+
         return $totalLoss;
     }
 
-    function sigmoid($t)
-    {
-        return 1 / (1 + exp(-$t));
-    }
-
-    /**
-     * Softmax calculation for PHP (useful for logistic classifications)
-     *
-     * @param array $v
-     *
-     * @return array
-     */
-    function softmax2(array $v)
-    {
-
-        //Just in case values are passed in as string, apply floatval
-        $v = array_map('exp', array_map('floatval', $v));
-        $sum = array_sum($v);
-
-        foreach ($v as $index => $value) {
-            $v[$index] = $value / $sum;
-        }
-
-        return $v;
-    }
+//    function sigmoid($t)
+//    {
+//        return 1 / (1 + exp(-$t));
+//    }
+//
+//    /**
+//     * Softmax calculation for PHP (useful for logistic classifications)
+//     *
+//     * @param array $v
+//     *
+//     * @return array
+//     */
+//    function softmax2(array $v)
+//    {
+//
+//        //Just in case values are passed in as string, apply floatval
+//        $v = array_map('exp', array_map('floatval', $v));
+//        $sum = array_sum($v);
+//
+//        foreach ($v as $index => $value) {
+//            $v[$index] = $value / $sum;
+//        }
+//
+//        return $v;
+//    }
 }
