@@ -72,10 +72,10 @@ switch ($argv[1]) {
 
         // Training:
         for ($i = 0; $i < $STEPS; $i++) {
-            //Retrieve a subset of the dataset as a batch:
+            // Retrieve a subset of the dataset as a batch:
             $batch = $trainDataset->getBatch($BATCH_SIZE, $i % $batches);
 
-
+            //
             $loss = $neuralNetwork->trainingStep($batch, 0.5);
             $averageLoss = $loss / $batch->getSize();
             //$accuracy = calculate_accuracy($neuralNetwork, $testDataset);
