@@ -11,6 +11,7 @@ ini_set('memory_limit', '3G');
 use number_recognize\MnistDataset;
 use number_recognize\MnistDataSetReader;
 use number_recognize\MnistDataSetReaderTesting;
+use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 use number_recognize\PerceptronTrainHelper;
 
@@ -19,21 +20,19 @@ require_once 'MnistDataSetReader.php';
 require_once 'MnistDataset.php';
 require_once 'MnistNeuralNetwork.php';
 require_once 'PerceptronTrainHelper.php';
+require_once 'MnistImageGenerator.php';
 
-// Attempt to clear console:
-//system('cls');
-//system('clear');
-
+// Define constants:
 const COLOR_WHITE = "\033[0m";
 const COLOR_RED = "\033[31m";
 const COLOR_GREEN = "\033[32m";
+const trainImagePath = 'data/mnist/train-images.idx3-ubyte';
+const trainLabelPath = 'data/mnist/train-labels.idx1-ubyte';
+const testImagePath = 'data/mnist/t10k-images.idx3-ubyte';
+const testLabelPath = 'data/mnist/t10k-labels.idx1-ubyte';
 
 $BATCH_SIZE = 100;
 $STEPS = 1000;
-
-// Load Training Dataset
-$trainImagePath = 'data/mnist/train-images.idx3-ubyte';
-$trainLabelPath = 'data/mnist/train-labels.idx1-ubyte';
 
 // Check specified arguments:
 if (empty($argv[1])) {
@@ -43,9 +42,18 @@ if (empty($argv[1])) {
 
 // Handling first argument:
 switch ($argv[1]) {
+    // Some testing...
     case 'generate_images':
         MnistDataSetReaderTesting::generateImages('data/mnist/t10k-images.idx3-ubyte');
         break;
+
+    // Example: php main.php generate_specified_number_images 0
+    case 'generate_specified_number_images':
+        $perceptronTrainHelper = new MnistImageGenerator();
+        $perceptronTrainHelper->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2]);
+        break;
+
+    // Example: php main.php train_perceptron
     case 'train_perceptron':
         $perceptronTrainHelper = new PerceptronTrainHelper();
         $perceptronTrainHelper->train();
