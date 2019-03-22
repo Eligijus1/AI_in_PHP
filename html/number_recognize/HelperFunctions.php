@@ -6,6 +6,9 @@ namespace number_recognize;
 
 class HelperFunctions
 {
+    public const MAGIC_IMAGE = 0x00000803;
+    public const MAGIC_LABEL = 0x00000801;
+
     public static function formatBytes($bytes, $precision = 2) {
         $units = array('B', 'KB', 'MB', 'GB', 'TB');
 
@@ -29,5 +32,35 @@ class HelperFunctions
         $format = '%u:%02u:%02u.%03u';
         $time = sprintf($format, $hours, $minutes, $seconds, $milliseconds);
         return rtrim($time, '0');
+    }
+
+    /**
+     * Read MNIST label file.
+     *
+     * Format: http://yann.lecun.com/exdb/mnist/
+     *
+     * @param string $labelPath
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public static function readLabels(string $labelPath): array
+    {
+        $stream = fopen($labelPath, 'rb');
+        if (false === $stream) {
+            throw new \Exception('Could not open file: ' . $labelPath);
+        }
+        $labels = [];
+        try {
+            $header = fread($stream, 8);
+            $fields = unpack('Nmagic/Nsize', $header);
+            if ($fields['magic'] !== self::MAGIC_LABEL) {
+                throw new \Exception('Invalid magic number: ' . $labelPath);
+            }
+            $labels = fread($stream, $fields['size']);
+        } finally {
+            fclose($stream);
+        }
+        return array_values(unpack('C*', $labels));
     }
 }

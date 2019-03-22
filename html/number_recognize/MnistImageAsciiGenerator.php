@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace number_recognize;
+use number_recognize\HelperFunctions;
 
-class PerceptronTrainHelper
+class MnistImageAsciiGenerator
 {
-    private const DATA_LOCATION = "data/train_perceptron";
+    private const DATA_LOCATION = "data/generated_ascii";
 
-    public function train(string $imagePath, string $labelsPath): void
+    public function generate(string $imagePath, string $labelsPath): void
     {
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -29,7 +29,7 @@ class PerceptronTrainHelper
         }
 
         // Call method, responsible to train:
-        $i = $this->trainPerceptron($imagePath, $labelsPath, 0);
+        $i = $this->generateAscii($imagePath, $labelsPath);
 
         // Information about results:
         echo date_format(new \DateTime(),
@@ -44,7 +44,7 @@ class PerceptronTrainHelper
                 'Y.m.d H:i:s') . " INFO: Data location: " . self::DATA_LOCATION . PHP_EOL;
     }
 
-    private function trainPerceptron(string $imagePath, string $labelsPath, int $number): int
+    private function generateAscii(string $imagePath, string $labelsPath): int
     {
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
@@ -66,7 +66,7 @@ class PerceptronTrainHelper
             $fields = unpack('Nmagic/Nsize/Nrows/Ncols', $header);
 
             // Check if magic image is ok as expected:
-            if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
+            if ($fields['magic'] !== HelperFunctions::MAGIC_IMAGE) {
                 throw new \Exception('Invalid magic number: ' . $imagePath);
             }
 
@@ -106,11 +106,6 @@ class PerceptronTrainHelper
                     }
                 }
 
-                // Save image:
-                if ($labelsArray[$i] === $number) {
-                    // TODO: call train
-                }
-
                 // Interrupting after specified amount of loops:
                 if ($i === 5) {
                     break;
@@ -123,14 +118,3 @@ class PerceptronTrainHelper
         return $i;
     }
 }
-
-/*
-If you don't need the dump file to be human-readable, you can just serialize() the array.
-
-storing:
-
-file_put_contents('yourfile.bin', serialize($array));
-retrieving:
-
-$array = unserialize(file_get_contents('yourfile.bin'));
-*/

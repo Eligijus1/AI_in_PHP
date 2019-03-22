@@ -22,6 +22,7 @@ require_once 'MnistDataset.php';
 require_once 'MnistNeuralNetwork.php';
 require_once 'PerceptronTrainHelper.php';
 require_once 'MnistImageGenerator.php';
+require_once 'MnistImageAsciiGenerator.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -58,6 +59,12 @@ switch ($argv[1]) {
     case 'generate_specified_number_images_black_white':
         $perceptronTrainHelper = new MnistImageGenerator();
         $perceptronTrainHelper->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
+        break;
+
+    // Example: php main.php generate_ascii
+    case 'generate_ascii':
+        $mnistImageAsciiGenerator = new MnistImageAsciiGenerator();
+        $mnistImageAsciiGenerator->generate(trainImagePath, trainLabelPath);
         break;
 
     // Example: php main.php train_perceptron
