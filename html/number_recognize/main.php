@@ -63,7 +63,7 @@ switch ($argv[1]) {
     // Example: php main.php train_perceptron
     case 'train_perceptron':
         $perceptronTrainHelper = new PerceptronTrainHelper();
-        $perceptronTrainHelper->train();
+        $perceptronTrainHelper->train(trainImagePath, trainLabelPath);
         break;
 
     // Example:
