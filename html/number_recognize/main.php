@@ -12,11 +12,13 @@ use number_recognize\MnistDataset;
 use number_recognize\MnistDataSetReader;
 use number_recognize\MnistDataSetReaderTesting;
 use number_recognize\MnistNeuralNetwork;
+use number_recognize\PerceptronTrainHelper;
 
 require_once 'MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';
 require_once 'MnistDataset.php';
 require_once 'MnistNeuralNetwork.php';
+require_once 'PerceptronTrainHelper.php';
 
 // Attempt to clear console:
 //system('cls');
@@ -43,6 +45,10 @@ if (empty($argv[1])) {
 switch ($argv[1]) {
     case 'generate_images':
         MnistDataSetReaderTesting::generateImages('data/mnist/t10k-images.idx3-ubyte');
+        break;
+    case 'train_perceptron':
+        $perceptronTrainHelper = new PerceptronTrainHelper();
+        $perceptronTrainHelper->train();
         break;
     case 'train_network':
 
