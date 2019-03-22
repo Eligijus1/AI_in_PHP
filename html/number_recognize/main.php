@@ -15,6 +15,7 @@ use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 use number_recognize\PerceptronTrainHelper;
 
+require_once 'HelperFunctions.php';
 require_once 'MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';
 require_once 'MnistDataset.php';
@@ -42,7 +43,7 @@ if (empty($argv[1])) {
 
 // Handling first argument:
 switch ($argv[1]) {
-    // Some testing...
+    // Some testing...: php main.php generate_images
     case 'generate_images':
         MnistDataSetReaderTesting::generateImages('data/mnist/t10k-images.idx3-ubyte');
         break;
@@ -53,11 +54,19 @@ switch ($argv[1]) {
         $perceptronTrainHelper->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2]);
         break;
 
+    // Example: php main.php generate_specified_number_images_black_white 0
+    case 'generate_specified_number_images_black_white':
+        $perceptronTrainHelper = new MnistImageGenerator();
+        $perceptronTrainHelper->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
+        break;
+
     // Example: php main.php train_perceptron
     case 'train_perceptron':
         $perceptronTrainHelper = new PerceptronTrainHelper();
         $perceptronTrainHelper->train();
         break;
+
+    // Example:
     case 'train_network':
 
         // ---------------------- BEGIN -----------------------------------
@@ -70,7 +79,7 @@ switch ($argv[1]) {
                 'Y.m.d H:i:s') . ' INFO: Loading training dataset... (may take a while)' . PHP_EOL;
 
         // Loading training data:
-        $trainDataset = MnistDataSetReader::fromFiles($trainImagePath, $trainLabelPath);
+        $trainDataset = MnistDataSetReader::fromFiles(trainImagePath, trainLabelPath);
 
         // Splitting training data to batches ???:
         $batches = $trainDataset->getSize() / $BATCH_SIZE;
