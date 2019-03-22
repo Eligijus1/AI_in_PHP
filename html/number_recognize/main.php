@@ -15,6 +15,7 @@ use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 use number_recognize\PerceptronTrainHelper;
 
+require_once 'Perceptron.php';
 require_once 'HelperFunctions.php';
 require_once 'MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';

@@ -57,6 +57,9 @@ class PerceptronTrainHelper
         // Open images path:
         $streamImages = fopen($imagePath, 'rb');
 
+        // Prepare perceptron object:
+        $perceptron = new Perceptron(28 * 28);
+
         $i = 0;
         try {
             // Binary-safe file read up to 16 bytes from the file pointer $stream:
@@ -79,46 +82,50 @@ class PerceptronTrainHelper
             for ($i = 0; $i < $fields['size']; $i++) {
                 // Read image:
                 $imageBytes = fread($streamImages, $fields['rows'] * $fields['cols']);
+                $imageBytesBlackWhite = [];
 
                 // Converting to byte array:
                 $imageBytesArray = unpack('C*', $imageBytes);
 
-                // Define file name, where will be saved data:
-                $fileName = self::DATA_LOCATION . "/" . sprintf("%06d",
-                        ($i + 1)) . "_label_" . $labelsArray[$i] . ".txt";
-
                 // Draw number:
-                $x = 0;
-                $y = 0;
                 foreach ($imageBytesArray as $imageByte) {
                     // Make image black/white if needed:
-                    $imageByteBlackWhite = $imageByte > 0 ? 1 : 0;
-
-                    file_put_contents($fileName, $imageByteBlackWhite, FILE_APPEND | LOCK_EX);
-
-                    $x++;
-
-                    if ($x >= 28) {
-                        $x = 0;
-                        $y++;
-
-                        file_put_contents($fileName, PHP_EOL, FILE_APPEND | LOCK_EX);
-                    }
+                    $imageBytesBlackWhite[] = $imageByte > 0 ? 1 : 0;
                 }
 
                 // Save image:
                 if ($labelsArray[$i] === $number) {
-                    // TODO: call train
+                    $perceptron->train($imageBytesBlackWhite, 1);
+                } else {
+                    $perceptron->train($imageBytesBlackWhite, 0);
                 }
 
                 // Interrupting after specified amount of loops:
-                if ($i === 5) {
+                if ($i === 1000) {
                     break;
                 }
             }
         } finally {
             fclose($streamImages);
         }
+
+        // Save object to disc:
+        $s = serialize($perceptron);
+        file_put_contents(self::DATA_LOCATION . "/perceptron_for_number_{$number}.dat", $s);
+
+        // Output debug information:
+        echo date_format(new \DateTime(),
+                'Y.m.d H:i:s') . " INFO: Bias for {$number}: " . $perceptron->getBias() . PHP_EOL;
+//        echo date_format(new \DateTime(),
+//                'Y.m.d H:i:s') . " INFO: {$number} weight vector: " . $perceptron->getBias() . PHP_EOL;
+//        print_r($perceptron->getWeightVector());
+
+//        // Check read:
+//        $perceptron = null;
+//        $s = file_get_contents(self::DATA_LOCATION . '/perceptron.dat');
+//        $perceptron = unserialize($s);
+//        echo date_format(new \DateTime(),
+//                'Y.m.d H:i:s') . " INFO: Bias for {$number} after read: " . $perceptron->getBias() . PHP_EOL;
 
         return $i;
     }
