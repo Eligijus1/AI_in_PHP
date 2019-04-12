@@ -73,6 +73,10 @@ switch ($argv[1]) {
         $perceptronTrainHelper->train(trainImagePath, trainLabelPath);
         break;
 
+    // Example: php main.php test_perceptron
+    case 'test_perceptron':
+        break;
+
     // Example:
     case 'train_network':
 
