@@ -150,12 +150,14 @@ class Perceptron
      * by training data.
      *
      * @param array $inputVector array of input signals
-     * @param int   $outcome     1 = true / 0 = false
+     * @param bool  $outcomeBool
      *
      * @throws \InvalidArgumentException
      */
-    public function train(array $inputVector, int $outcome)
+    public function train(array $inputVector, bool $outcomeBool): void
     {
+        $outcome = ($outcomeBool ? 1 : 0);
+
         // Make sure, that input parameters are valid
         if (!is_array($inputVector) || !($outcome == 0 || $outcome == 1)) {
             throw new \InvalidArgumentException();

@@ -29,11 +29,18 @@ class PerceptronTrainHelper
         }
 
         // Call method, responsible to train:
-        $i = $this->trainPerceptron($imagePath, $labelsPath, 0);
+        $this->trainPerceptron($imagePath, $labelsPath, 0);
+        $this->trainPerceptron($imagePath, $labelsPath, 1);
+        $this->trainPerceptron($imagePath, $labelsPath, 2);
+        $this->trainPerceptron($imagePath, $labelsPath, 3);
+        $this->trainPerceptron($imagePath, $labelsPath, 4);
+        $this->trainPerceptron($imagePath, $labelsPath, 5);
+        $this->trainPerceptron($imagePath, $labelsPath, 6);
+        $this->trainPerceptron($imagePath, $labelsPath, 7);
+        $this->trainPerceptron($imagePath, $labelsPath, 8);
+        $this->trainPerceptron($imagePath, $labelsPath, 9);
 
         // Information about results:
-        echo date_format(new \DateTime(),
-                'Y.m.d H:i:s') . " INFO: Checked {$i} numbers." . PHP_EOL;
         echo date_format(new \DateTime(),
                 'Y.m.d H:i:s') . " INFO: Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)) . PHP_EOL;
         echo date_format(new \DateTime(),
@@ -44,7 +51,7 @@ class PerceptronTrainHelper
                 'Y.m.d H:i:s') . " INFO: Data location: " . self::DATA_LOCATION . PHP_EOL;
     }
 
-    private function trainPerceptron(string $imagePath, string $labelsPath, int $number): int
+    private function trainPerceptron(string $imagePath, string $labelsPath, int $number): void
     {
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
@@ -61,6 +68,7 @@ class PerceptronTrainHelper
         $perceptron = new Perceptron(28 * 28);
 
         $i = 0;
+        $j = 0;
         try {
             // Binary-safe file read up to 16 bytes from the file pointer $stream:
             $header = fread($streamImages, 16);
@@ -95,15 +103,16 @@ class PerceptronTrainHelper
 
                 // Save image:
                 if ($labelsArray[$i] === $number) {
-                    $perceptron->train($imageBytesBlackWhite, 1);
+                    $perceptron->train($imageBytesBlackWhite, true);
+                    $j++;
                 } else {
-                    $perceptron->train($imageBytesBlackWhite, 0);
+                    $perceptron->train($imageBytesBlackWhite, false);
                 }
 
-                // Interrupting after specified amount of loops:
-                if ($i === 1000) {
-                    break;
-                }
+//                // Interrupting after specified amount of loops:
+//                if ($i === 1000) {
+//                    break;
+//                }
             }
         } finally {
             fclose($streamImages);
@@ -116,6 +125,8 @@ class PerceptronTrainHelper
         // Output debug information:
         echo date_format(new \DateTime(),
                 'Y.m.d H:i:s') . " INFO: Bias for {$number}: " . $perceptron->getBias() . PHP_EOL;
+        echo date_format(new \DateTime(),
+                'Y.m.d H:i:s') . " INFO: Total handled {$i} numbers. {$j} numbers was '{$number}'." . PHP_EOL;
 //        echo date_format(new \DateTime(),
 //                'Y.m.d H:i:s') . " INFO: {$number} weight vector: " . $perceptron->getBias() . PHP_EOL;
 //        print_r($perceptron->getWeightVector());
@@ -126,8 +137,6 @@ class PerceptronTrainHelper
 //        $perceptron = unserialize($s);
 //        echo date_format(new \DateTime(),
 //                'Y.m.d H:i:s') . " INFO: Bias for {$number} after read: " . $perceptron->getBias() . PHP_EOL;
-
-        return $i;
     }
 }
 

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 // Disable the memory limit to avoid "Allowed memory size exhausted" errors:
