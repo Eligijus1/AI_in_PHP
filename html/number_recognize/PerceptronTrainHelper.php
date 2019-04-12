@@ -53,6 +53,8 @@ class PerceptronTrainHelper
 
     private function trainPerceptron(string $imagePath, string $labelsPath, int $number): void
     {
+        $dataFile = self::DATA_LOCATION . "/perceptron_for_number_{$number}.dat";
+
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
             mkdir(self::DATA_LOCATION, 0777, true);
@@ -81,9 +83,9 @@ class PerceptronTrainHelper
                 throw new \Exception('Invalid magic number: ' . $imagePath);
             }
 
-            // Clean all old files from directory:
-            foreach (glob(self::DATA_LOCATION . '/*.*') as $v) {
-                unlink($v);
+            // Delete old file if exist:
+            if (file_exists($dataFile)) {
+                unlink($dataFile);
             }
 
             // Looping all in file available images:
@@ -120,13 +122,15 @@ class PerceptronTrainHelper
 
         // Save object to disc:
         $s = serialize($perceptron);
-        file_put_contents(self::DATA_LOCATION . "/perceptron_for_number_{$number}.dat", $s);
+        file_put_contents($dataFile, $s);
 
         // Output debug information:
         echo date_format(new \DateTime(),
                 'Y.m.d H:i:s') . " INFO: Bias for {$number}: " . $perceptron->getBias() . PHP_EOL;
         echo date_format(new \DateTime(),
                 'Y.m.d H:i:s') . " INFO: Total handled {$i} numbers. {$j} numbers was '{$number}'." . PHP_EOL;
+        echo date_format(new \DateTime(),
+                'Y.m.d H:i:s') . " INFO: Data saved to file '{$dataFile}'." . PHP_EOL;
 //        echo date_format(new \DateTime(),
 //                'Y.m.d H:i:s') . " INFO: {$number} weight vector: " . $perceptron->getBias() . PHP_EOL;
 //        print_r($perceptron->getWeightVector());
