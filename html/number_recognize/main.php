@@ -12,6 +12,7 @@ use number_recognize\MnistDataSetReader;
 use number_recognize\MnistDataSetReaderTesting;
 use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
+use number_recognize\PerceptronTestHelper;
 use number_recognize\PerceptronTrainHelper;
 
 require_once 'Perceptron.php';
@@ -23,6 +24,7 @@ require_once 'MnistNeuralNetwork.php';
 require_once 'PerceptronTrainHelper.php';
 require_once 'MnistImageGenerator.php';
 require_once 'MnistImageAsciiGenerator.php';
+require_once 'PerceptronTestHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -75,6 +77,8 @@ switch ($argv[1]) {
 
     // Example: php main.php test_perceptron
     case 'test_perceptron':
+        $perceptronTestHelper = new PerceptronTestHelper();
+        $perceptronTestHelper->test(testImagePath, testLabelPath);
         break;
 
     // Example:

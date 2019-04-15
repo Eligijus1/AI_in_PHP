@@ -134,23 +134,6 @@ class PerceptronTrainHelper
 //        echo date_format(new \DateTime(),
 //                'Y.m.d H:i:s') . " INFO: {$number} weight vector: " . $perceptron->getBias() . PHP_EOL;
 //        print_r($perceptron->getWeightVector());
-
-//        // Check read:
-//        $perceptron = null;
-//        $s = file_get_contents(self::DATA_LOCATION . '/perceptron.dat');
-//        $perceptron = unserialize($s);
-//        echo date_format(new \DateTime(),
-//                'Y.m.d H:i:s') . " INFO: Bias for {$number} after read: " . $perceptron->getBias() . PHP_EOL;
     }
 }
 
-/*
-If you don't need the dump file to be human-readable, you can just serialize() the array.
-
-storing:
-
-file_put_contents('yourfile.bin', serialize($array));
-retrieving:
-
-$array = unserialize(file_get_contents('yourfile.bin'));
-*/
