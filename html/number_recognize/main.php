@@ -9,6 +9,7 @@ ini_set('memory_limit', '3G');
 
 use number_recognize\helpers\MnistDataSetReaderTesting;
 use number_recognize\helpers\MnistImageAsciiGenerator;
+use number_recognize\helpers\PerceptronFormulaGenerator;
 use number_recognize\helpers\PerceptronTestHelper;
 use number_recognize\helpers\PerceptronTrainHelper;
 use number_recognize\MnistDataset;
@@ -27,6 +28,7 @@ require_once 'MnistImageGenerator.php';
 require_once 'helpers/MnistImageAsciiGenerator.php';
 require_once 'helpers/PerceptronTestHelper.php';
 require_once 'helpers/BlackWhiteImageSaver.php';
+require_once 'helpers/PerceptronFormulaGenerator.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -76,6 +78,11 @@ switch ($argv[1]) {
     // Example: php main.php test_perceptron
     case 'test_perceptron':
         (new PerceptronTestHelper())->test(testImagePath, testLabelPath, 0);
+        break;
+
+    // Example: php main.php gen_perceptron_formula 0
+    case 'gen_perceptron_formula':
+        (new PerceptronFormulaGenerator())((int)$argv[2]);
         break;
 
     // Example:

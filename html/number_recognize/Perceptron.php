@@ -143,7 +143,7 @@ class Perceptron
             throw new InvalidArgumentException();
         }
 
-        $testResult = $this->dotProduct($this->weightVector, $inputVector) + $this->bias;
+        $testResult = $this->dotProduct($inputVector) + $this->bias;
 
         $this->output = $testResult > 0 ? 1 : 0;
 
@@ -187,22 +187,27 @@ class Perceptron
         $this->iterationError = 1 / $this->iterations * $this->errorSum;
     }
 
-    /**
-     * @param array $vector1
-     * @param array $vector2
-     *
-     * @return number
-     */
-    private function dotProduct($vector1, $vector2)
+    private function dotProduct(array $inputVector): float
     {
+        // Calculate the sum of values in an array:
         return array_sum(
             array_map(
                 function ($a, $b) {
                     return $a * $b;
                 },
-                $vector1,
-                $vector2
+                $this->weightVector,
+                $inputVector
             )
         );
+    }
+
+    public function getFormula(): string {
+        $formula = "";
+
+        foreach ($this->weightVector as $key => $weight) {
+            $formula .= (empty($formula) ? "" : " + ") . "x{$key}*{$weight}";
+        }
+
+        return "result = (({$formula}) * {$this->bias}) > 0 ? 1 : 0";
     }
 }
