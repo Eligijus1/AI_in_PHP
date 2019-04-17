@@ -2,7 +2,13 @@
 
 declare(strict_types=1);
 
-namespace number_recognize;
+namespace number_recognize\helpers;
+
+use DateTime;
+use Exception;
+use number_recognize\HelperFunctions;
+use number_recognize\MnistDataSetReader;
+use number_recognize\Perceptron;
 
 class PerceptronTrainHelper
 {
@@ -14,16 +20,16 @@ class PerceptronTrainHelper
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        echo date_format(new \DateTime(), 'Y.m.d H:i:s') . ' INFO: Begin training with perceptron.' . PHP_EOL;
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: Begin training with perceptron.' . PHP_EOL;
 
         // Do some checks:
         if (!file_exists($imagePath)) {
-            echo date_format(new \DateTime(),
+            echo date_format(new DateTime(),
                     'Y.m.d H:i:s') . " ERROR: Images file {$imagePath} not exist." . PHP_EOL;
             return;
         }
         if (!file_exists($imagePath)) {
-            echo date_format(new \DateTime(),
+            echo date_format(new DateTime(),
                     'Y.m.d H:i:s') . " ERROR: Labels file {$labelsPath} not exist." . PHP_EOL;
             return;
         }
@@ -41,13 +47,13 @@ class PerceptronTrainHelper
         $this->trainPerceptron($imagePath, $labelsPath, 9);
 
         // Information about results:
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)) . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)) . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds) . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Data location: " . self::DATA_LOCATION . PHP_EOL;
     }
 
@@ -80,7 +86,7 @@ class PerceptronTrainHelper
 
             // Check if magic image is ok as expected:
             if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
-                throw new \Exception('Invalid magic number: ' . $imagePath);
+                throw new Exception('Invalid magic number: ' . $imagePath);
             }
 
             // Delete old file if exist:
@@ -110,11 +116,6 @@ class PerceptronTrainHelper
                 } else {
                     $perceptron->train($imageBytesBlackWhite, false);
                 }
-
-//                // Interrupting after specified amount of loops:
-//                if ($i === 1000) {
-//                    break;
-//                }
             }
         } finally {
             fclose($streamImages);
@@ -125,15 +126,12 @@ class PerceptronTrainHelper
         file_put_contents($dataFile, $s);
 
         // Output debug information:
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Bias for {$number}: " . $perceptron->getBias() . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Total handled {$i} numbers. {$j} numbers was '{$number}'." . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Data saved to file '{$dataFile}'." . PHP_EOL;
-//        echo date_format(new \DateTime(),
-//                'Y.m.d H:i:s') . " INFO: {$number} weight vector: " . $perceptron->getBias() . PHP_EOL;
-//        print_r($perceptron->getWeightVector());
     }
 }
 
