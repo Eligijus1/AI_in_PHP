@@ -7,9 +7,9 @@ declare(strict_types=1);
 // Set memory limit to 3 Gb (Yes, it eating a lot memory...):
 ini_set('memory_limit', '3G');
 
+use number_recognize\helpers\MnistDataSetReaderTesting;
 use number_recognize\MnistDataset;
 use number_recognize\MnistDataSetReader;
-use number_recognize\MnistDataSetReaderTesting;
 use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 use number_recognize\PerceptronTestHelper;
@@ -17,7 +17,7 @@ use number_recognize\PerceptronTrainHelper;
 
 require_once 'Perceptron.php';
 require_once 'HelperFunctions.php';
-require_once 'MnistDataSetReaderTesting.php';
+require_once 'helpers/MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';
 require_once 'MnistDataset.php';
 require_once 'MnistNeuralNetwork.php';
@@ -47,15 +47,14 @@ if (empty($argv[1])) {
 
 // Handling first argument:
 switch ($argv[1]) {
-    // Some testing...: php main.php generate_images
+    // Example: php main.php generate_images
     case 'generate_images':
-        MnistDataSetReaderTesting::generateImages('data/mnist/t10k-images.idx3-ubyte');
+        MnistDataSetReaderTesting::generateImages(trainImagePath);
         break;
 
     // Example: php main.php generate_specified_number_images 0
     case 'generate_specified_number_images':
-        $perceptronTrainHelper = new MnistImageGenerator();
-        $perceptronTrainHelper->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2]);
+        (new MnistImageGenerator())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2]);
         break;
 
     // Example: php main.php generate_specified_number_images_black_white 0
@@ -91,7 +90,7 @@ switch ($argv[1]) {
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . ' INFO: Loading training dataset... (may take a while)' . PHP_EOL;
 
         // Loading training data:
@@ -101,7 +100,7 @@ switch ($argv[1]) {
         $batches = $trainDataset->getSize() / $BATCH_SIZE;
 
         // Inform about training start:
-        echo date_format(new \DateTime(), 'Y.m.d H:i:s') . " INFO: Starting training..." . PHP_EOL;
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Starting training..." . PHP_EOL;
 
         // Define training start time:
         $milliseconds_training_start = round(microtime(true) * 1000);
@@ -122,12 +121,12 @@ switch ($argv[1]) {
         }
 
         // Information about results:
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Done training in " . (round(microtime(true) * 1000) - $milliseconds) . " milliseconds\n";
-        echo date_format(new \DateTime(), 'Y.m.d H:i:s') . " INFO: Memory used: " . memory_get_usage(true) . " bytes\n";
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Memory used: " . memory_get_usage(true) . " bytes\n";
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: peak of memory allocated by PHP: " . memory_get_peak_usage(true) . " bytes\n";
-        echo date_format(new \DateTime(), 'Y.m.d H:i:s') . " INFO: Training data amount: {$trainDataset->getSize()}\n";
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Training data amount: {$trainDataset->getSize()}\n";
 
         // ---------------------- END -----------------------------------
 

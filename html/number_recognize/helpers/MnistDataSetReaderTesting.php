@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace number_recognize;
+namespace number_recognize\helpers;
+
+use Exception;
+use number_recognize\MnistDataSetReader;
 
 class MnistDataSetReaderTesting
 {
     /**
      * @param string $imagePath
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function generateImages(string $imagePath): void
     {
@@ -24,7 +27,7 @@ class MnistDataSetReaderTesting
 
             // Check if magic image is ok as expected:
             if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
-                throw new \Exception('Invalid magic number: ' . $imagePath);
+                throw new Exception('Invalid magic number: ' . $imagePath);
             }
 
             // Looping all in file available images:
@@ -218,4 +221,3 @@ $size=filesize ($image);
 $contents= fread ($data, $size);
 fclose ($data);
  */
- 
