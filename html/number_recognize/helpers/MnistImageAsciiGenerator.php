@@ -2,49 +2,53 @@
 
 declare(strict_types=1);
 
+namespace number_recognize\helpers;
+
+use DateTime;
+use Exception;
 use number_recognize\HelperFunctions;
 
 class MnistImageAsciiGenerator
 {
     private const DATA_LOCATION = "data/generated_ascii";
 
-    public function generate(string $imagePath, string $labelsPath): void
+    public function generate(string $imagePath, string $labelsPath, int $generateAmount): void
     {
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        echo date_format(new \DateTime(), 'Y.m.d H:i:s') . ' INFO: Begin training with perceptron.' . PHP_EOL;
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: Begin training with perceptron.' . PHP_EOL;
 
         // Do some checks:
         if (!file_exists($imagePath)) {
-            echo date_format(new \DateTime(),
+            echo date_format(new DateTime(),
                     'Y.m.d H:i:s') . " ERROR: Images file {$imagePath} not exist." . PHP_EOL;
             return;
         }
         if (!file_exists($imagePath)) {
-            echo date_format(new \DateTime(),
+            echo date_format(new DateTime(),
                     'Y.m.d H:i:s') . " ERROR: Labels file {$labelsPath} not exist." . PHP_EOL;
             return;
         }
 
         // Call method, responsible to train:
-        $i = $this->generateAscii($imagePath, $labelsPath);
+        $i = $this->generateAscii($imagePath, $labelsPath, $generateAmount);
 
         // Information about results:
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Checked {$i} numbers." . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)) . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)) . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds) . PHP_EOL;
-        echo date_format(new \DateTime(),
+        echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Data location: " . self::DATA_LOCATION . PHP_EOL;
     }
 
-    private function generateAscii(string $imagePath, string $labelsPath): int
+    private function generateAscii(string $imagePath, string $labelsPath, int $generateAmount): int
     {
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
@@ -67,11 +71,11 @@ class MnistImageAsciiGenerator
 
             // Check if magic image is ok as expected:
             if ($fields['magic'] !== HelperFunctions::MAGIC_IMAGE) {
-                throw new \Exception('Invalid magic number: ' . $imagePath);
+                throw new Exception('Invalid magic number: ' . $imagePath);
             }
 
             // Clean all old files from directory:
-            foreach (glob(self::DATA_LOCATION . '/*.*') as $v) {
+            foreach (glob(self::DATA_LOCATION . '/*.txt') as $v) {
                 unlink($v);
             }
 
@@ -107,7 +111,7 @@ class MnistImageAsciiGenerator
                 }
 
                 // Interrupting after specified amount of loops:
-                if ($i === 5) {
+                if ($i >= ($generateAmount - 1)) {
                     break;
                 }
             }
@@ -115,6 +119,6 @@ class MnistImageAsciiGenerator
             fclose($streamImages);
         }
 
-        return $i;
+        return ($i + 1);
     }
 }

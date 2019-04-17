@@ -8,6 +8,7 @@ declare(strict_types=1);
 ini_set('memory_limit', '3G');
 
 use number_recognize\helpers\MnistDataSetReaderTesting;
+use number_recognize\helpers\MnistImageAsciiGenerator;
 use number_recognize\MnistDataset;
 use number_recognize\MnistDataSetReader;
 use number_recognize\MnistImageGenerator;
@@ -23,7 +24,7 @@ require_once 'MnistDataset.php';
 require_once 'MnistNeuralNetwork.php';
 require_once 'PerceptronTrainHelper.php';
 require_once 'MnistImageGenerator.php';
-require_once 'MnistImageAsciiGenerator.php';
+require_once 'helpers/MnistImageAsciiGenerator.php';
 require_once 'PerceptronTestHelper.php';
 require_once 'helpers/BlackWhiteImageSaver.php';
 
@@ -62,10 +63,9 @@ switch ($argv[1]) {
         (new MnistImageGenerator())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
         break;
 
-    // Example: php main.php generate_ascii
+    // Example: php main.php generate_ascii 10
     case 'generate_ascii':
-        $mnistImageAsciiGenerator = new MnistImageAsciiGenerator();
-        $mnistImageAsciiGenerator->generate(trainImagePath, trainLabelPath);
+        (new MnistImageAsciiGenerator())->generate(trainImagePath, trainLabelPath, (int)$argv[2]);
         break;
 
     // Example: php main.php train_perceptron
