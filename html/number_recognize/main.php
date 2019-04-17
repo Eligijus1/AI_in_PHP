@@ -59,8 +59,7 @@ switch ($argv[1]) {
 
     // Example: php main.php generate_specified_number_images_black_white 0
     case 'generate_specified_number_images_black_white':
-        $perceptronTrainHelper = new MnistImageGenerator();
-        $perceptronTrainHelper->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
+        (new MnistImageGenerator())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
         break;
 
     // Example: php main.php generate_ascii

@@ -74,7 +74,7 @@ class MnistImageGenerator
             }
 
             // Clean all old files from directory:
-            foreach (glob(self::IMAGES_LOCATION . '/*.*') as $v) {
+            foreach (glob(self::IMAGES_LOCATION . '/*.png') as $v) {
                 unlink($v);
             }
 
