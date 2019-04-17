@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace number_recognize;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Perceptron for more information see:
@@ -28,14 +29,14 @@ class Perceptron
      * @param float $bias         Bias factor
      * @param float $learningRate The learning rate 0 < x <= 1
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($vectorLength, $bias = 0.0, $learningRate = .5)
     {
         if ($vectorLength < 1) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         } elseif ($learningRate <= 0 || $learningRate > 1) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
 
         $this->vectorLength = $vectorLength;
@@ -43,6 +44,7 @@ class Perceptron
         $this->learningRate = $learningRate;
 
         for ($i = 0; $i < $this->vectorLength; $i++) {
+            // Set initial weights. They can be random or 0 numbers:
             //$this->weightVector[$i] = rand() / getrandmax() * 2 - 1;
             $this->weightVector[$i] = 0;
         }
@@ -51,7 +53,7 @@ class Perceptron
     public function getOutput()
     {
         if (is_null($this->output)) {
-            throw new \RuntimeException();
+            throw new RuntimeException();
         } else {
             return $this->output;
         }
@@ -68,12 +70,12 @@ class Perceptron
     /**
      * @param array $weightVector
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setWeightVector($weightVector)
     {
         if (!is_array($weightVector) || count($weightVector) != $this->vectorLength) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
         $this->weightVector = $weightVector;
     }
@@ -89,12 +91,12 @@ class Perceptron
     /**
      * @param float $bias
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setBias($bias)
     {
         if (!is_numeric($bias)) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
         $this->bias = $bias;
     }
@@ -110,12 +112,12 @@ class Perceptron
     /**
      * @param float $learningRate
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setLearningRate($learningRate)
     {
         if (!is_numeric($learningRate) || $learningRate <= 0 || $learningRate > 1) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
         $this->learningRate = $learningRate;
     }
@@ -155,7 +157,7 @@ class Perceptron
      * @param array $inputVector array of input signals
      * @param bool  $outcomeBool
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function train(array $inputVector, bool $outcomeBool): void
     {
@@ -163,7 +165,7 @@ class Perceptron
 
         // Make sure, that input parameters are valid
         if (!is_array($inputVector) || !($outcome == 0 || $outcome == 1)) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
 
         // Update perceptron iteration number:
