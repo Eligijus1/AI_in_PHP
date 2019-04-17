@@ -83,19 +83,6 @@ class Perceptron
     }
 
     /**
-     * @param array $weightVector
-     *
-     * @throws InvalidArgumentException
-     */
-    public function setWeightVector($weightVector)
-    {
-        if (!is_array($weightVector) || count($weightVector) != $this->vectorLength) {
-            throw new InvalidArgumentException();
-        }
-        $this->weightVector = $weightVector;
-    }
-
-    /**
      * @return int
      */
     public function getBias()
@@ -104,37 +91,11 @@ class Perceptron
     }
 
     /**
-     * @param float $bias
-     *
-     * @throws InvalidArgumentException
-     */
-    public function setBias($bias)
-    {
-        if (!is_numeric($bias)) {
-            throw new InvalidArgumentException();
-        }
-        $this->bias = $bias;
-    }
-
-    /**
      * @return float
      */
     public function getLearningRate()
     {
         return $this->learningRate;
-    }
-
-    /**
-     * @param float $learningRate
-     *
-     * @throws InvalidArgumentException
-     */
-    public function setLearningRate($learningRate)
-    {
-        if (!is_numeric($learningRate) || $learningRate <= 0 || $learningRate > 1) {
-            throw new InvalidArgumentException();
-        }
-        $this->learningRate = $learningRate;
     }
 
     /**
@@ -202,6 +163,16 @@ class Perceptron
         $this->iterationError = 1 / $this->iterations * $this->errorSum;
     }
 
+    public function getFormula(): string {
+        $formula = "";
+
+        foreach ($this->weightVector as $key => $weight) {
+            $formula .= (empty($formula) ? "" : " + ") . "x{$key}*{$weight}";
+        }
+
+        return "result = (({$formula}) * {$this->bias}) > 0 ? 1 : 0";
+    }
+
     private function dotProduct(array $inputVector): float
     {
         // Calculate the sum of values in an array:
@@ -214,15 +185,5 @@ class Perceptron
                 $inputVector
             )
         );
-    }
-
-    public function getFormula(): string {
-        $formula = "";
-
-        foreach ($this->weightVector as $key => $weight) {
-            $formula .= (empty($formula) ? "" : " + ") . "x{$key}*{$weight}";
-        }
-
-        return "result = (({$formula}) * {$this->bias}) > 0 ? 1 : 0";
     }
 }
