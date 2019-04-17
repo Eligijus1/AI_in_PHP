@@ -6,7 +6,6 @@ namespace number_recognize\helpers;
 
 use DateTime;
 use Exception;
-use number_recognize\HelperFunctions;
 use number_recognize\MnistDataSetReader;
 use number_recognize\Perceptron;
 

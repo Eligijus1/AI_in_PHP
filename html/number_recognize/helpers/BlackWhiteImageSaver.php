@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace number_recognize\helpers;
 
-use DateTime;
-
 class BlackWhiteImageSaver
 {
     /**

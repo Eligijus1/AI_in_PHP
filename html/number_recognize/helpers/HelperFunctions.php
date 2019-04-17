@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace number_recognize;
+namespace number_recognize\helpers;
+
+use Exception;
 
 class HelperFunctions
 {
@@ -42,20 +44,20 @@ class HelperFunctions
      * @param string $labelPath
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function readLabels(string $labelPath): array
     {
         $stream = fopen($labelPath, 'rb');
         if (false === $stream) {
-            throw new \Exception('Could not open file: ' . $labelPath);
+            throw new Exception('Could not open file: ' . $labelPath);
         }
         $labels = [];
         try {
             $header = fread($stream, 8);
             $fields = unpack('Nmagic/Nsize', $header);
             if ($fields['magic'] !== self::MAGIC_LABEL) {
-                throw new \Exception('Invalid magic number: ' . $labelPath);
+                throw new Exception('Invalid magic number: ' . $labelPath);
             }
             $labels = fread($stream, $fields['size']);
         } finally {

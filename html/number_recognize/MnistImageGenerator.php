@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace number_recognize;
 
+use number_recognize\helpers\HelperFunctions;
+
 class MnistImageGenerator
 {
     private const IMAGES_LOCATION = "data/generate_specified_number_images";

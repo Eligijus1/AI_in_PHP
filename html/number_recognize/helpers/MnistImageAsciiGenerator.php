@@ -6,7 +6,6 @@ namespace number_recognize\helpers;
 
 use DateTime;
 use Exception;
-use number_recognize\HelperFunctions;
 
 class MnistImageAsciiGenerator
 {
