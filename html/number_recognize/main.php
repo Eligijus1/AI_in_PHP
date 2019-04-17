@@ -79,7 +79,7 @@ switch ($argv[1]) {
         break;
 
     // Example:
-    case 'train_network':
+    case 'train_sigmoid_network':
 
         // ---------------------- BEGIN -----------------------------------
 
