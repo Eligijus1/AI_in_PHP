@@ -17,7 +17,22 @@ class Perceptron
 {
     private $vectorLength;
     private $bias;
+
+    /**
+     * NOTE:
+     * According to Wikipedia:
+     * There is no need for a learning rate in the perceptron algorithm.
+     * This is because multiplying the update by any constant simply
+     * rescales the weights but never changes the sign of the prediction.
+     *
+     * Typically learning rates are configured naively at random by the user.
+     * At best, the user would leverage on past experiences (or other types of learning material)
+     * to gain the intuition on what is the best value to use in setting learning rates.
+     *
+     * @var float
+     */
     private $learningRate;
+
     private $weightVector;
     private $iterations = 0;
     private $errorSum = 0;
