@@ -25,6 +25,7 @@ require_once 'PerceptronTrainHelper.php';
 require_once 'MnistImageGenerator.php';
 require_once 'MnistImageAsciiGenerator.php';
 require_once 'PerceptronTestHelper.php';
+require_once 'helpers/BlackWhiteImageSaver.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -78,7 +79,7 @@ switch ($argv[1]) {
     // Example: php main.php test_perceptron
     case 'test_perceptron':
         $perceptronTestHelper = new PerceptronTestHelper();
-        $perceptronTestHelper->test(testImagePath, testLabelPath);
+        $perceptronTestHelper->test(testImagePath, testLabelPath, 0);
         break;
 
     // Example:

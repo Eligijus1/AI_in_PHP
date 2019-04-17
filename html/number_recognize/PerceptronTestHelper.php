@@ -6,13 +6,16 @@ namespace number_recognize;
 
 use DateTime;
 use Exception;
+use number_recognize\helpers\BlackWhiteImageSaver;
 
 class PerceptronTestHelper
 {
     private const DATA_LOCATION = "data/train_perceptron";
 
-    public function test(string $imagePath, string $labelsPath): void
+    public function test(string $imagePath, string $labelsPath, int $writeFailedGuessImagesAmount = 0): void
     {
+        $blackWhiteImageSaver = new BlackWhiteImageSaver(self::DATA_LOCATION . '/test_failed');
+
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
@@ -46,7 +49,8 @@ class PerceptronTestHelper
 
         $testDataCount = 0;
         $guessingSuccessCount = 0;
-        $guessingMoreAsOneCount = 0;
+        $guessingMoreAsOneCount = [];
+        $wrongGuessCount = 0;
         try {
             // Binary-safe file read up to 16 bytes from the file pointer $stream:
             $header = fread($streamImages, 16);
@@ -77,23 +81,42 @@ class PerceptronTestHelper
                 }
 
                 // Testing current number:
-                $foundNumber = 0;
+                $foundNumber = false;
+                $foundValidNumbersAmount = 0;
                 for ($number = 0; $number <= 9; ++$number) {
-                    if ($perceptrons[$number]->test($imageBytesBlackWhite)) {
-                        if ($labelsArray[$i] === $number) {
-                            $foundNumber++;
+                    // Get answer from neural network:
+                    $testResult = $perceptrons[$number]->test($imageBytesBlackWhite);
+
+                    // Increase number, that will show true "guess amount":
+                    if ($testResult === 1) {
+                        $foundValidNumbersAmount++;
+                    }
+
+                    // Check if guessed number and real number is same:
+                    if ($testResult === 1 && $labelsArray[$i] === $number) {
+                        $foundNumber = true;
+                    }
+
+                    // Check wrong guessing:
+                    if ($testResult === 1 && $labelsArray[$i] !== $number) {
+                        $wrongGuessCount++;
+                        if ($wrongGuessCount <= $writeFailedGuessImagesAmount) {
+                            $fileName = "wrong_guess_" . date_format(new DateTime(),
+                                    'Y.m.d_H-i-s') . '_' . sprintf("%06d",
+                                    $i) . '_' . '_real_' . $labelsArray[$i] . "_decided_{$number}.png";
+                            $blackWhiteImageSaver->save($imageBytesBlackWhite, $fileName);
                         }
                     }
                 }
-                if ($foundNumber === 1) {
+                if ($foundNumber && $foundValidNumbersAmount === 1) {
                     $guessingSuccessCount++;
                 }
-                if ($foundNumber > 1) {
-                    $guessingMoreAsOneCount++;
+                for ($k = 0; $k <= 9; ++$k) {
+                    if ($foundValidNumbersAmount === $k) {
+                        $guessingMoreAsOneCount[$k] = (empty($guessingMoreAsOneCount[$k]) ? 0 : $guessingMoreAsOneCount[$k]) + 1;
+                    }
                 }
             }
-
-
         } finally {
             fclose($streamImages);
         }
@@ -110,8 +133,11 @@ class PerceptronTestHelper
         echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Test numbers amount: {$testDataCount}" . PHP_EOL;
         echo date_format(new DateTime(),
                 'Y.m.d H:i:s') . " INFO: Success guessing amount: {$guessingSuccessCount}" . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: More as 1 number amount: {$guessingMoreAsOneCount}" . PHP_EOL;
+        ksort($guessingMoreAsOneCount);
+        foreach ($guessingMoreAsOneCount as $key => $guessingCount) {
+            echo date_format(new DateTime(),
+                    'Y.m.d H:i:s') . " INFO: Found {$key} 'valid' numbers amount: {$guessingCount}" . PHP_EOL;
+        }
     }
 
     private function getPerceptron(int $number): Perceptron

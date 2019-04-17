@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace number_recognize;
 
+use InvalidArgumentException;
+
 /**
  * Perceptron for more information see:
  * http://en.wikipedia.org/wiki/Perceptron
@@ -130,13 +132,13 @@ class Perceptron
      * @param int[] $inputVector
      *
      * @return int (0 for false, 1 = true)
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function test(array $inputVector): int
     {
         // Checking input parameter, to make sure, that input values are correct:
         if (!is_array($inputVector) || count($inputVector) != $this->vectorLength) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
 
         $testResult = $this->dotProduct($this->weightVector, $inputVector) + $this->bias;
