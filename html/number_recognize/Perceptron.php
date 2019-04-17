@@ -155,7 +155,7 @@ class Perceptron
      * by training data.
      *
      * @param array $inputVector array of input signals
-     * @param bool  $outcomeBool
+     * @param bool  $outcomeBool what output signal should by.
      *
      * @throws InvalidArgumentException
      */
