@@ -17,22 +17,6 @@ class Perceptron
 {
     private $vectorLength;
     private $bias;
-
-    /**
-     * NOTE:
-     * According to Wikipedia:
-     * There is no need for a learning rate in the perceptron algorithm.
-     * This is because multiplying the update by any constant simply
-     * rescales the weights but never changes the sign of the prediction.
-     *
-     * Typically learning rates are configured naively at random by the user.
-     * At best, the user would leverage on past experiences (or other types of learning material)
-     * to gain the intuition on what is the best value to use in setting learning rates.
-     *
-     * @var float
-     */
-    private $learningRate;
-
     private $weightVector;
     private $iterations = 0;
     private $errorSum = 0;
@@ -42,25 +26,19 @@ class Perceptron
     /**
      * @param int   $vectorLength The number of input signals
      * @param float $bias         Bias factor
-     * @param float $learningRate The learning rate 0 < x <= 1
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($vectorLength, $bias = 0.0, $learningRate = .5)
+    public function __construct($vectorLength, $bias = 0.0)
     {
         if ($vectorLength < 1) {
-            throw new InvalidArgumentException();
-        } elseif ($learningRate <= 0 || $learningRate > 1) {
             throw new InvalidArgumentException();
         }
 
         $this->vectorLength = $vectorLength;
         $this->bias = $bias;
-        $this->learningRate = $learningRate;
 
         for ($i = 0; $i < $this->vectorLength; $i++) {
-            // Set initial weights. They can be random or 0 numbers:
-            //$this->weightVector[$i] = rand() / getrandmax() * 2 - 1;
             $this->weightVector[$i] = 0;
         }
     }
@@ -88,14 +66,6 @@ class Perceptron
     public function getBias()
     {
         return $this->bias;
-    }
-
-    /**
-     * @return float
-     */
-    public function getLearningRate()
-    {
-        return $this->learningRate;
     }
 
     /**
@@ -152,9 +122,7 @@ class Perceptron
 
         // Loop all array items:
         for ($i = 0; $i < $this->vectorLength; $i++) {
-            // Define weights:
-            $this->weightVector[$i] =
-                $this->weightVector[$i] + $this->learningRate * ((int)$outcome - (int)$output) * $inputVector[$i];
+            $this->weightVector[$i] = $this->weightVector[$i] + ((int)$outcome - (int)$output) * $inputVector[$i];
         }
 
         // Define bias
@@ -163,7 +131,8 @@ class Perceptron
         $this->iterationError = 1 / $this->iterations * $this->errorSum;
     }
 
-    public function getFormula(): string {
+    public function getFormula(): string
+    {
         $formula = "";
 
         foreach ($this->weightVector as $key => $weight) {
