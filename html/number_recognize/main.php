@@ -85,6 +85,18 @@ switch ($argv[1]) {
         (new PerceptronFormulaGenerator())((int)$argv[2]);
         break;
 
+    // Example: php main.php train_sigmoid
+    case 'train_sigmoid':
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' ERROR: Not implemented' . PHP_EOL;
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: M_EULER = ' . M_EULER . PHP_EOL;
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: M_E = ' . M_E . PHP_EOL;
+        break;
+
+    // Example: php main.php test_sigmoid
+    case 'test_sigmoid':
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' ERROR: Not implemented' . PHP_EOL;
+        break;
+
     // Example:
     case 'train_sigmoid_network':
 
