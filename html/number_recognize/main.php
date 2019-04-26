@@ -13,7 +13,6 @@ use number_recognize\helpers\PerceptronFormulaGenerator;
 use number_recognize\helpers\PerceptronTestHelper;
 use number_recognize\helpers\PerceptronTrainHelper;
 use number_recognize\MnistDataset;
-use number_recognize\MnistDataSetReader;
 use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 
@@ -97,6 +96,39 @@ switch ($argv[1]) {
         echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' ERROR: Not implemented' . PHP_EOL;
         break;
 
+    default:
+        echo "\nERROR: Unhandled action '" . $argv[1] . "'.\n";
+        return;
+}
+
+/**
+ * Accuracy Evaluation
+ *
+ * @param MnistNeuralNetwork $neuralNetwork
+ * @param MnistDataset       $dataset
+ *
+ * @return float|int
+ */
+function calculate_accuracy(MnistNeuralNetwork $neuralNetwork, MnistDataset $dataset)
+{
+    $size = $dataset->getSize();
+    // Loop through all the training examples
+    for ($i = 0, $correct = 0; $i < $size; $i++) {
+        $image = $dataset->getImage($i);
+        $label = $dataset->getLabel($i);
+        $activations = $neuralNetwork->hypothesis($image);
+
+        // Our prediction is index containing the maximum probability:
+        $prediction = array_search(max($activations), $activations);
+        if ($prediction == $label) {
+            $correct++;
+        }
+    }
+
+    // Percentage of correct predictions is the accuracy:
+    return $correct / $size;
+}
+/*
     // Example:
     case 'train_sigmoid_network':
 
@@ -147,35 +179,4 @@ switch ($argv[1]) {
         // ---------------------- END -----------------------------------
 
         break;
-    default:
-        echo "\nERROR: Unhandled action '" . $argv[1] . "'.\n";
-        return;
-}
-
-/**
- * Accuracy Evaluation
- *
- * @param MnistNeuralNetwork $neuralNetwork
- * @param MnistDataset       $dataset
- *
- * @return float|int
- */
-function calculate_accuracy(MnistNeuralNetwork $neuralNetwork, MnistDataset $dataset)
-{
-    $size = $dataset->getSize();
-    // Loop through all the training examples
-    for ($i = 0, $correct = 0; $i < $size; $i++) {
-        $image = $dataset->getImage($i);
-        $label = $dataset->getLabel($i);
-        $activations = $neuralNetwork->hypothesis($image);
-
-        // Our prediction is index containing the maximum probability:
-        $prediction = array_search(max($activations), $activations);
-        if ($prediction == $label) {
-            $correct++;
-        }
-    }
-
-    // Percentage of correct predictions is the accuracy:
-    return $correct / $size;
-}
+*/
