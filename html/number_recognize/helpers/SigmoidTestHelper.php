@@ -46,7 +46,7 @@ class SigmoidTestHelper
             echo "\n{$i}";
             print_r($image);
             return;
-            $sigmoid->
+            //$sigmoid->
         }
         //$sigmoid->test();
 
