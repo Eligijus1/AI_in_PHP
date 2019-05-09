@@ -48,6 +48,27 @@ class MnistNeuralNetwork
         }, $activations);
     }
 
+//    /**
+//     * Softmax calculation for PHP (useful for logistic classifications)
+//     *
+//     * @param array $v
+//     *
+//     * @return array
+//     */
+//    function softmax2(array $v)
+//    {
+//
+//        //Just in case values are passed in as string, apply floatval
+//        $v = array_map('exp', array_map('floatval', $v));
+//        $sum = array_sum($v);
+//
+//        foreach ($v as $index => $value) {
+//            $v[$index] = $value / $sum;
+//        }
+//
+//        return $v;
+//    }
+
     /**
      * Forward propagate through the neural network to calculate the activation
      * vector for an image.
@@ -132,30 +153,4 @@ class MnistNeuralNetwork
 
         return $totalLoss;
     }
-
-//    function sigmoid($t)
-//    {
-//        return 1 / (1 + exp(-$t));
-//    }
-//
-//    /**
-//     * Softmax calculation for PHP (useful for logistic classifications)
-//     *
-//     * @param array $v
-//     *
-//     * @return array
-//     */
-//    function softmax2(array $v)
-//    {
-//
-//        //Just in case values are passed in as string, apply floatval
-//        $v = array_map('exp', array_map('floatval', $v));
-//        $sum = array_sum($v);
-//
-//        foreach ($v as $index => $value) {
-//            $v[$index] = $value / $sum;
-//        }
-//
-//        return $v;
-//    }
 }

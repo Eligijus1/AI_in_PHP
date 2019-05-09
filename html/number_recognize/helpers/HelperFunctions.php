@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace number_recognize\helpers;
 
 use Exception;
+use number_recognize\MnistDataSetReader;
 
 class HelperFunctions
 {
@@ -64,5 +65,40 @@ class HelperFunctions
             fclose($stream);
         }
         return array_values(unpack('C*', $labels));
+    }
+
+    public static function readImagesData(string $imagePath): array
+    {
+        // Open images path:
+        $streamImages = fopen($imagePath, 'rb');
+        $images = [];
+
+        try {
+            // Binary-safe file read up to 16 bytes from the file pointer $stream:
+            $header = fread($streamImages, 16);
+
+            // Unpack data from binary string into an array according to the given format (first parameter):
+            $fields = unpack('Nmagic/Nsize/Nrows/Ncols', $header);
+
+            // Check if magic image is ok as expected:
+            if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
+                throw new Exception('Invalid magic number: ' . $imagePath);
+            }
+
+            // Looping all in file available images:
+            for ($i = 0; $i < $fields['size']; $i++) {
+                // Read image:
+                $imageBytes = fread($streamImages, $fields['rows'] * $fields['cols']);
+
+                // Converting to byte array:
+                $imageBytesArray = unpack('C*', $imageBytes);
+
+                $images[] = $imageBytesArray;
+            }
+        } finally {
+            fclose($streamImages);
+        }
+
+        return $images;
     }
 }

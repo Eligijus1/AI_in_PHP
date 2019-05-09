@@ -12,11 +12,14 @@ use number_recognize\helpers\MnistImageAsciiGenerator;
 use number_recognize\helpers\PerceptronFormulaGenerator;
 use number_recognize\helpers\PerceptronTestHelper;
 use number_recognize\helpers\PerceptronTrainHelper;
+use number_recognize\helpers\SigmoidTestHelper;
+use number_recognize\helpers\SigmoidTrainHelper;
 use number_recognize\MnistDataset;
 use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 
 require_once 'Perceptron.php';
+require_once 'Sigmoid.php';
 require_once 'helpers/HelperFunctions.php';
 require_once 'helpers/MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';
@@ -28,6 +31,8 @@ require_once 'helpers/MnistImageAsciiGenerator.php';
 require_once 'helpers/PerceptronTestHelper.php';
 require_once 'helpers/BlackWhiteImageSaver.php';
 require_once 'helpers/PerceptronFormulaGenerator.php';
+require_once 'helpers/SigmoidTrainHelper.php';
+require_once 'helpers/SigmoidTestHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -86,14 +91,12 @@ switch ($argv[1]) {
 
     // Example: php main.php train_sigmoid
     case 'train_sigmoid':
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' ERROR: Not implemented' . PHP_EOL;
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: M_EULER = ' . M_EULER . PHP_EOL;
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: M_E = ' . M_E . PHP_EOL;
+        (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath);
         break;
 
     // Example: php main.php test_sigmoid
     case 'test_sigmoid':
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' ERROR: Not implemented' . PHP_EOL;
+        (new SigmoidTestHelper())->test(testImagePath, testLabelPath);
         break;
 
     default:

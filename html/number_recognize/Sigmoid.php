@@ -40,7 +40,7 @@ class Sigmoid
         }
     }
 
-    public function test($input)
+    public function test(array $input)
     {
         global $numLayers;
         global $layerSize;
@@ -81,16 +81,47 @@ class Sigmoid
         }
     }
 
-    public function train()
+    /**
+     * Training network on the provided
+     * training set
+     *
+     * @param array $trainingSets
+     *
+     * @return boolean
+     */
+    public function train(array $trainingSets)
     {
+        $numEpochs = 1;
 
+        do {
+            if ($this->numEpochs > $this->maxNumEpochs) {
+                return false;
+            }
+
+            $sumNetworkError = 0;
+            foreach ($trainingSets as $trainingSet) {
+                $this->network->activate($trainingSet);
+                $outputs = $this->network->getOutputs();
+                $this->calculateNodeDeltas($trainingSet);
+                $this->calculateGradients();
+                $this->calculateWeightUpdates();
+                $this->applyWeightChanges();
+                $sumNetworkError += $this->calculateNetworkError($trainingSet);
+            }
+
+            $globalError = $sumNetworkError / count($trainingSets);
+
+            $numEpochs++;
+        } while ($globalError > $this->minimumError);
+
+        return true;
     }
 
-    function sigmoid($t)
+    private function sigmoid($t)
     {
         //return 1 / (1 + pow(M_EULER, -$t));// M_EULER	0.57721566490153286061	Euler constant
-        return 1 / (1 + pow(M_E, -$t));// M_E	2.7182818284590452354	e
-        //return 1 / (1 + exp(-$t));
+        //return 1 / (1 + pow(M_E, -$t));// M_E	2.7182818284590452354	e
+        return 1 / (1 + exp(-$t));
     }
 
     private function array_zip(array $a1, array $a2): array
@@ -102,6 +133,11 @@ class Sigmoid
         }
 
         return $out;
+    }
+
+    private function getDerivative($net)
+    {
+        return $this->sigmoid($net) * (1 - $this->sigmoid($net));
     }
 
     /**
