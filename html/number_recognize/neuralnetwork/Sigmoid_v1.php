@@ -4,59 +4,56 @@ declare(strict_types=1);
 
 namespace number_recognize\neuralnetwork;
 
-class Sigmoid
+use number_recognize\MnistDataset;
+
+class Sigmoid_v1
 {
-    private $networkLayers = [];
+    /**
+     * Bias
+     *
+     * This will be a one dimensional array (vector) [10]
+     *
+     * @var array
+     */
+    private $biasVector;
 
-    private $net = [];
+    /**
+     * Weights
+     *
+     * This will be a two dimensional array (matrix) [784x10]
+     *
+     * @var array
+     */
+    private $weights;
 
-    private $weights = [];
-
-    private $biasWeights = [];
-
-    private $values = [];
-
-    private $activation;
-
-    private $totalNumNodes;
-
-    public function __construct(array $networkLayers)
+    /**
+     * Initialise the bias vector and weights as random values between 0 and 1.
+     */
+    public function __construct()
     {
-        $this->networkLayers = [];
-        $startNode = 0;
-        $endNode = 0;
-
-        foreach ($networkLayers as $layer => $numNodes) {
-            if ($layer > 0) {
-                $startNode += $networkLayers[$layer - 1];
+        $this->biasVector = [];
+        $this->weights = [];
+        for ($i = 0; $i < 10; $i++) {// NOTE: 10, because we have 10 numbers (0,1...9)
+            $this->biasVector[$i] = random_int(1, 1000) / 1000;
+            $this->weights[$i] = [];
+            for ($j = 0; $j < MnistDataset::IMAGE_SIZE; $j++) {
+                $this->weights[$i][$j] = random_int(1, 1000) / 1000;
             }
-
-            $endNode += $numNodes;
-
-            $this->networkLayers[] = [
-                'num_nodes' => $numNodes,
-                'start_node' => $startNode,
-                'end_node' => $endNode - 1,
-            ];
         }
-
-        $this->totalNumNodes = array_sum($networkLayers);
-
-        $this->initialise();
     }
 
-    public function test(array $inputVector)
+    public function test(array $input)
     {
-//        global $numLayers;
-//        global $layerSize;
-//        global $alpha;
-//        global $beta;
-//        global $weight;
-//        global $prevWeight;
-//        global $out;
+        global $numLayers;
+        global $layerSize;
+        global $alpha;
+        global $beta;
+        global $weight;
+        global $prevWeight;
+        global $out;
 
         //Assign input to 0th layer
-        foreach ($inputVector as $key => $value) {
+        foreach ($input as $key => $value) {
             $out[0][$key] = $value;
         }
 
@@ -146,48 +143,49 @@ class Sigmoid
     }
 
     /**
-     * Initialises the nodes outputs to zero
-     * and interconnection strengths to random values
-     * between -0.05 and +0.05
+     * @return array
      */
-    private function initialise()
+    private function zip()
     {
-        $this->net = array();
-        $this->weights = array();
-        $this->biasWeights = array();
-        $this->values = array();
-        $this->initialiseValues();
-        $this->initialiseWeights();
-    }
-
-    /**
-     * Initialises the nodes outputs to zero
-     */
-    private function initialiseValues()
-    {
-        $this->values = array_fill(0, $this->totalNumNodes, 0.0);
-        $this->net = array_fill(0, $this->totalNumNodes, 0.0);
-    }
-
-    /**
-     * Initialises interconnection strengths to random values
-     * between -0.05 and +0.05
-     */
-    private function initialiseWeights()
-    {
-        foreach ($this->networkLayers as $num => $layer) {
-            if ($num < count($this->networkLayers) - 1) {
-                //Calculate non bias weights
-                for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
-                    for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
-                        $this->weights[$i][$j] = rand(-5, 5) / 100;
-                    }
-                }
-                //Calculate bias weights
-                for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
-                    $this->biasWeights[$num][$b] = rand(-5, 5) / 100;
-                }
-            }
+        $args = func_get_args();
+        $zipped = array();
+        $n = count($args);
+        for ($i = 0; $i < $n; ++$i) {
+            reset($args[$i]);
         }
+        while ($n) {
+            $tmp = array();
+            for ($i = 0; $i < $n; ++$i) {
+                if (key($args[$i]) === null) {
+                    break 2;
+                }
+                $tmp[] = current($args[$i]);
+                next($args[$i]);
+            }
+            $zipped[] = $tmp;
+        }
+        return $zipped;
     }
+
+    /*
+     Python:
+
+    def feedforward(self, a):
+        """Return the output of the network if "a" is input."""
+        for b, w in zip(self.biases, self.weights):
+            a = sigmoid(np.dot(w, a)+b)
+        return a
+     */
 }
+
+/*
+function sigmoid($x)
+{
+    $steepness = 0.00069315;
+    return 1 / (1 + exp(-$x * $steepness));
+}
+for ($i = 0; $i <= 10000; ++$i) {
+    echo $i, ': ', sigmoid($i), '<br>';
+}
+
+*/

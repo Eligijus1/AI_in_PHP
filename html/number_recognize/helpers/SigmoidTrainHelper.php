@@ -32,7 +32,11 @@ class SigmoidTrainHelper
         }
 
         // Training network:
-        $sigmoid = new Sigmoid();
+        $sigmoid = new Sigmoid([
+            784,
+            15,
+            10
+        ]);// 1 parameter - input pixels amount; 15 - hidden layer - adjust; last - output
         //TODO: $sigmoid->train()
 
         // Create work if not exist:
