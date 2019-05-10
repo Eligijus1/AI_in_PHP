@@ -148,10 +148,7 @@ class Sigmoid
             }
         }
 
-        // Return the values from the output layer:
-        $startNode = $this->networkLayers[count($this->networkLayers) - 1]['start_node'];
-        $endNode = $this->networkLayers[count($this->networkLayers) - 1]['end_node'];
-        return array_slice($this->values, $startNode, ($endNode + 1) - $startNode);
+        return $this->getOutputs();
     }
 
     /**
@@ -187,6 +184,18 @@ class Sigmoid
         } while ($globalError > $this->minimumError);
 
         return true;
+    }
+
+    /**
+     * Gets the values from the output layer
+     *
+     * @return array
+     */
+    public function getOutputs(): array
+    {
+        $startNode = $this->networkLayers[count($this->networkLayers) - 1]['start_node'];
+        $endNode = $this->networkLayers[count($this->networkLayers) - 1]['end_node'];
+        return array_slice($this->values, $startNode, ($endNode+1) - $startNode);
     }
 
     private function sigmoid($t)
