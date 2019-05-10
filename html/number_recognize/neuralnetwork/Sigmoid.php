@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace number_recognize;
+namespace number_recognize\neuralnetwork;
+
+use number_recognize\MnistDataset;
 
 class Sigmoid
 {

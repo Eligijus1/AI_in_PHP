@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace number_recognize\helpers;
 
 use DateTime;
-use number_recognize\Perceptron;
+use number_recognize\neuralnetwork\Perceptron;
 
 class PerceptronFormulaGenerator
 {

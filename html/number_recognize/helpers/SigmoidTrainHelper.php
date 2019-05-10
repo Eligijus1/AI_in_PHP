@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace number_recognize\helpers;
 
 use DateTime;
-use number_recognize\Sigmoid;
+use number_recognize\neuralnetwork\Sigmoid;
 
 class SigmoidTrainHelper
 {

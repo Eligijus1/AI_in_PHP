@@ -7,7 +7,7 @@ namespace number_recognize\helpers;
 use DateTime;
 use Exception;
 use number_recognize\MnistDataSetReader;
-use number_recognize\Perceptron;
+use number_recognize\neuralnetwork\Perceptron;
 
 class PerceptronTestHelper
 {

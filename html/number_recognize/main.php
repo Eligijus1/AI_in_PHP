@@ -18,8 +18,8 @@ use number_recognize\MnistDataset;
 use number_recognize\MnistImageGenerator;
 use number_recognize\MnistNeuralNetwork;
 
-require_once 'Perceptron.php';
-require_once 'Sigmoid.php';
+require_once 'neuralnetwork/Perceptron.php';
+require_once 'neuralnetwork/Sigmoid.php';
 require_once 'helpers/HelperFunctions.php';
 require_once 'helpers/MnistDataSetReaderTesting.php';
 require_once 'MnistDataSetReader.php';
