@@ -82,6 +82,27 @@ class Sigmoid
      */
     private $numEpochs;
 
+    /**
+     * Calculated deltas of weights.
+     *
+     * error = actual - expected
+     * weight_delta = error * sigmoid(x)dx
+     *
+     * sigmoid(x)dx - sigmoid derivative function.
+     *
+     * NOTE: sigmoid(x)dx = sigmoid(x)dx * (1 - sigmoid(x)dx)
+     *
+     * @var array
+     */
+    private $nodeDeltas = [];
+
+    /**
+     * Calculated gradients.
+     *
+     * @var array
+     */
+    private $gradients = [];
+
     public function __construct(
         array $networkLayers,
         float $learningRate,
@@ -210,21 +231,14 @@ class Sigmoid
      */
     private function initialise()
     {
-        $this->net = array();
-        $this->weights = array();
-        $this->biasWeights = array();
-        $this->values = array();
-        $this->initialiseValues();
-        $this->initialiseWeights();
-    }
-
-    /**
-     * Initialises the nodes outputs to zero
-     */
-    private function initialiseValues()
-    {
+        $this->net = [];
+        $this->weights = [];
+        $this->biasWeights = [];
+        $this->values = [];
+        $this->nodeDeltas = array_fill(0, $this->totalNumNodes, 0.0);
         $this->values = array_fill(0, $this->totalNumNodes, 0.0);
         $this->net = array_fill(0, $this->totalNumNodes, 0.0);
+        $this->initialiseWeights();
     }
 
     /**
