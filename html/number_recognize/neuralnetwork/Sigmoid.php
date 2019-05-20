@@ -179,7 +179,7 @@ class Sigmoid
                     }
                     $net += $this->biasWeights[$num - 1][$j];
                     $this->net[$j] = $net;
-                    $this->values[$j] = $this->sigmoid($net);
+                    $this->values[$j] = $this->getActivation($net);
                 }
             }
         }
@@ -206,7 +206,8 @@ class Sigmoid
 
             $sumNetworkError = 0;
             foreach ($trainingSets as $trainingSet) {
-                $outputs = $this->test($trainingSet);
+                //$outputs = $this->test($trainingSet);
+                $this->test($trainingSet);
                 $this->calculateNodeDeltas($trainingSet);
                 $this->calculateGradients();
                 $this->calculateWeightUpdates();
@@ -234,9 +235,28 @@ class Sigmoid
         return array_slice($this->values, $startNode, ($endNode + 1) - $startNode);
     }
 
-    private function sigmoid($t)
+    /**
+     * Calculate and return sigmoid value.
+     *
+     * @param float $net
+     *
+     * @return float
+     */
+    public function getActivation(float $net): float
     {
-        return 1 / (1 + exp(-$t));
+        return 1 / (1 + exp(-$net));
+    }
+
+    /**
+     * Calculate and return sigmoid derivative value.
+     *
+     * @param float $net
+     *
+     * @return float
+     */
+    public function getDerivative(float $net): float
+    {
+        return $this->getActivation($net) * (1 - $this->getActivation($net));
     }
 
     /**
@@ -301,7 +321,7 @@ class Sigmoid
         $j = 0;
         for ($i = $startNode; $i <= $endNode; ++$i) {
             $error = $this->values[$i] - $idealOutputs[$j];
-            $this->nodeDeltas[$i] = (-1 * $error) * $this->sigmoid($this->net[$i]);
+            $this->nodeDeltas[$i] = (-1 * $error) * $this->getDerivative($this->net[$i]);
             ++$j;
         }
         //Calculate node delta for hidden nodes
@@ -313,7 +333,7 @@ class Sigmoid
                 foreach ($this->weights[$z] as $connectedNode => $weight) {
                     $sum += $weight * $this->nodeDeltas[$connectedNode];
                 }
-                $this->nodeDeltas[$z] = $this->sigmoid($this->net[$z]) * $sum;
+                $this->nodeDeltas[$z] = $this->getDerivative($this->net[$z]) * $sum;
             }
         }
     }
