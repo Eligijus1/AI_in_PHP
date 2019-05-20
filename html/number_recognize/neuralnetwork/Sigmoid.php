@@ -103,6 +103,21 @@ class Sigmoid
      */
     private $gradients = [];
 
+    /**
+     * @var array
+     */
+    private $biasGradients = [];
+
+    /**
+     * @var array
+     */
+    private $biasWeightUpdates = [];
+
+    /**
+     * @var array
+     */
+    private $weightUpdates = [];
+
     public function __construct(
         array $networkLayers,
         float $learningRate,
@@ -238,6 +253,10 @@ class Sigmoid
         $this->nodeDeltas = array_fill(0, $this->totalNumNodes, 0.0);
         $this->values = array_fill(0, $this->totalNumNodes, 0.0);
         $this->net = array_fill(0, $this->totalNumNodes, 0.0);
+        $this->gradients = [];
+        $this->biasGradients = [];
+        $this->biasWeightUpdates = [];
+        $this->weightUpdates = [];
         $this->initialiseWeights();
     }
 
@@ -353,12 +372,12 @@ class Sigmoid
                 //Calculate weight changes for non bias weights
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
                     for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
-                        $this->network->updateWeight($i, $j, $this->weightUpdates[$i][$j]);
+                        $this->updateWeight($i, $j, $this->weightUpdates[$i][$j]);
                     }
                 }
                 //Calculate weight changes for bias weights
                 for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
-                    $this->network->updateBiasWeight($num, $b, $this->biasWeightUpdates[$num][$b]);
+                    $this->updateBiasWeight($num, $b, $this->biasWeightUpdates[$num][$b]);
                 }
             }
         }
@@ -381,11 +400,37 @@ class Sigmoid
         $j = 0;
         $sum = 0;
         for ($i = $startNode; $i <= $endNode; ++$i) {
-            $error = $idealOutputs[$j] - $this->network->getValue($i);
+            $error = $idealOutputs[$j] - $this->values[$i];
             $sum += $error * $error;
             ++$j;
         }
         $globalError = (1 / $numNodes) * $sum;
         return $globalError;
+    }
+
+    /**
+     * Updates the weight between node $i
+     * and $j with given weight value
+     *
+     * @param int   $i
+     * @param int   $j
+     * @param float $weight
+     */
+    public function updateWeight($i, $j, $weight)
+    {
+        $this->weights[$i][$j] += $weight;
+    }
+
+    /**
+     * Updates the bias weight between node $i
+     * and $j with given weight value
+     *
+     * @param int   $i
+     * @param int   $j
+     * @param float $weight
+     */
+    public function updateBiasWeight($i, $j, $weight)
+    {
+        $this->biasWeights[$i][$j] += $weight;
     }
 }
