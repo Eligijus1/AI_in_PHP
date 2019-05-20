@@ -195,7 +195,7 @@ class Sigmoid
     {
         $startNode = $this->networkLayers[count($this->networkLayers) - 1]['start_node'];
         $endNode = $this->networkLayers[count($this->networkLayers) - 1]['end_node'];
-        return array_slice($this->values, $startNode, ($endNode+1) - $startNode);
+        return array_slice($this->values, $startNode, ($endNode + 1) - $startNode);
     }
 
     private function sigmoid($t)
@@ -258,29 +258,29 @@ class Sigmoid
      */
     private function calculateNodeDeltas(array $trainingSet)
     {
-        $networkLayers = $this->network->getNetworkLayers();
-        $idealOutputs = array_slice($trainingSet, -1 * $networkLayers[count($networkLayers) - 1]['num_nodes']);
-        $startNode = $networkLayers[count($networkLayers) - 1]['start_node'];
-        $endNode = $networkLayers[count($networkLayers) - 1]['end_node'];
-        $activation = $this->network->getActivation();
+        $idealOutputs = array_slice($trainingSet,
+            -1 * $this->networkLayers[count($this->networkLayers) - 1]['num_nodes']);
+        $startNode = $this->networkLayers[count($this->networkLayers) - 1]['start_node'];
+        $endNode = $this->networkLayers[count($this->networkLayers) - 1]['end_node'];
+        //$activation = $this->network->getActivation();
 
         //Calculate node delta for output nodes
         $j = 0;
         for ($i = $startNode; $i <= $endNode; ++$i) {
-            $error = $this->network->getValue($i) - $idealOutputs[$j];
-            $this->nodeDeltas[$i] = (-1 * $error) * $activation->getDerivative($this->network->getNet($i));
+            $error = $this->values[$i] - $idealOutputs[$j];
+            $this->nodeDeltas[$i] = (-1 * $error) * $this->sigmoid($this->net[$i]);
             ++$j;
         }
         //Calculate node delta for hidden nodes
-        for ($k = count($networkLayers) - 2; $k > 0; --$k) {
-            $startNode = $networkLayers[$k]['start_node'];
-            $endNode = $networkLayers[$k]['end_node'];
+        for ($k = count($this->networkLayers) - 2; $k > 0; --$k) {
+            $startNode = $this->networkLayers[$k]['start_node'];
+            $endNode = $this->networkLayers[$k]['end_node'];
             for ($z = $startNode; $z <= $endNode; ++$z) {
                 $sum = 0;
-                foreach ($this->network->getWeight($z) as $connectedNode => $weight) {
+                foreach ($this->weights[$z] as $connectedNode => $weight) {
                     $sum += $weight * $this->nodeDeltas[$connectedNode];
                 }
-                $this->nodeDeltas[$z] = $activation->getDerivative($this->network->getNet($z)) * $sum;
+                $this->nodeDeltas[$z] = $this->sigmoid($this->net[$z]) * $sum;
             }
         }
     }
@@ -290,17 +290,17 @@ class Sigmoid
      */
     private function calculateGradients()
     {
-        $networkLayers = $this->network->getNetworkLayers();
-        foreach ($networkLayers as $num => $layer) {
-            if ($num < count($networkLayers) - 1) {
+        foreach ($this->networkLayers as $num => $layer) {
+            if ($num < count($this->networkLayers) - 1) {
                 //Calculate gradients for non bias weights
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
-                    for ($j = $networkLayers[$num + 1]['start_node']; $j <= $networkLayers[$num + 1]['end_node']; ++$j) {
-                        $this->gradients[$i][$j] = $this->network->getValue($i) * $this->nodeDeltas[$j];
+                    for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
+                        $this->gradients[$i][$j] = $this->values[$i] * $this->nodeDeltas[$j];
                     }
                 }
-                //Calculate gradents for bias weights
-                for ($b = $networkLayers[$num + 1]['start_node']; $b <= $networkLayers[$num + 1]['end_node']; ++$b) {
+
+                //Calculate gradients for bias weights
+                for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
                     $this->biasGradients[$num][$b] = $this->nodeDeltas[$b];
                 }
             }
@@ -313,17 +313,16 @@ class Sigmoid
      */
     private function calculateWeightUpdates()
     {
-        $networkLayers = $this->network->getNetworkLayers();
-        foreach ($networkLayers as $num => $layer) {
-            if ($num < count($networkLayers) - 1) {
+        foreach ($this->networkLayers as $num => $layer) {
+            if ($num < count($this->networkLayers) - 1) {
                 //Calculate weight changes for non bias weights
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
-                    for ($j = $networkLayers[$num + 1]['start_node']; $j <= $networkLayers[$num + 1]['end_node']; ++$j) {
+                    for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
                         $this->weightUpdates[$i][$j] = ($this->learningRate * $this->gradients[$i][$j]) + ($this->momentum * $this->weightUpdates[$i][$j]);
                     }
                 }
                 //Calculate weight changes for bias weights
-                for ($b = $networkLayers[$num + 1]['start_node']; $b <= $networkLayers[$num + 1]['end_node']; ++$b) {
+                for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
                     $this->biasWeightUpdates[$num][$b] = ($this->learningRate * $this->biasGradients[$num][$b]) + ($this->momentum * $this->biasWeightUpdates[$num][$b]);
                 }
             }
@@ -335,17 +334,16 @@ class Sigmoid
      */
     private function applyWeightChanges()
     {
-        $networkLayers = $this->network->getNetworkLayers();
-        foreach ($networkLayers as $num => $layer) {
-            if ($num < count($networkLayers) - 1) {
+        foreach ($this->networkLayers as $num => $layer) {
+            if ($num < count($this->networkLayers) - 1) {
                 //Calculate weight changes for non bias weights
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
-                    for ($j = $networkLayers[$num + 1]['start_node']; $j <= $networkLayers[$num + 1]['end_node']; ++$j) {
+                    for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
                         $this->network->updateWeight($i, $j, $this->weightUpdates[$i][$j]);
                     }
                 }
                 //Calculate weight changes for bias weights
-                for ($b = $networkLayers[$num + 1]['start_node']; $b <= $networkLayers[$num + 1]['end_node']; ++$b) {
+                for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
                     $this->network->updateBiasWeight($num, $b, $this->biasWeightUpdates[$num][$b]);
                 }
             }
@@ -361,11 +359,11 @@ class Sigmoid
      */
     private function calculateNetworkError(array $trainingSet)
     {
-        $networkLayers = $this->network->getNetworkLayers();
-        $idealOutputs = array_slice($trainingSet, -1 * $networkLayers[count($networkLayers) - 1]['num_nodes']);
-        $startNode = $networkLayers[count($networkLayers) - 1]['start_node'];
-        $endNode = $networkLayers[count($networkLayers) - 1]['end_node'];
-        $numNodes = $networkLayers[count($networkLayers) - 1]['num_nodes'];
+        $idealOutputs = array_slice($trainingSet,
+            -1 * $this->networkLayers[count($this->networkLayers) - 1]['num_nodes']);
+        $startNode = $this->networkLayers[count($this->networkLayers) - 1]['start_node'];
+        $endNode = $this->networkLayers[count($this->networkLayers) - 1]['end_node'];
+        $numNodes = $this->networkLayers[count($this->networkLayers) - 1]['num_nodes'];
         $j = 0;
         $sum = 0;
         for ($i = $startNode; $i <= $endNode; ++$i) {
