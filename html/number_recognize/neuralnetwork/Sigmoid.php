@@ -163,13 +163,14 @@ class Sigmoid
      *
      * @return array
      */
-    public function test(array $inputVector): array
+    public function activate(array $inputVector): array
     {
-        // Assign input values to input layer"
+        // Assign input values to input layer:
         for ($z = 0; $z < $this->networkLayers[0]['num_nodes']; ++$z) {
             $this->values[$z] = $inputVector[$z];
         }
 
+        // Other layers values:
         foreach ($this->networkLayers as $num => $layer) {
             if ($num > 0) {
                 for ($j = $layer['start_node']; $j <= $layer['end_node']; ++$j) {
@@ -207,7 +208,7 @@ class Sigmoid
             $sumNetworkError = 0;
             foreach ($trainingSets as $trainingSet) {
                 //$outputs = $this->test($trainingSet);
-                $this->test($trainingSet);
+                $this->activate($trainingSet);
                 $this->calculateNodeDeltas($trainingSet);
                 $this->calculateGradients();
                 $this->calculateWeightUpdates();

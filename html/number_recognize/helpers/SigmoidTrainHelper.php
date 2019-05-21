@@ -29,14 +29,21 @@ class SigmoidTrainHelper
             return;
         }
 
-        // Extract images array:
-        $images = HelperFunctions::readImagesData($imagePath);
-        $dataCount = count($images);
-
         // Training network:
         // NOTE: 1 parameter - input pixels amount; 15 - hidden layer (need adjust); last - output.
         $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005);
-        $trainStatus = $sigmoid->train($images);
+
+        // Extract train images array:
+        $images = HelperFunctions::readImagesData($imagePath);
+        $imagesCount = count($images);
+
+        // Extract labels array:
+        $labels = HelperFunctions::readLabels($labelsPath);
+        $labelsCount = count($labels);
+
+        // Call train methods, responsible for training:
+        // WARNING: this operation very resources consuming.
+        $trainStatus = $sigmoid->train($images) ? 'OK' : 'Failed';
 
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
@@ -52,6 +59,6 @@ class SigmoidTrainHelper
         HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
         HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
         HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
-        HelperFunctions::printInfo("Used for train {$dataCount} data. Train result is {$trainStatus}.");
+        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels. Train result is {$trainStatus}.");
     }
 }
