@@ -189,7 +189,7 @@ class Sigmoid
 
     /**
      * Training network on the provided
-     * training set
+     * training set.
      *
      * @param array $trainingSets
      *

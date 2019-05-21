@@ -17,24 +17,26 @@ class SigmoidTrainHelper
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: Begin training with perceptron.' . PHP_EOL;
+        HelperFunctions::printInfo("Begin training with perceptron.");
 
         // Do some checks:
         if (!file_exists($imagePath)) {
-            echo date_format(new DateTime(),
-                    'Y.m.d H:i:s') . " ERROR: Images file {$imagePath} not exist." . PHP_EOL;
+            HelperFunctions::printError("Images file {$imagePath} not exist.");
             return;
         }
         if (!file_exists($imagePath)) {
-            echo date_format(new DateTime(),
-                    'Y.m.d H:i:s') . " ERROR: Labels file {$labelsPath} not exist." . PHP_EOL;
+            HelperFunctions::printError("Labels file {$labelsPath} not exist.");
             return;
         }
 
+        // Extract images array:
+        $images = HelperFunctions::readImagesData($imagePath);
+        $dataCount = count($images);
+
         // Training network:
-        // 1 parameter - input pixels amount; 15 - hidden layer - adjust; last - output
+        // NOTE: 1 parameter - input pixels amount; 15 - hidden layer (need adjust); last - output.
         $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005);
-        //TODO: $sigmoid->train()
+        $trainStatus = $sigmoid->train($images);
 
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
@@ -46,13 +48,10 @@ class SigmoidTrainHelper
         file_put_contents(self::DATA_LOCATION . "/sigmoid.dat", $s);
 
         // Information about results:
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)) . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)) . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds) . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Data location: " . self::DATA_LOCATION . PHP_EOL;
+        HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
+        HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
+        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
+        HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
+        HelperFunctions::printInfo("Used for train {$dataCount} data. Train result is {$trainStatus}.");
     }
 }

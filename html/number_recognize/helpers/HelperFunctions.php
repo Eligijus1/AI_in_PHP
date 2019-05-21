@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace number_recognize\helpers;
 
+use DateTime;
 use Exception;
 use number_recognize\MnistDataSetReader;
 
@@ -12,7 +13,8 @@ class HelperFunctions
     public const MAGIC_IMAGE = 0x00000803;
     public const MAGIC_LABEL = 0x00000801;
 
-    public static function formatBytes($bytes, $precision = 2) {
+    public static function formatBytes($bytes, $precision = 2)
+    {
         $units = array('B', 'KB', 'MB', 'GB', 'TB');
 
         $bytes = max($bytes, 0);
@@ -24,7 +26,8 @@ class HelperFunctions
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
-    public static function formatMilliseconds($milliseconds) {
+    public static function formatMilliseconds($milliseconds)
+    {
         $seconds = floor($milliseconds / 1000);
         $minutes = floor($seconds / 60);
         $hours = floor($minutes / 60);
@@ -65,6 +68,29 @@ class HelperFunctions
             fclose($stream);
         }
         return array_values(unpack('C*', $labels));
+    }
+
+    /**
+     * Simple method to print messages.
+     *
+     * @param string $type
+     * @param string $message
+     *
+     * @throws Exception
+     */
+    public static function printMessage(string $type, string $message): void
+    {
+        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " {$type}: {$message}" . PHP_EOL;
+    }
+
+    public static function printInfo(string $message): void
+    {
+        HelperFunctions::printMessage('INFO', $message);
+    }
+
+    public static function printError(string $message): void
+    {
+        HelperFunctions::printMessage('ERROR', $message);
     }
 
     public static function readImagesData(string $imagePath): array
