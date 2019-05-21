@@ -4,8 +4,8 @@ declare(strict_types=1);
 // Disable the memory limit to avoid "Allowed memory size exhausted" errors:
 //ini_set('memory_limit', '-1');
 
-// Set memory limit to 3 Gb (Yes, it eating a lot memory...):
-ini_set('memory_limit', '3G');
+// Set memory limit to 6 Gb (Yes, it eating a lot memory...):
+ini_set('memory_limit', '6G');
 
 use number_recognize\helpers\MnistDataSetReaderTesting;
 use number_recognize\helpers\MnistImageAsciiGenerator;

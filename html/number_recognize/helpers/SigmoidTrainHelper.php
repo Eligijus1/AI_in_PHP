@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace number_recognize\helpers;
 
-use DateTime;
 use number_recognize\neuralnetwork\Sigmoid;
 
 class SigmoidTrainHelper
@@ -41,9 +40,37 @@ class SigmoidTrainHelper
         $labels = HelperFunctions::readLabels($labelsPath);
         $labelsCount = count($labels);
 
+        // Prepare training DataSet:
+        $trainingDataSet = [];
+        $i = 0;
+        foreach ($images as $image) {
+            // Converting image bytes to float between 0 and 1:
+            $trainingItem = array_map(function ($b) {
+                return $b / 255;
+            }, array_values($image));
+
+            // Training data set should have answer, that contain answer data:
+            for ($j = 0; $j <= 9; ++$j) {
+                if ($j === (int)$labels[$i]) {
+                    array_push($trainingItem, 1);
+                } else {
+                    array_push($trainingItem, 0);
+                }
+            }
+
+            $trainingDataSet[$i] = $trainingItem;
+
+            // Update loop:
+            $i++;
+        }
+
+        // Reset not required variables:
+        $images = null;
+        $labels = null;
+
         // Call train methods, responsible for training:
-        // WARNING: this operation very resources consuming.
-        $trainStatus = $sigmoid->train($images) ? 'OK' : 'Failed';
+        // WARNING: this operation consuming a lot resources.
+        $trainStatus = $sigmoid->train($trainingDataSet) ? 'OK' : 'Failed';
 
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
