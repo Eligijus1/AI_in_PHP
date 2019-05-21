@@ -12,6 +12,8 @@ class SigmoidTrainHelper
 
     public function train(string $imagePath, string $labelsPath): void
     {
+        $dataFile = self::DATA_LOCATION . "/sigmoid.dat";
+
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
@@ -79,7 +81,7 @@ class SigmoidTrainHelper
 
         // Save object to disc:
         $s = serialize($sigmoid);
-        file_put_contents(self::DATA_LOCATION . "/sigmoid.dat", $s);
+        file_put_contents($dataFile, $s);
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
