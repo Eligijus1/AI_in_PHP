@@ -172,7 +172,7 @@ class Sigmoid
             $this->values[$z] = $inputVector[$z];
         }
 
-        // Here $this->values contain input data.
+        // Here $this->values contain only input data.
 
         // Other layers values:
         foreach ($this->networkLayers as $num => $layer) {
@@ -201,6 +201,8 @@ class Sigmoid
             }
         }
 
+        // Here $this->values contain all data.
+
         return $this->getOutputs();
     }
 
@@ -223,23 +225,15 @@ class Sigmoid
 
             $sumNetworkError = 0;
             foreach ($trainingSets as $key => $trainingSet) {
-                HelperFunctions::printInfo("Begin training with training set {$key}.");
-
-                //$outputs = $this->test($trainingSet);
                 $this->activate($trainingSet);
-                HelperFunctions::printInfo("Activated network.");
                 $this->calculateNodeDeltas($trainingSet);
-                HelperFunctions::printInfo("Calculated node deltas.");
                 $this->calculateGradients();
-
-                HelperFunctions::printInfo("Calculated gradients. Begin Calculate weights updates.");
                 $this->calculateWeightUpdates();
-                HelperFunctions::printInfo("Calculated weights updates.");
-
                 $this->applyWeightChanges();
-                HelperFunctions::printInfo("Apply weight changes.");
                 $sumNetworkError += $this->calculateNetworkError($trainingSet);
-                HelperFunctions::printInfo("Calculated network errors.");
+
+                // Output some information:
+                HelperFunctions::printInfo("Finished training with training set {$key}, epoch {$this->numEpochs} of {$this->maxNumEpochs}.");
             }
 
             $globalError = $sumNetworkError / count($trainingSets);
@@ -306,28 +300,6 @@ class Sigmoid
         $this->weightUpdates = [];
         $this->initialiseWeights();
     }
-
-//    /**
-//     * Initialises interconnection strengths to random values
-//     * between -0.05 and +0.05
-//     */
-//    private function initialiseWeights_old()
-//    {
-//        foreach ($this->networkLayers as $num => $layer) {
-//            if ($num < count($this->networkLayers) - 1) {
-//                //Calculate non bias weights
-//                for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
-//                    for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
-//                        $this->weights[$i][$j] = rand(-5, 5) / 100;
-//                    }
-//                }
-//                //Calculate bias weights
-//                for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
-//                    $this->biasWeights[$num][$b] = rand(-5, 5) / 100;
-//                }
-//            }
-//        }
-//    }
 
     /**
      * Initialise weight updates to zero
