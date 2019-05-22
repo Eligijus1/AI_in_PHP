@@ -18,7 +18,7 @@ class SigmoidTrainHelper
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        HelperFunctions::printInfo("Begin training with perceptron.");
+        HelperFunctions::printInfo("Begin training with sigmoid.");
 
         // Do some checks:
         if (!file_exists($imagePath)) {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace number_recognize\helpers;
 
-use DateTime;
 use number_recognize\neuralnetwork\Sigmoid;
 
 class SigmoidTestHelper
@@ -17,49 +16,56 @@ class SigmoidTestHelper
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . ' INFO: Begin testing with perceptron.' . PHP_EOL;
+        HelperFunctions::printInfo("Begin testing with sigmoid.");
 
         // Do some checks:
         if (!file_exists($imagePath)) {
-            echo date_format(new DateTime(),
-                    'Y.m.d H:i:s') . " ERROR: Images file {$imagePath} not exist." . PHP_EOL;
+            HelperFunctions::printError("Images file {$imagePath} not exist.");
             return;
         }
         if (!file_exists($imagePath)) {
-            echo date_format(new DateTime(),
-                    'Y.m.d H:i:s') . " ERROR: Labels file {$labelsPath} not exist." . PHP_EOL;
+            HelperFunctions::printError("Labels file {$labelsPath} not exist.");
             return;
         }
 
         // Extract from file Sigmoid network:
         $sigmoid = $this->getSigmoid();
 
-        // Extract labels array:
-        $labelsArray = HelperFunctions::readLabels($labelsPath);
+        // Extract test images array:
+        $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
+        $imagesCount = count($images);
+        HelperFunctions::printInfo("Read test images.");
 
-        // Extract images array:
-        $images = HelperFunctions::readImagesData($imagePath);
-        $testDataCount = count($images);
+        // Extract test labels array:
+        $labels = HelperFunctions::readLabels($labelsPath);
+        $labelsCount = count($labels);
+        HelperFunctions::printInfo("Read test labels.");
 
-        // Looping images:
-        foreach ($images as $i => $image) {
-            echo "\n{$i}";
-            print_r($image);
-            return;
-            //$sigmoid->
+        // Prepare testing DataSet:
+        $successGuessAmount = 0;
+        foreach ($images as $key => $image) {
+            // Testing current item:
+            $output = $sigmoid->activate($image);
+            $guessValue = $this->guessValueFromOutput($output);
+
+            // Register success guess:
+            if ($guessValue === (int)$labels[$key]) {
+                $successGuessAmount++;
+            }
         }
-        //$sigmoid->test();
+        HelperFunctions::printInfo("Prepared testing DataSet.");
+
+        // Reset not required variables:
+        $images = null;
+        $labels = null;
 
         // Information about results:
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)) . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)) . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Done testing in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds) . PHP_EOL;
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Data location: " . self::DATA_LOCATION . PHP_EOL;
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Test numbers amount: {$testDataCount}" . PHP_EOL;
+        HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
+        HelperFunctions::printInfo("Peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
+        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
+        HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
+        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
+        HelperFunctions::printInfo("Success guess amount: {$successGuessAmount}.");
     }
 
     private function getSigmoid(): Sigmoid
@@ -69,5 +75,24 @@ class SigmoidTestHelper
         $sigmoid = unserialize($data);
 
         return $sigmoid;
+    }
+
+    private function guessValueFromOutput(array $output): int
+    {
+        $value = -1;
+        $guessAmount = 0;
+
+        foreach ($output as $key => $networkOutput) {
+            if ($networkOutput >= 0.9 && $networkOutput <= 1) {
+                $guessAmount++;
+                $value = $key;
+            }
+        }
+
+        if ($guessAmount > 1) {
+            $value = -1;
+        }
+
+        return $value;
     }
 }

@@ -127,4 +127,51 @@ class HelperFunctions
 
         return $images;
     }
+
+    /**
+     * Reading images float array between 0 and 1.
+     * In DB images are stored with values between 0 and 255.
+     * 0 mean - nothing.
+     *
+     * @param string $imagePath
+     *
+     * @return float[]
+     * @throws Exception
+     */
+    public static function readImagesDataAsFloatBetween0And1(string $imagePath): array
+    {
+        // Open images path:
+        $streamImages = fopen($imagePath, 'rb');
+        $images = [];
+
+        try {
+            // Binary-safe file read up to 16 bytes from the file pointer $stream:
+            $header = fread($streamImages, 16);
+
+            // Unpack data from binary string into an array according to the given format (first parameter):
+            $fields = unpack('Nmagic/Nsize/Nrows/Ncols', $header);
+
+            // Check if magic image is ok as expected:
+            if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
+                throw new Exception('Invalid magic number: ' . $imagePath);
+            }
+
+            // Looping all in file available images:
+            for ($i = 0; $i < $fields['size']; $i++) {
+                // Read image:
+                $imageBytes = fread($streamImages, $fields['rows'] * $fields['cols']);
+
+                // Converting to byte array:
+                $imageBytesArray = unpack('C*', $imageBytes);
+
+                $images[] = array_map(function ($b) {
+                    return $b / 255;
+                }, array_values($imageBytesArray));
+            }
+        } finally {
+            fclose($streamImages);
+        }
+
+        return $images;
+    }
 }
