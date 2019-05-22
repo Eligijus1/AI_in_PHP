@@ -42,7 +42,7 @@ class SigmoidTrainHelper
         HelperFunctions::printInfo("Created Sigmoid object.");
 
         // Extract train images array:
-        $images = HelperFunctions::readImagesData($imagePath);
+        $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
         $imagesCount = count($images);
         HelperFunctions::printInfo("Read train images.");
 
@@ -54,12 +54,7 @@ class SigmoidTrainHelper
         // Prepare training DataSet:
         $trainingDataSet = [];
         $i = 0;
-        foreach ($images as $image) {
-            // Converting image bytes to float between 0 and 1:
-            $trainingItem = array_map(function ($b) {
-                return $b / 255;
-            }, array_values($image));
-
+        foreach ($images as $trainingItem) {
             // Training data set should have answer, that contain answer data:
             for ($j = 0; $j <= 9; ++$j) {
                 if ($j === (int)$labels[$i]) {
