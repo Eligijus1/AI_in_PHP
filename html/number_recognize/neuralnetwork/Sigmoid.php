@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace number_recognize\neuralnetwork;
 
+use number_recognize\helpers\HelperFunctions;
+
 class Sigmoid
 {
     /**
@@ -170,12 +172,28 @@ class Sigmoid
             $this->values[$z] = $inputVector[$z];
         }
 
+        // Here $this->values contain input data.
+
+        print_r($this->weights);
+
         // Other layers values:
         foreach ($this->networkLayers as $num => $layer) {
             if ($num > 0) {
                 for ($j = $layer['start_node']; $j <= $layer['end_node']; ++$j) {
                     $net = 0;
                     for ($i = $this->networkLayers[$num - 1]['start_node']; $i <= $this->networkLayers[$num - 1]['end_node']; ++$i) {
+
+                        // Check for errors:
+                        if (!isset($this->values[$i])) {
+                            HelperFunctions::printError("\$this->values[{$i}] in activate method not defined.");
+                            exit(0);
+                        }
+                        if (!isset($this->weights[$i][$j])) {
+                            HelperFunctions::printError("\$this->weights[{$i}][{$j}] int activate method not defined.");
+                            exit(0);
+                        }
+
+                        // Multiplication of next layers values and weights:
                         $net += $this->values[$i] * $this->weights[$i][$j];
                     }
                     $net += $this->biasWeights[$num - 1][$j];
@@ -184,6 +202,8 @@ class Sigmoid
                 }
             }
         }
+
+        exit(0);
 
         return $this->getOutputs();
     }
@@ -206,14 +226,24 @@ class Sigmoid
             }
 
             $sumNetworkError = 0;
-            foreach ($trainingSets as $trainingSet) {
+            foreach ($trainingSets as $key => $trainingSet) {
+                HelperFunctions::printInfo("Begin training with training set {$key}.");
+
                 //$outputs = $this->test($trainingSet);
                 $this->activate($trainingSet);
+                HelperFunctions::printInfo("Activated network.");
                 $this->calculateNodeDeltas($trainingSet);
+                HelperFunctions::printInfo("Calculated node deltas.");
                 $this->calculateGradients();
+
+                HelperFunctions::printInfo("Calculated gradients. Begin Calculate weights updates.");
                 $this->calculateWeightUpdates();
+                HelperFunctions::printInfo("Calculated weights updates.");
+
                 $this->applyWeightChanges();
+                HelperFunctions::printInfo("Apply weight changes.");
                 $sumNetworkError += $this->calculateNetworkError($trainingSet);
+                HelperFunctions::printInfo("Calculated network errors.");
             }
 
             $globalError = $sumNetworkError / count($trainingSets);
@@ -281,23 +311,44 @@ class Sigmoid
         $this->initialiseWeights();
     }
 
+//    /**
+//     * Initialises interconnection strengths to random values
+//     * between -0.05 and +0.05
+//     */
+//    private function initialiseWeights_old()
+//    {
+//        foreach ($this->networkLayers as $num => $layer) {
+//            if ($num < count($this->networkLayers) - 1) {
+//                //Calculate non bias weights
+//                for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
+//                    for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
+//                        $this->weights[$i][$j] = rand(-5, 5) / 100;
+//                    }
+//                }
+//                //Calculate bias weights
+//                for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
+//                    $this->biasWeights[$num][$b] = rand(-5, 5) / 100;
+//                }
+//            }
+//        }
+//    }
+
     /**
-     * Initialises interconnection strengths to random values
-     * between -0.05 and +0.05
+     * Initialise weight updates to zero
      */
-    private function initialiseWeights()
+    protected function initialiseWeights()
     {
         foreach ($this->networkLayers as $num => $layer) {
             if ($num < count($this->networkLayers) - 1) {
                 //Calculate non bias weights
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
                     for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
-                        $this->weights[$i][$j] = rand(-5, 5) / 100;
+                        $this->weightUpdates[$i][$j] = 0.0;
                     }
                 }
                 //Calculate bias weights
                 for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
-                    $this->biasWeights[$num][$b] = rand(-5, 5) / 100;
+                    $this->biasWeightUpdates[$num][$b] = 0.0;
                 }
             }
         }
@@ -369,13 +420,14 @@ class Sigmoid
     {
         foreach ($this->networkLayers as $num => $layer) {
             if ($num < count($this->networkLayers) - 1) {
-                //Calculate weight changes for non bias weights
+                //Calculate weight changes for non bias weights:
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
                     for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
                         $this->weightUpdates[$i][$j] = ($this->learningRate * $this->gradients[$i][$j]) + ($this->momentum * $this->weightUpdates[$i][$j]);
                     }
                 }
-                //Calculate weight changes for bias weights
+
+                //Calculate weight changes for bias weights:
                 for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
                     $this->biasWeightUpdates[$num][$b] = ($this->learningRate * $this->biasGradients[$num][$b]) + ($this->momentum * $this->biasWeightUpdates[$num][$b]);
                 }

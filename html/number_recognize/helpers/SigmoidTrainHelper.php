@@ -31,16 +31,25 @@ class SigmoidTrainHelper
         }
 
         // Training network:
-        // NOTE: 1 parameter - input pixels amount; 15 - hidden layer (need adjust); last - output.
-        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005);
+        // NOTE:
+        // =====
+        // 1 parameter - 784 - input pixels amount; 15 - hidden layer (need adjust); last - output.
+        // 2 parameter - learning rate. Need adjust.
+        // 3 parameter - momentum. Need adjust.
+        // 4 parameter - minimum error.
+        // 5 parameter - max num epochs. Need use 2000 or more.
+        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 1);
+        HelperFunctions::printInfo("Created Sigmoid object.");
 
         // Extract train images array:
         $images = HelperFunctions::readImagesData($imagePath);
         $imagesCount = count($images);
+        HelperFunctions::printInfo("Read train images.");
 
         // Extract labels array:
         $labels = HelperFunctions::readLabels($labelsPath);
         $labelsCount = count($labels);
+        HelperFunctions::printInfo("Read train labels.");
 
         // Prepare training DataSet:
         $trainingDataSet = [];
@@ -65,6 +74,7 @@ class SigmoidTrainHelper
             // Update loop:
             $i++;
         }
+        HelperFunctions::printInfo("Prepared training DataSet.");
 
         // Reset not required variables:
         $images = null;
@@ -73,6 +83,7 @@ class SigmoidTrainHelper
         // Call train methods, responsible for training:
         // WARNING: this operation consuming a lot resources.
         $trainStatus = $sigmoid->train($trainingDataSet) ? 'OK' : 'Failed';
+        HelperFunctions::printInfo("Training finished.");
 
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
