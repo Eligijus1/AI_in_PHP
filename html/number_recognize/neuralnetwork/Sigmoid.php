@@ -174,8 +174,6 @@ class Sigmoid
 
         // Here $this->values contain input data.
 
-        print_r($this->weights);
-
         // Other layers values:
         foreach ($this->networkLayers as $num => $layer) {
             if ($num > 0) {
@@ -202,8 +200,6 @@ class Sigmoid
                 }
             }
         }
-
-        exit(0);
 
         return $this->getOutputs();
     }
@@ -340,14 +336,17 @@ class Sigmoid
     {
         foreach ($this->networkLayers as $num => $layer) {
             if ($num < count($this->networkLayers) - 1) {
-                //Calculate non bias weights
+                //Calculate non bias weights:
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
                     for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
+                        $this->weights[$i][$j] = rand(-5, 5) / 100;
                         $this->weightUpdates[$i][$j] = 0.0;
                     }
                 }
-                //Calculate bias weights
+
+                //Calculate bias weights:
                 for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
+                    $this->biasWeights[$num][$b] = rand(-5, 5) / 100;
                     $this->biasWeightUpdates[$num][$b] = 0.0;
                 }
             }
