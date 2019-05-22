@@ -233,7 +233,7 @@ class Sigmoid
                 $sumNetworkError += $this->calculateNetworkError($trainingSet);
 
                 // Output some information:
-                HelperFunctions::printInfo("Finished training with training set {$key}, epoch {$this->numEpochs} of {$this->maxNumEpochs}.");
+                //HelperFunctions::printInfo("Finished training with training set {$key}, epoch {$this->numEpochs} of {$this->maxNumEpochs}.");
             }
 
             $globalError = $sumNetworkError / count($trainingSets);
