@@ -38,18 +38,18 @@ class SigmoidTrainHelper
         // 3 parameter - momentum. Need adjust.
         // 4 parameter - minimum error.
         // 5 parameter - max num epochs. Need use 2000 or more.
-        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 1);
+        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 5);
         HelperFunctions::printInfo("Created Sigmoid object.");
-
-        // Extract train images array:
-        $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
-        $imagesCount = count($images);
-        HelperFunctions::printInfo("Read train images.");
 
         // Extract labels array:
         $labels = HelperFunctions::readLabels($labelsPath);
         $labelsCount = count($labels);
         HelperFunctions::printInfo("Read train labels.");
+
+        // Extract train images array:
+        $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
+        $imagesCount = count($images);
+        HelperFunctions::printInfo("Read train images.");
 
         // Prepare training DataSet:
         $trainingDataSet = [];

@@ -62,9 +62,9 @@ class SigmoidTestHelper
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
         HelperFunctions::printInfo("Peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
-        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
+        HelperFunctions::printInfo("Done testing in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
         HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
-        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
+        HelperFunctions::printInfo("Used for testing {$imagesCount} images and {$labelsCount} labels.");
         HelperFunctions::printInfo("Success guess amount: {$successGuessAmount}.");
     }
 
