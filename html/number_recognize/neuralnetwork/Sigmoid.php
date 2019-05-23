@@ -226,7 +226,10 @@ class Sigmoid
 
             $sumNetworkError = 0;
             foreach ($trainingSets as $key => $trainingSet) {
+                // First try activate existing network with current input data:
                 $this->activate($trainingSet);
+
+                //
                 $this->calculateNodeDeltas($trainingSet);
                 $this->calculateGradients();
                 $this->calculateWeightUpdates();
