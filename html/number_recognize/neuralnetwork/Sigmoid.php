@@ -212,15 +212,16 @@ class Sigmoid
      *
      * @param array $trainingSets
      *
-     * @return boolean
+     * @return float
      */
-    public function train(array $trainingSets)
+    public function train(array $trainingSets): ?float
     {
+        $globalError = null;
         $this->numEpochs = 1;
 
         do {
             if ($this->numEpochs > $this->maxNumEpochs) {
-                return false;
+                return $globalError;
             }
 
             $sumNetworkError = 0;
@@ -241,7 +242,7 @@ class Sigmoid
             $this->numEpochs++;
         } while ($globalError > $this->minimumError);
 
-        return true;
+        return $globalError;
     }
 
     /**

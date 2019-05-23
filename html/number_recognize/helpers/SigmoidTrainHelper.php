@@ -77,7 +77,7 @@ class SigmoidTrainHelper
 
         // Call train methods, responsible for training:
         // WARNING: this operation consuming a lot resources.
-        $trainStatus = $sigmoid->train($trainingDataSet) ? 'OK' : 'Failed';
+        $globalError = $sigmoid->train($trainingDataSet);
         HelperFunctions::printInfo("Training finished.");
 
         // Create work if not exist:
@@ -94,6 +94,6 @@ class SigmoidTrainHelper
         HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
         HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
         HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
-        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels. Train result is {$trainStatus}.");
+        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels. Train global error is {$globalError}.");
     }
 }
