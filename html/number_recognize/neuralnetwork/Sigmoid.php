@@ -285,9 +285,7 @@ class Sigmoid
     }
 
     /**
-     * Initialises the nodes outputs to zero
-     * and interconnection strengths to random values
-     * between -0.05 and +0.05
+     * Initialises the nodes.
      */
     private function initialise()
     {
@@ -315,14 +313,16 @@ class Sigmoid
                 //Calculate non bias weights:
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
                     for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
-                        $this->weights[$i][$j] = rand(-5, 5) / 100;
+                        //$this->weights[$i][$j] = rand(-5, 5) / 100;
+                        $this->weights[$i][$j] = 0.0;
                         $this->weightUpdates[$i][$j] = 0.0;
                     }
                 }
 
                 //Calculate bias weights:
                 for ($b = $this->networkLayers[$num + 1]['start_node']; $b <= $this->networkLayers[$num + 1]['end_node']; ++$b) {
-                    $this->biasWeights[$num][$b] = rand(-5, 5) / 100;
+                    //$this->biasWeights[$num][$b] = rand(-5, 5) / 100;
+                    $this->biasWeights[$num][$b] = 0.0;
                     $this->biasWeightUpdates[$num][$b] = 0.0;
                 }
             }

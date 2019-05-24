@@ -38,7 +38,7 @@ class SigmoidTrainHelper
         // 3 parameter - momentum. Need adjust.
         // 4 parameter - minimum error.
         // 5 parameter - max num epochs. Need use 2000 or more.
-        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 30);
+        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 20);
         HelperFunctions::printInfo("Created Sigmoid object.");
 
         // Extract labels array:
