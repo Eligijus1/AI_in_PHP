@@ -313,8 +313,7 @@ class Sigmoid
                 //Calculate non bias weights:
                 for ($i = $layer['start_node']; $i <= $layer['end_node']; ++$i) {
                     for ($j = $this->networkLayers[$num + 1]['start_node']; $j <= $this->networkLayers[$num + 1]['end_node']; ++$j) {
-                        //$this->weights[$i][$j] = rand(-5, 5) / 100;
-                        $this->weights[$i][$j] = 0.0;
+                        $this->weights[$i][$j] = rand(-5, 5) / 100;
                         $this->weightUpdates[$i][$j] = 0.0;
                     }
                 }
