@@ -38,7 +38,7 @@ class SigmoidTrainHelper
         // 3 parameter - momentum. Need adjust.
         // 4 parameter - minimum error.
         // 5 parameter - max num epochs. Need use 2000 or more.
-        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 20);
+        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 21);
         HelperFunctions::printInfo("Created Sigmoid object.");
 
         // Extract labels array:
@@ -94,6 +94,7 @@ class SigmoidTrainHelper
         HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
         HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
         HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
-        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels. Train global error is {$globalError}.");
+        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
+        HelperFunctions::printInfo("Train global error is {$globalError}.");
     }
 }
