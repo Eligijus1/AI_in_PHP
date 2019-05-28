@@ -70,7 +70,14 @@ class SigmoidTestHelper
 
     private function getSigmoid(): Sigmoid
     {
-        $data = file_get_contents(self::DATA_LOCATION . "/sigmoid.dat");
+        $networkFile = self::DATA_LOCATION . "/sigmoid.dat";
+
+        if (!file_exists($networkFile)) {
+            HelperFunctions::printError("File {$networkFile} not exist.");
+            exit(1);
+        }
+
+        $data = file_get_contents($networkFile);
 
         $sigmoid = unserialize($data);
 
