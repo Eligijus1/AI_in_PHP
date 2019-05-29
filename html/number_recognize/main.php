@@ -91,12 +91,20 @@ switch ($argv[1]) {
 
     // Example: php main.php train_sigmoid
     case 'train_sigmoid':
-        (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath);
+        (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, 0.2, 0.7, 20);
         break;
 
     // Example: php main.php test_sigmoid
     case 'test_sigmoid':
         (new SigmoidTestHelper())->test(testImagePath, testLabelPath);
+        break;
+
+    // Example: php main.php train_and_test_sigmoid
+    case 'train_and_test_sigmoid':
+        for ($i = 28; $i <= 30; $i++) {
+            (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, 0.2, 0.7, $i);
+            (new SigmoidTestHelper())->test(testImagePath, testLabelPath);
+        }
         break;
 
     default:

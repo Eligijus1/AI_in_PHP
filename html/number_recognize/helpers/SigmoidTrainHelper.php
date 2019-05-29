@@ -10,15 +10,23 @@ class SigmoidTrainHelper
 {
     private const DATA_LOCATION = "data/train_sigmoid";
 
-    public function train(string $imagePath, string $labelsPath): void
-    {
+    public function train(
+        string $imagePath,
+        string $labelsPath,
+        float $learningRate = 0.2,
+        float $momentum = 0.7,
+        int $maxNumEpochs = 20,
+        float $minimumError = 0.005
+    ): void {
         $dataFile = self::DATA_LOCATION . "/sigmoid.dat";
+        $dataFileBackup = self::DATA_LOCATION . "/sigmoid_15_hidden_layers_{$learningRate}_learning_rate_{$momentum}_momentum_{$minimumError}_min_error_{$maxNumEpochs}_epochs.dat";
 
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
         HelperFunctions::printInfo("Begin training with sigmoid.");
+        HelperFunctions::printInfo("Learning rate: {$learningRate}; Momentum: {$momentum}; Max epochs: {$maxNumEpochs}");
 
         // Do some checks:
         if (!file_exists($imagePath)) {
@@ -38,7 +46,7 @@ class SigmoidTrainHelper
         // 3 parameter - momentum. Need adjust.
         // 4 parameter - minimum error.
         // 5 parameter - max num epochs. Need use 2000 or more.
-        $sigmoid = new Sigmoid([784, 15, 10], 0.2, 0.7, 0.005, 27);
+        $sigmoid = new Sigmoid([784, 15, 10], $learningRate, $momentum, $minimumError, $maxNumEpochs);
         HelperFunctions::printInfo("Created Sigmoid object.");
 
         // Extract labels array:
@@ -88,6 +96,7 @@ class SigmoidTrainHelper
         // Save object to disc:
         $s = serialize($sigmoid);
         file_put_contents($dataFile, $s);
+        file_put_contents($dataFileBackup, $s);
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
