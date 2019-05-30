@@ -101,8 +101,15 @@ switch ($argv[1]) {
 
     // Example: php main.php train_and_test_sigmoid
     case 'train_and_test_sigmoid':
+        /*
         for ($i = 28; $i <= 30; $i++) {
             (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, 0.2, 0.7, $i);
+            (new SigmoidTestHelper())->test(testImagePath, testLabelPath);
+        }
+        */
+        $values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+        foreach ($values as $value) {
+            (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, $value, 0.7, 26);
             (new SigmoidTestHelper())->test(testImagePath, testLabelPath);
         }
         break;
