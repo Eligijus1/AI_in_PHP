@@ -219,21 +219,28 @@ class Sigmoid
         $globalError = null;
         $this->numEpochs = 1;
 
+        // Loop until global error will reach minimum error:
         do {
+            // If epoch number reached max requested epochs number, simple interrupt:
             if ($this->numEpochs > $this->maxNumEpochs) {
                 return $globalError;
             }
 
+            // Loop every training data set:
             $sumNetworkError = 0;
             foreach ($trainingSets as $key => $trainingSet) {
                 // First try activate existing network with current input data:
                 $this->activate($trainingSet);
 
-                //
+                // Calculating node deltas:
                 $this->calculateNodeDeltas($trainingSet);
+
                 $this->calculateGradients();
+
                 $this->calculateWeightUpdates();
+
                 $this->applyWeightChanges();
+
                 $sumNetworkError += $this->calculateNetworkError($trainingSet);
 
                 // Output some information:
@@ -245,6 +252,7 @@ class Sigmoid
             $this->numEpochs++;
         } while ($globalError > $this->minimumError);
 
+        // Finish and return error level:
         return $globalError;
     }
 
@@ -341,7 +349,6 @@ class Sigmoid
             -1 * $this->networkLayers[count($this->networkLayers) - 1]['num_nodes']);
         $startNode = $this->networkLayers[count($this->networkLayers) - 1]['start_node'];
         $endNode = $this->networkLayers[count($this->networkLayers) - 1]['end_node'];
-        //$activation = $this->network->getActivation();
 
         //Calculate node delta for output nodes
         $j = 0;
@@ -350,6 +357,7 @@ class Sigmoid
             $this->nodeDeltas[$i] = (-1 * $error) * $this->getDerivative($this->net[$i]);
             ++$j;
         }
+
         //Calculate node delta for hidden nodes
         for ($k = count($this->networkLayers) - 2; $k > 0; --$k) {
             $startNode = $this->networkLayers[$k]['start_node'];
