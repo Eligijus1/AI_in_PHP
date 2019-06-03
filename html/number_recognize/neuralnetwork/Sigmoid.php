@@ -120,6 +120,11 @@ class Sigmoid
      */
     private $weightUpdates = [];
 
+    /**
+     * @var float|null
+     */
+    private $latestTrainGlobalError = null;
+
     public function __construct(
         array $networkLayers,
         float $learningRate,
@@ -221,7 +226,9 @@ class Sigmoid
         $this->numEpochs = 1;
 
         // Define maximum epochs number:
-        if (!$maxNumEpochs) {
+        if ($maxNumEpochs) {
+            $this->maxNumEpochs = $this->maxNumEpochs + $maxNumEpochs;
+        } else {
             $maxNumEpochs = $this->maxNumEpochs;
         }
 
@@ -259,6 +266,7 @@ class Sigmoid
         } while ($globalError > $this->minimumError);
 
         // Finish and return error level:
+        $this->latestTrainGlobalError = $globalError;
         return $globalError;
     }
 
@@ -493,5 +501,25 @@ class Sigmoid
     public function updateBiasWeight($i, $j, $weight)
     {
         $this->biasWeights[$i][$j] += $weight;
+    }
+
+    public function getLearningRate(): float
+    {
+        return $this->learningRate;
+    }
+
+    public function getMomentum(): float
+    {
+        return $this->momentum;
+    }
+
+    public function getMaxNumEpochs(): int
+    {
+        return $this->maxNumEpochs;
+    }
+
+    public function getLatestTrainGlobalError(): ?float
+    {
+        return $this->latestTrainGlobalError;
     }
 }
