@@ -106,4 +106,37 @@ class SigmoidTrainHelper
         HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
         HelperFunctions::printInfo("Train global error is {$globalError}.");
     }
+
+    public function getTrainingDataSet(string $imagePath, string $labelsPath): array
+    {
+        // Extract labels array:
+        $labels = HelperFunctions::readLabels($labelsPath);
+        HelperFunctions::printInfo("Read train labels.");
+
+        // Extract train images array:
+        $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
+        HelperFunctions::printInfo("Read train images.");
+
+        // Prepare training DataSet:
+        $trainingDataSet = [];
+        $i = 0;
+        foreach ($images as $trainingItem) {
+            // Training data set should have answer, that contain answer data:
+            for ($j = 0; $j <= 9; ++$j) {
+                if ($j === (int)$labels[$i]) {
+                    array_push($trainingItem, 1);
+                } else {
+                    array_push($trainingItem, 0);
+                }
+            }
+
+            $trainingDataSet[$i] = $trainingItem;
+
+            // Update loop:
+            $i++;
+        }
+        HelperFunctions::printInfo("Prepared training DataSet.");
+
+        return $trainingDataSet;
+    }
 }

@@ -68,7 +68,7 @@ class SigmoidTestHelper
         HelperFunctions::printInfo("Success guess amount: {$successGuessAmount}.");
     }
 
-    private function getSigmoid(?string $networkFile = null): Sigmoid
+    public function getSigmoid(?string $networkFile = null): Sigmoid
     {
         if (!$networkFile) {
             $networkFile = self::DATA_LOCATION . "/sigmoid.dat";

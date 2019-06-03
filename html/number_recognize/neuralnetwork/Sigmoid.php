@@ -211,18 +211,24 @@ class Sigmoid
      * training set.
      *
      * @param array $trainingSets
+     * @param int   $maxNumEpochs
      *
      * @return float
      */
-    public function train(array $trainingSets): ?float
+    public function train(array $trainingSets, int $maxNumEpochs = null): ?float
     {
         $globalError = null;
         $this->numEpochs = 1;
 
+        // Define maximum epochs number:
+        if (!$maxNumEpochs) {
+            $maxNumEpochs = $this->maxNumEpochs;
+        }
+
         // Loop until global error will reach minimum error:
         do {
             // If epoch number reached max requested epochs number, simple interrupt:
-            if ($this->numEpochs > $this->maxNumEpochs) {
+            if ($this->numEpochs > $maxNumEpochs) {
                 return $globalError;
             }
 
