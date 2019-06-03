@@ -101,20 +101,20 @@ switch ($argv[1]) {
 
     // Example: php main.php train_and_test_sigmoid
     case 'train_and_test_sigmoid':
+        $oldSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\04_sigmoid.dat';
+        $newSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\05_sigmoid.dat';
         /** @var Sigmoid $sigmoid */
-        $sigmoid = unserialize(file_get_contents('C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\02_sigmoid.dat'));
+        $sigmoid = unserialize(file_get_contents($oldSigmoid));
         $trainingDataSet = (new SigmoidTrainHelper())->getTrainingDataSet(trainImagePath, trainLabelPath);
         $sigmoid->train($trainingDataSet, 1);
 
-        file_put_contents('C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\03_sigmoid.dat',
-            serialize($sigmoid));
-
-        (new SigmoidTestHelper())->test(testImagePath, testLabelPath,
-            'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\03_sigmoid.dat');
+        file_put_contents($newSigmoid, serialize($sigmoid));
+        echo "\n";
+        (new SigmoidTestHelper())->test(testImagePath, testLabelPath, $newSigmoid);
 
         break;
 
     default:
-        echo "\nERROR: Unhandled action '" . $argv[1] . "'.\n";
+        HelperFunctions::printError("Unhandled action '{$argv[1]}'");
         return;
 }

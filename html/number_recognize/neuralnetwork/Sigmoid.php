@@ -236,6 +236,7 @@ class Sigmoid
         do {
             // If epoch number reached max requested epochs number, simple interrupt:
             if ($this->numEpochs > $maxNumEpochs) {
+                $this->latestTrainGlobalError = $globalError;
                 return $globalError;
             }
 
