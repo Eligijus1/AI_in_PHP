@@ -87,17 +87,13 @@ class SigmoidTestHelper
     private function guessValueFromOutput(array $output): int
     {
         $value = -1;
-        $guessAmount = 0;
+        $guessPercentLevel = 0;
 
         foreach ($output as $key => $networkOutput) {
-            if ($networkOutput >= 0.9 && $networkOutput <= 1) {
-                $guessAmount++;
+            if ($networkOutput > $guessPercentLevel && $networkOutput <= 1) {
                 $value = $key;
+                $guessPercentLevel = $networkOutput;
             }
-        }
-
-        if ($guessAmount > 1) {
-            $value = -1;
         }
 
         return $value;
