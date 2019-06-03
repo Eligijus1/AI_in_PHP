@@ -16,7 +16,6 @@ use number_recognize\helpers\PerceptronTrainHelper;
 use number_recognize\helpers\SigmoidTestHelper;
 use number_recognize\helpers\SigmoidTrainHelper;
 use number_recognize\MnistImageGenerator;
-use number_recognize\neuralnetwork\Sigmoid;
 
 require_once 'neuralnetwork/Perceptron.php';
 require_once 'neuralnetwork/Sigmoid.php';
@@ -101,15 +100,11 @@ switch ($argv[1]) {
 
     // Example: php main.php train_and_test_sigmoid
     case 'train_and_test_sigmoid':
-        $oldSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\04_sigmoid.dat';
-        $newSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\05_sigmoid.dat';
-        /** @var Sigmoid $sigmoid */
+        $oldSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\00036_sigmoid.dat';
+        $newSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\00037_sigmoid.dat';
         $sigmoid = unserialize(file_get_contents($oldSigmoid));
-        $trainingDataSet = (new SigmoidTrainHelper())->getTrainingDataSet(trainImagePath, trainLabelPath);
-        $sigmoid->train($trainingDataSet, 1);
-
+        $sigmoid->train((new SigmoidTrainHelper())->getTrainingDataSet(trainImagePath, trainLabelPath), 1);
         file_put_contents($newSigmoid, serialize($sigmoid));
-        echo "\n";
         (new SigmoidTestHelper())->test(testImagePath, testLabelPath, $newSigmoid);
 
         break;
