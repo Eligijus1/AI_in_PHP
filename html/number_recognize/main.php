@@ -14,9 +14,7 @@ use number_recognize\helpers\PerceptronTestHelper;
 use number_recognize\helpers\PerceptronTrainHelper;
 use number_recognize\helpers\SigmoidTestHelper;
 use number_recognize\helpers\SigmoidTrainHelper;
-use number_recognize\MnistDataset;
 use number_recognize\MnistImageGenerator;
-use number_recognize\MnistNeuralNetwork;
 
 require_once 'neuralnetwork/Perceptron.php';
 require_once 'neuralnetwork/Sigmoid.php';
@@ -115,6 +113,7 @@ switch ($argv[1]) {
         }
         break;
         */
+        /*
         $values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
         foreach ($values as $value) {
             (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, 0.2, $value, 26);
@@ -122,89 +121,10 @@ switch ($argv[1]) {
             (new SigmoidTestHelper())->test(testImagePath, testLabelPath);
             echo "\n";
         }
+        */
         break;
 
     default:
         echo "\nERROR: Unhandled action '" . $argv[1] . "'.\n";
         return;
 }
-
-/**
- * Accuracy Evaluation
- *
- * @param MnistNeuralNetwork $neuralNetwork
- * @param MnistDataset       $dataset
- *
- * @return float|int
- */
-function calculate_accuracy(MnistNeuralNetwork $neuralNetwork, MnistDataset $dataset)
-{
-    $size = $dataset->getSize();
-    // Loop through all the training examples
-    for ($i = 0, $correct = 0; $i < $size; $i++) {
-        $image = $dataset->getImage($i);
-        $label = $dataset->getLabel($i);
-        $activations = $neuralNetwork->hypothesis($image);
-
-        // Our prediction is index containing the maximum probability:
-        $prediction = array_search(max($activations), $activations);
-        if ($prediction == $label) {
-            $correct++;
-        }
-    }
-
-    // Percentage of correct predictions is the accuracy:
-    return $correct / $size;
-}
-/*
-    // Example:
-    case 'train_sigmoid_network':
-
-        // ---------------------- BEGIN -----------------------------------
-
-        // Define application start time:
-        $milliseconds = round(microtime(true) * 1000);
-
-        // Print message, that starting loading:
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . ' INFO: Loading training dataset... (may take a while)' . PHP_EOL;
-
-        // Loading training data:
-        $trainDataset = MnistDataSetReader::fromFiles(trainImagePath, trainLabelPath);
-
-        // Splitting training data to batches ???:
-        $batches = $trainDataset->getSize() / $BATCH_SIZE;
-
-        // Inform about training start:
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Starting training..." . PHP_EOL;
-
-        // Define training start time:
-        $milliseconds_training_start = round(microtime(true) * 1000);
-
-        // Create neural network object:
-        $neuralNetwork = new MnistNeuralNetwork();
-
-        // Training:
-        for ($i = 0; $i < $STEPS; $i++) {
-            // Retrieve a subset of the dataset as a batch:
-            $batch = $trainDataset->getBatch($BATCH_SIZE, $i % $batches);
-
-            //
-            $loss = $neuralNetwork->trainingStep($batch, 0.5);
-            $averageLoss = $loss / $batch->getSize();
-            //$accuracy = calculate_accuracy($neuralNetwork, $testDataset);
-            //printf("Step %04d\tAverage Loss %.2f\tAccuracy: %.2f\n", $i + 1, $averageLoss, $accuracy);
-        }
-
-        // Information about results:
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: Done training in " . (round(microtime(true) * 1000) - $milliseconds) . " milliseconds\n";
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Memory used: " . memory_get_usage(true) . " bytes\n";
-        echo date_format(new DateTime(),
-                'Y.m.d H:i:s') . " INFO: peak of memory allocated by PHP: " . memory_get_peak_usage(true) . " bytes\n";
-        echo date_format(new DateTime(), 'Y.m.d H:i:s') . " INFO: Training data amount: {$trainDataset->getSize()}\n";
-
-        // ---------------------- END -----------------------------------
-
-        break;
-*/
