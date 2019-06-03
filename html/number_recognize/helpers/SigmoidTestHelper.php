@@ -10,7 +10,7 @@ class SigmoidTestHelper
 {
     private const DATA_LOCATION = "data/train_sigmoid";
 
-    public function test(string $imagePath, string $labelsPath): void
+    public function test(string $imagePath, string $labelsPath, ?string $networkFile = null): void
     {
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -29,7 +29,7 @@ class SigmoidTestHelper
         }
 
         // Extract from file Sigmoid network:
-        $sigmoid = $this->getSigmoid();
+        $sigmoid = $this->getSigmoid($networkFile);
 
         // Extract test images array:
         $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
@@ -68,9 +68,11 @@ class SigmoidTestHelper
         HelperFunctions::printInfo("Success guess amount: {$successGuessAmount}.");
     }
 
-    private function getSigmoid(): Sigmoid
+    private function getSigmoid(?string $networkFile = null): Sigmoid
     {
-        $networkFile = self::DATA_LOCATION . "/sigmoid.dat";
+        if (!$networkFile) {
+            $networkFile = self::DATA_LOCATION . "/sigmoid.dat";
+        }
 
         if (!file_exists($networkFile)) {
             HelperFunctions::printError("File {$networkFile} not exist.");
