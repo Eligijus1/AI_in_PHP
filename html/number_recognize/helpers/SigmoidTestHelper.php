@@ -10,7 +10,7 @@ class SigmoidTestHelper
 {
     private const DATA_LOCATION = "data/train_sigmoid";
 
-    public function test(string $imagePath, string $labelsPath, ?string $networkFile = null): void
+    public function test(string $imagePath, string $labelsPath, ?string $networkFile = null): int
     {
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -21,11 +21,11 @@ class SigmoidTestHelper
         // Do some checks:
         if (!file_exists($imagePath)) {
             HelperFunctions::printError("Images file {$imagePath} not exist.");
-            return;
+            return 0;
         }
         if (!file_exists($imagePath)) {
             HelperFunctions::printError("Labels file {$labelsPath} not exist.");
-            return;
+            return 0;
         }
 
         // Extract from file Sigmoid network:
@@ -70,6 +70,8 @@ class SigmoidTestHelper
         HelperFunctions::printInfo("Momentum: {$sigmoid->getMomentum()}.");
         HelperFunctions::printInfo("Epochs number: {$sigmoid->getMaxNumEpochs()}.");
         HelperFunctions::printInfo("Global error: {$sigmoid->getLatestTrainGlobalError()}.");
+
+        return $successGuessAmount;
     }
 
     public function getSigmoid(?string $networkFile = null): Sigmoid
