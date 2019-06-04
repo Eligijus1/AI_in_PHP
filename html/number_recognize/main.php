@@ -96,14 +96,14 @@ switch ($argv[1]) {
     // Example: php main.php test_sigmoid
     case 'test_sigmoid':
         (new SigmoidTestHelper())->test(testImagePath, testLabelPath,
-            'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\00039_sigmoid.dat');
+            'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\Backups\00050_sigmoid_9447.dat');
         break;
 
     // Example: php main.php train_and_test_sigmoid
     case 'train_and_test_sigmoid':
-        for ($i = 0; $i <= 10; $i++) {
-            $oldSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\000' . (41 + $i) . '_sigmoid.dat';
-            $newSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\000' . (42 + $i) . '_sigmoid.dat';
+        for ($i = 0; $i <= 40; $i++) {
+            $oldSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\000' . (52 + $i) . '_sigmoid.dat';
+            $newSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\000' . (53 + $i) . '_sigmoid.dat';
             $sigmoid = unserialize(file_get_contents($oldSigmoid));
             $sigmoid->train((new SigmoidTrainHelper())->getTrainingDataSet(trainImagePath, trainLabelPath), 1);
             file_put_contents($newSigmoid, serialize($sigmoid));
