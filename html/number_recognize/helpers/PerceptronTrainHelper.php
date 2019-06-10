@@ -6,7 +6,6 @@ namespace number_recognize\helpers;
 
 use DateTime;
 use Exception;
-use number_recognize\MnistDataSetReader;
 use number_recognize\neuralnetwork\Perceptron;
 
 class PerceptronTrainHelper
@@ -84,7 +83,7 @@ class PerceptronTrainHelper
             $fields = unpack('Nmagic/Nsize/Nrows/Ncols', $header);
 
             // Check if magic image is ok as expected:
-            if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
+            if ($fields['magic'] !== MnistImageGeneratorHelper::MAGIC_IMAGE) {
                 throw new Exception('Invalid magic number: ' . $imagePath);
             }
 

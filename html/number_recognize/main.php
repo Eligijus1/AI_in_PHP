@@ -10,28 +10,27 @@ ini_set('memory_limit', '6G');
 use number_recognize\helpers\HelperFunctions;
 use number_recognize\helpers\MnistDataSetReaderTesting;
 use number_recognize\helpers\MnistImageAsciiGenerator;
+use number_recognize\helpers\MnistImageGeneratorHelper;
 use number_recognize\helpers\PerceptronFormulaGenerator;
 use number_recognize\helpers\PerceptronTestHelper;
 use number_recognize\helpers\PerceptronTrainHelper;
 use number_recognize\helpers\SigmoidTestHelper;
 use number_recognize\helpers\SigmoidTrainHelper;
-use number_recognize\MnistImageGenerator;
+use number_recognize\helpers\SoftmaxTrainHelper;
 
 require_once 'neuralnetwork/Perceptron.php';
 require_once 'neuralnetwork/Sigmoid.php';
 require_once 'helpers/HelperFunctions.php';
 require_once 'helpers/MnistDataSetReaderTesting.php';
-require_once 'MnistDataSetReader.php';
-require_once 'MnistDataset.php';
-require_once 'MnistNeuralNetwork.php';
 require_once 'helpers/PerceptronTrainHelper.php';
-require_once 'MnistImageGenerator.php';
 require_once 'helpers/MnistImageAsciiGenerator.php';
 require_once 'helpers/PerceptronTestHelper.php';
 require_once 'helpers/BlackWhiteImageSaver.php';
 require_once 'helpers/PerceptronFormulaGenerator.php';
+require_once 'helpers/MnistImageGeneratorHelper.php';
 require_once 'helpers/SigmoidTrainHelper.php';
 require_once 'helpers/SigmoidTestHelper.php';
+require_once 'helpers/SoftmaxTrainHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -60,12 +59,12 @@ switch ($argv[1]) {
 
     // Example: php main.php generate_specified_number_images 0
     case 'generate_specified_number_images':
-        (new MnistImageGenerator())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2]);
+        (new MnistImageGeneratorHelper())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2]);
         break;
 
     // Example: php main.php generate_specified_number_images_black_white 0
     case 'generate_specified_number_images_black_white':
-        (new MnistImageGenerator())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
+        //(new MnistImageGenerator())->generateOneNumberImages(trainImagePath, trainLabelPath, (int)$argv[2], true);
         break;
 
     // Example: php main.php generate_ascii 10
@@ -125,6 +124,10 @@ switch ($argv[1]) {
 
         break;
 
+    // Example: php main.php train_softmax
+    case 'train_softmax':
+        (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath);
+        break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
         return;

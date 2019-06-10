@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace number_recognize\helpers;
 
 use Exception;
-use number_recognize\MnistDataSetReader;
 
 class MnistDataSetReaderTesting
 {
@@ -26,7 +25,7 @@ class MnistDataSetReaderTesting
             $fields = unpack('Nmagic/Nsize/Nrows/Ncols', $header);
 
             // Check if magic image is ok as expected:
-            if ($fields['magic'] !== MnistDataSetReader::MAGIC_IMAGE) {
+            if ($fields['magic'] !== MnistImageGeneratorHelper::MAGIC_IMAGE) {
                 throw new Exception('Invalid magic number: ' . $imagePath);
             }
 
