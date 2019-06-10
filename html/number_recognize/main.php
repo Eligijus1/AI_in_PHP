@@ -126,7 +126,7 @@ switch ($argv[1]) {
 
     // Example: php main.php train_softmax
     case 'train_softmax':
-        (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath);
+        (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1);
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");

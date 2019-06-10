@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace number_recognize\neuralnetwork;
 
-use number_recognize\MnistDataset;
-
 class Softmax
 {
     // This will be a one dimensional array (vector) [10]:
@@ -14,6 +12,12 @@ class Softmax
     // This will be a two dimensional array (matrix) [784x10]:
     private $W;
 
+    // Input layer is equal to images size (width x height):
+    private const IMAGE_SIZE = 28 * 28;
+
+    // Output layer is equal to possible results (0,1,2...9):
+    private const LABELS = 10;
+
     /**
      * Initialise the bias vector and weights as random values between 0 and 1.
      */
@@ -21,10 +25,11 @@ class Softmax
     {
         $this->b = [];
         $this->W = [];
-        for ($i = 0; $i < MnistDataset::LABELS; $i++) {
+
+        for ($i = 0; $i < self::LABELS; $i++) {
             $this->b[$i] = random_int(1, 1000) / 1000;
             $this->W[$i] = [];
-            for ($j = 0; $j < MnistDataset::IMAGE_SIZE; $j++) {
+            for ($j = 0; $j < self::IMAGE_SIZE; $j++) {
                 $this->W[$i][$j] = random_int(1, 1000) / 1000;
             }
         }
@@ -62,9 +67,9 @@ class Softmax
     {
         $activations = [];
         // Computes: Wx + b
-        for ($i = 0; $i < MnistDataset::LABELS; $i++) {
+        for ($i = 0; $i < self::LABELS; $i++) {
             $activations[$i] = $this->b[$i];
-            for ($j = 0; $j < MnistDataset::IMAGE_SIZE; $j++) {
+            for ($j = 0; $j < self::IMAGE_SIZE; $j++) {
                 $activations[$i] += $this->W[$i][$j] * $image[$j];
             }
         }
@@ -87,35 +92,36 @@ class Softmax
     private function gradientUpdate(array $image, array &$bGrad, array &$WGrad, int $label): float
     {
         $activations = $this->hypothesis($image);
-        for ($i = 0; $i < MnistDataset::LABELS; $i++) {
+        for ($i = 0; $i < self::LABELS; $i++) {
             // Uses the derivative of the softmax function
             $bGradPart = ($i === $label) ? $activations[$i] - 1 : $activations[$i];
-            for ($j = 0; $j < MnistDataset::IMAGE_SIZE; $j++) {
+            for ($j = 0; $j < self::IMAGE_SIZE; $j++) {
                 // Gradient is the product of the bias gradient and the input activation
                 $WGrad[$i][$j] += $bGradPart * $image[$j];
             }
             $bGrad[$i] += $bGradPart;
         }
-        // Cross entropy
+
+        // Cross entropy:
         return 0 - log($activations[$label]);
     }
 
     /**
      * Perform one step of gradient descent on the neural network using the
-     * provided dataset.
+     * provided data.
      *
      * Returns the total loss for the network on the provided dataset.
      *
-     * @param MnistDataset $dataset
-     * @param float        $learningRate
+     * @param array $data
+     * @param float $learningRate
      *
      * @return float
      */
-    public function trainingStep(MnistDataset $dataset, float $learningRate): float
+    public function trainingStep(array $data, float $learningRate): float
     {
         // Zero init the gradients
-        $bGrad = array_fill(0, MnistDataset::LABELS, 0);
-        $WGrad = array_fill(0, MnistDataset::LABELS, array_fill(0, MnistDataset::IMAGE_SIZE, 0));
+        $bGrad = array_fill(0, self::LABELS, 0);
+        $WGrad = array_fill(0, self::LABELS, array_fill(0, self::IMAGE_SIZE, 0));
         $totalLoss = 0;
         $size = $dataset->getSize();
 
@@ -125,9 +131,9 @@ class Softmax
         }
 
         // Adjust the weights and bias vector using the gradient and the learning rate:
-        for ($i = 0; $i < MnistDataset::LABELS; $i++) {
+        for ($i = 0; $i < self::LABELS; $i++) {
             $this->b[$i] -= $learningRate * $bGrad[$i] / $size;
-            for ($j = 0; $j < MnistDataset::IMAGE_SIZE; $j++) {
+            for ($j = 0; $j < self::IMAGE_SIZE; $j++) {
                 $this->W[$i][$j] -= $learningRate * $WGrad[$i][$j] / $size;
             }
         }
