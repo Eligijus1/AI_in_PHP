@@ -4,8 +4,22 @@ declare(strict_types=1);
 
 namespace number_recognize\neuralnetwork;
 
+use Exception;
+
 class Softmax
 {
+    /**
+     * Learning rate is a hyper-parameter that controls how much we are adjusting the weights of our network with
+     * respect the loss gradient. The lower the value, the slower we travel along the downward slope. While this
+     * might be a good idea (using a low learning rate) in terms of making sure that we do not miss any local minima,
+     * it could also mean that we’ll be taking a long time to converge — especially if we get stuck on a plateau region.
+     *
+     * NOTE: empiric variable defined in constructor. Need play, to find perfect value. Value examples: 0.7, 0.9 ...
+     *
+     * @var float
+     */
+    private $learningRate;
+
     // This will be a one dimensional array (vector) [10]:
     private $b;
 
@@ -20,11 +34,16 @@ class Softmax
 
     /**
      * Initialise the bias vector and weights as random values between 0 and 1.
+     *
+     * @param float $learningRate
+     *
+     * @throws Exception
      */
-    public function __construct()
+    public function __construct(float $learningRate)
     {
         $this->b = [];
         $this->W = [];
+        $this->learningRate = $learningRate;
 
         for ($i = 0; $i < self::LABELS; $i++) {
             $this->b[$i] = random_int(1, 1000) / 1000;
@@ -115,11 +134,10 @@ class Softmax
      *
      * @param array $images
      * @param array $labels
-     * @param float $learningRate
      *
      * @return float
      */
-    public function trainingStep(array $images, array $labels, float $learningRate): float
+    public function trainingStep(array $images, array $labels): float
     {
         // Zero init the gradients
         $bGrad = array_fill(0, self::LABELS, 0);
@@ -134,12 +152,17 @@ class Softmax
 
         // Adjust the weights and bias vector using the gradient and the learning rate:
         for ($i = 0; $i < self::LABELS; $i++) {
-            $this->b[$i] -= $learningRate * $bGrad[$i] / $size;
+            $this->b[$i] -= $this->learningRate * $bGrad[$i] / $size;
             for ($j = 0; $j < self::IMAGE_SIZE; $j++) {
-                $this->W[$i][$j] -= $learningRate * $WGrad[$i][$j] / $size;
+                $this->W[$i][$j] -= $this->learningRate * $WGrad[$i][$j] / $size;
             }
         }
 
         return $totalLoss;
+    }
+
+    public function getLearningRate(): float
+    {
+        return $this->learningRate;
     }
 }

@@ -32,7 +32,7 @@ class SoftmaxTrainHelper
         }
 
         // Softmax object:
-        $softmax = new Softmax();
+        $softmax = new Softmax($learningRate);
         HelperFunctions::printInfo("Created Softmax object.");
 
         // Extract labels array:
@@ -46,10 +46,12 @@ class SoftmaxTrainHelper
         HelperFunctions::printInfo("Read train images.");
 
         // Begin training with images:
-        $loss = $softmax->trainingStep($images, $labels, $learningRate);
-        $averageLoss = $loss / count($images);
-        $accuracy = $this->calculateAccuracy($softmax, $images, $labels);
-        HelperFunctions::printInfo("Step 1; Average Loss {$averageLoss}; Accuracy {$accuracy}");
+        for ($i = 1; $i < 10; $i++) {
+            $loss = $softmax->trainingStep($images, $labels);
+            $averageLoss = $loss / count($images);
+            $accuracy = $this->calculateAccuracy($softmax, $images, $labels);
+            HelperFunctions::printInfo("Step {$i}; Average Loss {$averageLoss}; Accuracy {$accuracy};");
+        }
 
         // Create work if not exist:
         if (!file_exists(self::DATA_LOCATION)) {
