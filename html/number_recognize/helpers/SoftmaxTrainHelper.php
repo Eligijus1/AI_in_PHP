@@ -13,7 +13,6 @@ class SoftmaxTrainHelper
     public function train(string $imagePath, string $labelsPath, float $learningRate): void
     {
         $dataFile = self::DATA_LOCATION . "/softmax.dat";
-        //$dataFileBackup = self::DATA_LOCATION . "/softmax_15_hidden_layers_{$learningRate}_learning_rate_{$momentum}_momentum_{$minimumError}_min_error_{$maxNumEpochs}_epochs.dat";
 
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -47,9 +46,19 @@ class SoftmaxTrainHelper
         HelperFunctions::printInfo("Read train images.");
 
         // Begin training with images:
-        foreach ($images as $key => $image) {
-            $softmax->trainingStep();
+        $loss = $softmax->trainingStep($images, $labels, $learningRate);
+        $averageLoss = $loss / count($images);
+        $accuracy = $this->calculateAccuracy($softmax, $images, $labels);
+        HelperFunctions::printInfo("Step 1; Average Loss {$averageLoss}; Accuracy {$accuracy}");
+
+        // Create work if not exist:
+        if (!file_exists(self::DATA_LOCATION)) {
+            mkdir(self::DATA_LOCATION, 0777, true);
         }
+
+        // Save object to disc:
+        $s = serialize($softmax);
+        file_put_contents($dataFile, $s);
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
@@ -58,6 +67,32 @@ class SoftmaxTrainHelper
         HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
         HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
         HelperFunctions::printInfo("Learning rate is {$learningRate}.");
-//        HelperFunctions::printInfo("Train global error is {$globalError}.");
+    }
+
+    /**
+     * Accuracy Evaluation
+     *
+     * @param Softmax $softmax
+     * @param array   $images
+     * @param array   $labels
+     *
+     * @return float|int
+     */
+    private function calculateAccuracy(Softmax $softmax, array $images, array $labels)
+    {
+        $size = count($images);
+        // Loop through all the training examples
+        for ($i = 0, $correct = 0; $i < $size; $i++) {
+            $image = $images[$i];
+            $label = $labels[$i];
+            $activations = $softmax->hypothesis($image);
+            // Our prediction is index containing the maximum probability
+            $prediction = array_search(max($activations), $activations);
+            if ($prediction == $label) {
+                $correct++;
+            }
+        }
+        // Percentage of correct predictions is the accuracy
+        return $correct / $size;
     }
 }

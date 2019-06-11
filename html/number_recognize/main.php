@@ -20,6 +20,7 @@ use number_recognize\helpers\SoftmaxTrainHelper;
 
 require_once 'neuralnetwork/Perceptron.php';
 require_once 'neuralnetwork/Sigmoid.php';
+require_once 'neuralnetwork/Softmax.php';
 require_once 'helpers/HelperFunctions.php';
 require_once 'helpers/MnistDataSetReaderTesting.php';
 require_once 'helpers/PerceptronTrainHelper.php';

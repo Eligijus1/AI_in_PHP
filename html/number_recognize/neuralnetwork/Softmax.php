@@ -92,6 +92,7 @@ class Softmax
     private function gradientUpdate(array $image, array &$bGrad, array &$WGrad, int $label): float
     {
         $activations = $this->hypothesis($image);
+
         for ($i = 0; $i < self::LABELS; $i++) {
             // Uses the derivative of the softmax function
             $bGradPart = ($i === $label) ? $activations[$i] - 1 : $activations[$i];
@@ -112,22 +113,23 @@ class Softmax
      *
      * Returns the total loss for the network on the provided dataset.
      *
-     * @param array $data
+     * @param array $images
+     * @param array $labels
      * @param float $learningRate
      *
      * @return float
      */
-    public function trainingStep(array $data, float $learningRate): float
+    public function trainingStep(array $images, array $labels, float $learningRate): float
     {
         // Zero init the gradients
         $bGrad = array_fill(0, self::LABELS, 0);
         $WGrad = array_fill(0, self::LABELS, array_fill(0, self::IMAGE_SIZE, 0));
         $totalLoss = 0;
-        $size = $dataset->getSize();
+        $size = count($images);
 
         // Calculate the gradients and loss:
         for ($i = 0; $i < $size; $i++) {
-            $totalLoss += $this->gradientUpdate($dataset->getImage($i), $bGrad, $WGrad, $dataset->getLabel($i));
+            $totalLoss += $this->gradientUpdate($images[$i], $bGrad, $WGrad, $labels[$i]);
         }
 
         // Adjust the weights and bias vector using the gradient and the learning rate:
