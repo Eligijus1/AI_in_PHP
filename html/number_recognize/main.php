@@ -16,6 +16,7 @@ use number_recognize\helpers\PerceptronTestHelper;
 use number_recognize\helpers\PerceptronTrainHelper;
 use number_recognize\helpers\SigmoidTestHelper;
 use number_recognize\helpers\SigmoidTrainHelper;
+use number_recognize\helpers\SoftmaxTestHelper;
 use number_recognize\helpers\SoftmaxTrainHelper;
 
 require_once 'neuralnetwork/Perceptron.php';
@@ -32,6 +33,7 @@ require_once 'helpers/MnistImageGeneratorHelper.php';
 require_once 'helpers/SigmoidTrainHelper.php';
 require_once 'helpers/SigmoidTestHelper.php';
 require_once 'helpers/SoftmaxTrainHelper.php';
+require_once 'helpers/SoftmaxTestHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -99,35 +101,15 @@ switch ($argv[1]) {
             'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\Backups\00065_sigmoid_9451.dat');
         break;
 
-    // Example: php main.php train_and_test_sigmoid
-    case 'train_and_test_sigmoid':
-        $bestSuccessGuessAmount = 0;
-        $bestNetworkFile = "";
-        for ($i = 0; $i <= 50; $i++) {
-            $oldSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\00' . (100 + $i) . '_sigmoid.dat';
-            $newSigmoid = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\00' . (101 + $i) . '_sigmoid.dat';
-            $sigmoid = unserialize(file_get_contents($oldSigmoid));
-            $sigmoid->train((new SigmoidTrainHelper())->getTrainingDataSet(trainImagePath, trainLabelPath), 1);
-            file_put_contents($newSigmoid, serialize($sigmoid));
-            $successGuessAmount = (new SigmoidTestHelper())->test(testImagePath, testLabelPath, $newSigmoid);
-
-            if ($successGuessAmount > $bestSuccessGuessAmount) {
-                $bestSuccessGuessAmount = $successGuessAmount;
-                $bestNetworkFile = $newSigmoid;
-            }
-
-            HelperFunctions::printInfo("Done '{$newSigmoid}'");
-            echo "\n";
-        }
-
-        HelperFunctions::printInfo("Best success amount: '{$bestSuccessGuessAmount}'");
-        HelperFunctions::printInfo("Best network file: '{$bestNetworkFile}'");
-
-        break;
-
     // Example: php main.php train_softmax
     case 'train_softmax':
         (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1);
+        break;
+
+    // Example: php main.php test_softmax
+    case 'test_softmax':
+        (new SoftmaxTestHelper())->test(testImagePath, testLabelPath,
+            'C:\Projects\AI_in_PHP\html\number_recognize\data\train_softmax\softmax.dat');
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
