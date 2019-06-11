@@ -10,16 +10,22 @@ class SoftmaxTrainHelper
 {
     private const DATA_LOCATION = "data/train_softmax";
 
-    public function train(string $imagePath, string $labelsPath, float $learningRate): void
-    {
+    public function train(
+        string $imagePath,
+        string $labelsPath,
+        float $learningRate,
+        int $epochs = 1,
+        ?string $softmaxNetwork = null
+    ): void {
         $dataFile = self::DATA_LOCATION . "/softmax.dat";
+        $dataFileBackup = self::DATA_LOCATION . "/softmax_{$learningRate}_learning_rate_{$epochs}_epochs.dat";
 
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
         HelperFunctions::printInfo("Begin training with sigmoid.");
-        //HelperFunctions::printInfo("Learning rate: {$learningRate}; Momentum: {$momentum}; Max epochs: {$maxNumEpochs}");
+        HelperFunctions::printInfo("Learning rate: {$learningRate}; Epochs: {$epochs}");
 
         // Do some checks:
         if (!file_exists($imagePath)) {
@@ -32,8 +38,13 @@ class SoftmaxTrainHelper
         }
 
         // Softmax object:
-        $softmax = new Softmax($learningRate);
-        HelperFunctions::printInfo("Created Softmax object.");
+        $softmax = null;
+        if ($softmaxNetwork) {
+            $softmax = (new SoftmaxTestHelper())->getSoftmax($softmaxNetwork);
+        } else {
+            $softmax = new Softmax($learningRate, $epochs);
+            HelperFunctions::printInfo("Created Softmax object.");
+        }
 
         // Extract labels array:
         $labels = HelperFunctions::readLabels($labelsPath);
@@ -46,7 +57,7 @@ class SoftmaxTrainHelper
         HelperFunctions::printInfo("Read train images.");
 
         // Begin training with images:
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i <= $epochs; $i++) {
             $loss = $softmax->trainingStep($images, $labels);
             $averageLoss = $loss / count($images);
             $accuracy = $this->calculateAccuracy($softmax, $images, $labels);
@@ -61,6 +72,7 @@ class SoftmaxTrainHelper
         // Save object to disc:
         $s = serialize($softmax);
         file_put_contents($dataFile, $s);
+        file_put_contents($dataFileBackup, $s);
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));

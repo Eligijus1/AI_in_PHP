@@ -103,7 +103,11 @@ switch ($argv[1]) {
 
     // Example: php main.php train_softmax
     case 'train_softmax':
-        (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1);
+        (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1, 20);
+        break;
+
+    case 'train_existing_softmax_with_extra_epochs':
+        //(new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1);
         break;
 
     // Example: php main.php test_softmax

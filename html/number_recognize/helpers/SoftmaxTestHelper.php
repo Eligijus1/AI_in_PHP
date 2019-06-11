@@ -75,9 +75,9 @@ class SoftmaxTestHelper
         HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
         HelperFunctions::printInfo("Used for testing {$imagesCount} images and {$labelsCount} labels.");
         HelperFunctions::printInfo("Learning rate: {$softmax->getLearningRate()}.");
+        HelperFunctions::printInfo("Epochs number: {$softmax->getEpochsNumber()}.");
         HelperFunctions::printInfo("Success guess amount: {$successGuessAmount}.");
         //HelperFunctions::printInfo("Momentum: {$sigmoid->getMomentum()}.");
-        //HelperFunctions::printInfo("Epochs number: {$sigmoid->getMaxNumEpochs()}.");
         //HelperFunctions::printInfo("Global error: {$sigmoid->getLatestTrainGlobalError()}.");
 
         return $successGuessAmount;

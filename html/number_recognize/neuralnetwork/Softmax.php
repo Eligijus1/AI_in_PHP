@@ -33,17 +33,24 @@ class Softmax
     private const LABELS = 10;
 
     /**
+     * @var int
+     */
+    private $epochsNumber;
+
+    /**
      * Initialise the bias vector and weights as random values between 0 and 1.
      *
      * @param float $learningRate
+     * @param int   $epochsNumber
      *
      * @throws Exception
      */
-    public function __construct(float $learningRate)
+    public function __construct(float $learningRate, int $epochsNumber)
     {
         $this->b = [];
         $this->W = [];
         $this->learningRate = $learningRate;
+        $this->epochsNumber = $epochsNumber;
 
         for ($i = 0; $i < self::LABELS; $i++) {
             $this->b[$i] = random_int(1, 1000) / 1000;
@@ -164,5 +171,18 @@ class Softmax
     public function getLearningRate(): float
     {
         return $this->learningRate;
+    }
+
+    public function getEpochsNumber(): int
+    {
+        return $this->epochsNumber;
+    }
+
+    /**
+     * @param int $epochsNumber
+     */
+    public function setEpochsNumber(int $epochsNumber): void
+    {
+        $this->epochsNumber = $epochsNumber;
     }
 }
