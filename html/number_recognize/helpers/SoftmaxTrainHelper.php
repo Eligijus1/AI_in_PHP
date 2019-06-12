@@ -17,9 +17,6 @@ class SoftmaxTrainHelper
         int $epochs = 1,
         ?string $softmaxNetwork = null
     ): void {
-        $dataFile = self::DATA_LOCATION . "/softmax.dat";
-        $dataFileBackup = self::DATA_LOCATION . "/softmax_{$learningRate}_learning_rate_{$epochs}_epochs.dat";
-
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
@@ -39,8 +36,13 @@ class SoftmaxTrainHelper
 
         // Softmax object:
         $softmax = null;
+        $oldEpochsNumer = 0;
         if ($softmaxNetwork) {
             $softmax = (new SoftmaxTestHelper())->getSoftmax($softmaxNetwork);
+            HelperFunctions::printInfo("Continue train existing network.");
+            HelperFunctions::printInfo("Learning rate is {$softmax->getLearningRate()}.");
+            HelperFunctions::printInfo("Current epochs number is {$softmax->getEpochsNumber()}.");
+            $oldEpochsNumer = $softmax->getEpochsNumber();
         } else {
             $softmax = new Softmax($learningRate, $epochs);
             HelperFunctions::printInfo("Created Softmax object.");
@@ -62,6 +64,7 @@ class SoftmaxTrainHelper
             $averageLoss = $loss / count($images);
             $accuracy = $this->calculateAccuracy($softmax, $images, $labels);
             HelperFunctions::printInfo("Step {$i}; Average Loss {$averageLoss}; Accuracy {$accuracy};");
+            $softmax->setEpochsNumber($oldEpochsNumer + $i);
         }
 
         // Create work if not exist:
@@ -71,8 +74,9 @@ class SoftmaxTrainHelper
 
         // Save object to disc:
         $s = serialize($softmax);
-        file_put_contents($dataFile, $s);
-        file_put_contents($dataFileBackup, $s);
+        file_put_contents(self::DATA_LOCATION . "/softmax.dat", $s);
+        file_put_contents(self::DATA_LOCATION . "/softmax_{$softmax->getLearningRate()}_learning_rate_{$softmax->getEpochsNumber()}_epochs.dat",
+            $s);
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));

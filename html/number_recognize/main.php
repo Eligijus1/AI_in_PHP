@@ -107,7 +107,10 @@ switch ($argv[1]) {
         break;
 
     case 'train_existing_softmax_with_extra_epochs':
-        //(new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1);
+        (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1, 20,
+            'C:\Projects\AI_in_PHP\html\number_recognize\data\train_softmax\softmax.dat');
+        (new SoftmaxTestHelper())->test(testImagePath, testLabelPath,
+            'C:\Projects\AI_in_PHP\html\number_recognize\data\train_softmax\softmax.dat');
         break;
 
     // Example: php main.php test_softmax
