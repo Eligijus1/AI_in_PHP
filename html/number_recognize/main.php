@@ -110,8 +110,25 @@ switch ($argv[1]) {
     case 'train_existing_softmax_with_extra_epochs':
         (new SoftmaxTrainHelper())->train(trainImagePath, trainLabelPath, 0.1, 20,
             'C:\Projects\AI_in_PHP\html\number_recognize\data\train_softmax\softmax.dat');
-        (new SoftmaxTestHelper())->test(testImagePath, testLabelPath,
+        $successGuessAmount = (new SoftmaxTestHelper())->test(testImagePath, testLabelPath,
             'C:\Projects\AI_in_PHP\html\number_recognize\data\train_softmax\softmax.dat');
+
+        // Rename backup file:
+        $directory = 'C:\Projects\AI_in_PHP\html\number_recognize\data\train_softmax';
+        $files = scandir($directory);
+        $frontCounter = sprintf("%05d", count($files) - 3);
+        foreach ($files as $file) {
+            $fileFullPath = $directory . DIRECTORY_SEPARATOR . $file;
+            if (!is_dir($fileFullPath) && $file !== 'desktop.ini') {
+                if (substr($file, 0, 7) === 'softmax' && $file !== 'softmax.dat') {
+                    $newFile = $directory . DIRECTORY_SEPARATOR . "{$frontCounter}_" . basename($fileFullPath,
+                            '.dat') . "_{$successGuessAmount}_success_guess_amount.dat";
+                    HelperFunctions::printInfo("Renamed {$fileFullPath} to {$newFile}.");
+                    rename($fileFullPath, $newFile);
+                }
+            }
+        }
+
         break;
 
     // Example: php main.php test_softmax
