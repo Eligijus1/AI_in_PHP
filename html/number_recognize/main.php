@@ -108,7 +108,7 @@ switch ($argv[1]) {
 
     // Example: php main.php train_existing_softmax_with_extra_epochs
     case 'train_existing_softmax_with_extra_epochs':
-        for ($i = 1; $i < 20; $i++) {
+        for ($i = 1; $i < 60; $i++) {
             echo "\n";
             HelperFunctions::printInfo("Step {$i}.");
 
