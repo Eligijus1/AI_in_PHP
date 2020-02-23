@@ -4,4 +4,10 @@ ubuntu-bionic-18.04-cloudimg-console.log
 html/FANN_NUMBER_RECOGNIZE/data
 html/FANN_NUMBER_RECOGNIZE/*.fann
 html/FANN_NUMBER_RECOGNIZE/checkpoints/
-html/number_recognize/data
+html/number_recognize/data/generate_specified_number_images
+html/number_recognize/data/generated_ascii
+html/number_recognize/data/generated_png
+html/number_recognize/data/mnist
+html/number_recognize/data/number_images_train
+html/number_recognize/data/web_draw_png
+html/number_recognize/data/train_perceptron/Backups
