@@ -27,6 +27,7 @@ $max_epochs = 500000;
 
 // The number of epochs between calling a user function.
 // A value of zero means that user function is not called.
+// One Epoch is when an ENTIRE dataset is passed forward and backward through the neural network only ONCE.
 $epochs_between_reports = 1000;
 
 /* Creates a standard fully connected back propagation neural network
@@ -48,24 +49,19 @@ if ($ann) {
     $filename = dirname(__FILE__) . "/xor.data";
 
     // Trains on an entire dataset, which is read from file, for a period of time:
-    if (fann_train_on_file($ann, $filename, $max_epochs, $epochs_between_reports, $desired_error))
-    {
+    if (fann_train_on_file($ann, $filename, $max_epochs, $epochs_between_reports, $desired_error)) {
         // Saves the entire network to a configuration file:
         fann_save($ann, dirname(__FILE__) . "/xor_float.net");
-        echo "INFO: saved to file " . dirname(__FILE__) . "/xor_float.net<br>";
-    }
-    else
-    {
-        echo "ERROR: fann_train_on_file returned false.<br>";
+        echo "INFO: saved to file " . dirname(__FILE__) . "/xor_float.net" . PHP_EOL;
+    } else {
+        echo "ERROR: fann_train_on_file returned false." . PHP_EOL;
     }
 
     // Destroys the entire network and properly freeing all the associated memory:
     fann_destroy($ann);
-}
-else
-{
-    echo "ERROR: ann is empty.<br>";
+} else {
+    echo "ERROR: ann is empty." . PHP_EOL;
 }
 
 // Inform about application finish and print time used:
-echo "INFO: Done simple_train.php in " . (round(microtime(true) * 1000) - $milliseconds) ." milliseconds<br>";
+echo "INFO: Done simple_train.php in " . (round(microtime(true) * 1000) - $milliseconds) . " milliseconds" . PHP_EOL;
