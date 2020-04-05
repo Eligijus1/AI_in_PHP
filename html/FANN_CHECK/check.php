@@ -1,6 +1,8 @@
 <?php
+echo PHP_EOL . "Check if function 'fann_create_standard' exist: ";
 var_dump(function_exists("fann_create_standard"));
 // var_dump(extension_loaded('php_fann'));
+echo PHP_EOL . "Check if extension 'fann' exist: ";
 var_dump(extension_loaded('fann'));
 
 
