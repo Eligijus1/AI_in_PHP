@@ -134,7 +134,7 @@ class HelperFunctions
      *
      * @param string $imagePath
      *
-     * @return float[]
+     * @return array
      * @throws Exception
      */
     public static function readImagesDataAsFloatBetween0And1(string $imagePath): array
