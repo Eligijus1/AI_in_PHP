@@ -21,81 +21,14 @@ namespace number_recognize\helpers;
 
 class FannSigmoidTrainHelper
 {
-    private const DATA_LOCATION = "data/fann";
-
-    public function train(string $imagePath, string $labelsPath)
+    public function train()
     {
-        $dataFile = self::DATA_LOCATION . "/train_sigmoid.fann";
-
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
         // Print message, that starting loading:
-        HelperFunctions::printInfo("Begin training with sigmoid.");
+        HelperFunctions::printInfo("Begin FANN sigmoid training.");
 
-        // Do some checks:
-        if (!file_exists($imagePath)) {
-            HelperFunctions::printError("Images file {$imagePath} not exist.");
-            return;
-        }
-        if (!file_exists($imagePath)) {
-            HelperFunctions::printError("Labels file {$labelsPath} not exist.");
-            return;
-        }
-
-        // Extract labels array:
-        $labels = HelperFunctions::readLabels($labelsPath);
-        $labelsCount = count($labels);
-        HelperFunctions::printInfo("Read train labels.");
-
-        // Extract train images array:
-        $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
-        $imagesCount = count($images);
-        HelperFunctions::printInfo("Read train images.");
-
-        // Create data file:
-        if (!is_file($dataFile)) {
-            file_put_contents($dataFile, $imagesCount . " 784 10");
-        } else {
-            HelperFunctions::printError("File $dataFile exist.");
-            return;
-        }
-
-        $fp = fopen($dataFile, 'a');
-        $i = 0;
-        foreach ($images as $trainingItem) {
-            $answers = [];
-            for ($j = 0; $j <= 9; ++$j) {
-                if ($j === (int)$labels[$i]) {
-                    array_push($answers, 1);
-                } else {
-                    array_push($answers, 0);
-                }
-            }
-
-            /** @var float[] $trainingItem */
-            fwrite($fp, PHP_EOL . implode(" ", $trainingItem)); // Inputs.
-            fwrite($fp, PHP_EOL . implode(" ", $answers)); // Outputs.
-
-            $i++;
-        }
-        fclose($fp);
-        HelperFunctions::printInfo("Prepared training DataSet.");
-
-        // Training network:
-        //$this->trainNetwork($labels, $images);
-
-        // Information about results:
-        HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
-        HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
-        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
-        HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
-        HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
-        // HelperFunctions::printInfo("Train global error is {$globalError}.");
-    }
-
-    private function trainNetwork(array $labels, array $images)
-    {
         /* Creates a standard fully connected back propagation neural network
          * There will be a bias neuron in each layer (except the output layer),
          * and this bias neuron will be connected to all neurons in the next layer.
@@ -108,9 +41,9 @@ class FannSigmoidTrainHelper
          * 3 - Number of neurons in the second (hidden) layer (experimental way to decide).
          * 4 - Number of neurons in the 3rd (Third) layer - output. (0 - 9)
          */
-        $fann = fann_create_standard(3, 784, 15, 10);
+        $fann = fann_create_standard(3, FannHelper::INPUT_NEURONS_AMOUNT, 15, FannHelper::OUTPUT_NEURONS_AMOUNT);
         if (!$fann) {
-            quit("ERROR: Error to get NN instance");
+            quit("ERROR: Error to get NN instance.");
         }
 
         // Sets the activation function for all of the hidden layers:
@@ -139,12 +72,18 @@ class FannSigmoidTrainHelper
          * 4 - The number of epochs between calling a user function. A value of zero means that user function is not called.
          * 5 - It mean 1 error in 1000 samples, like 1 mistake in 1000 tries.
          */
-        if (fann_train_on_file($fann, $filename, 150, 1, 0.001)) {
+        if (fann_train_on_file($fann, FannHelper::TRAINING_DATA_FILE, 150, 1, 0.001)) {
             // Saves the entire network to a configuration file:
-            fann_save($fann, self::DATA_LOCATION . "/mnist_sigmoid.net");
+            fann_save($fann, FannHelper::NETWORK_CONFIGURATION_FILE);
         }
 
         // Destroys the entire network and properly freeing all the associated memory:
         fann_destroy($fann);
+
+        // Information about results:
+        HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
+        HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
+        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
+        HelperFunctions::printInfo("Network configuration file location: " . FannHelper::NETWORK_CONFIGURATION_FILE);
     }
 }
