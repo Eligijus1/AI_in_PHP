@@ -64,20 +64,18 @@ class FannSigmoidTrainHelper
         $fp = fopen($dataFile, 'a');
         $i = 0;
         foreach ($images as $trainingItem) {
-            // Training data set should have answer, that contain answer data:
+            $answers = [];
             for ($j = 0; $j <= 9; ++$j) {
                 if ($j === (int)$labels[$i]) {
-                    array_push($trainingItem, 1);
+                    array_push($answers, 1);
                 } else {
-                    array_push($trainingItem, 0);
+                    array_push($answers, 0);
                 }
             }
 
             /** @var float[] $trainingItem */
-            fwrite($fp, implode(" ", $trainingItem)); // Inputs.
-            // Output.
-            //-1 -1 <- the 2 inputs for the 1st group
-            //-1    <- the 1 output for the 1st group
+            fwrite($fp, PHP_EOL . implode(" ", $trainingItem)); // Inputs.
+            fwrite($fp, PHP_EOL . implode(" ", $answers)); // Outputs.
 
             $i++;
         }

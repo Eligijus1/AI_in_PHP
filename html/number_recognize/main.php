@@ -7,6 +7,7 @@ declare(strict_types=1);
 // Set memory limit to 6 Gb (Yes, it eating a lot memory...):
 ini_set('memory_limit', '6G');
 
+use number_recognize\helpers\FannHelper;
 use number_recognize\helpers\FannSigmoidTrainHelper;
 use number_recognize\helpers\HelperFunctions;
 use number_recognize\helpers\MnistDataSetReaderTesting;
@@ -36,6 +37,7 @@ require_once 'helpers/SigmoidTestHelper.php';
 require_once 'helpers/SoftmaxTrainHelper.php';
 require_once 'helpers/SoftmaxTestHelper.php';
 require_once 'helpers/FannSigmoidTrainHelper.php';
+require_once 'helpers/FannHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -147,6 +149,10 @@ switch ($argv[1]) {
     // FANN:
     // http://leenissen.dk/fann/fann_1_2_0/r2030.html
 
+    // Example: php main.php fann_generate_training_data_file
+    case "fann_generate_training_data_file":
+        (new FannHelper())->generateTrainingDataFile(trainImagePath, trainLabelPath);
+        break;
     // Example: php main.php fann_train_sigmoid
     case "fann_train_sigmoid": // Sigmoid activation function. One of the most used activation functions. This activation function gives output that is between 0 and 1.
         (new FannSigmoidTrainHelper())->train(trainImagePath, trainLabelPath);

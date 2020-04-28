@@ -13,3 +13,5 @@ html/number_recognize/data/web_draw_png
 html/number_recognize/data/train_perceptron/Backups
 html/number_recognize/data/train_sigmoid/Backups
 html/number_recognize/data/train_softmax/Backups
+html/number_recognize/data/fann/train_sigmoid.fann
+html/number_recognize/data/fann/train_data.fann
