@@ -8,6 +8,7 @@ declare(strict_types=1);
 ini_set('memory_limit', '6G');
 
 use number_recognize\helpers\FannHelper;
+use number_recognize\helpers\FannSigmoidTestHelper;
 use number_recognize\helpers\FannSigmoidTrainHelper;
 use number_recognize\helpers\HelperFunctions;
 use number_recognize\helpers\MnistDataSetReaderTesting;
@@ -38,6 +39,7 @@ require_once 'helpers/SoftmaxTrainHelper.php';
 require_once 'helpers/SoftmaxTestHelper.php';
 require_once 'helpers/FannSigmoidTrainHelper.php';
 require_once 'helpers/FannHelper.php';
+require_once 'helpers/FannSigmoidTestHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -157,8 +159,10 @@ switch ($argv[1]) {
     case "fann_train_sigmoid": // Sigmoid activation function. One of the most used activation functions. This activation function gives output that is between 0 and 1.
         (new FannSigmoidTrainHelper())->train();
         break;
-//    case "train_fann_sigmoid_stepwise":
-//        break;
+    // Example: php main.php fann_test_sigmoid
+    case "fann_test_sigmoid":
+        (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
+        break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
         return;
