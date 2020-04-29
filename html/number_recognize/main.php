@@ -157,10 +157,15 @@ switch ($argv[1]) {
         break;
     // Example: php main.php fann_train_sigmoid
     case "fann_train_sigmoid": // Sigmoid activation function. One of the most used activation functions. This activation function gives output that is between 0 and 1.
-        (new FannSigmoidTrainHelper())->train();
+        (new FannSigmoidTrainHelper())->train(150);
         break;
     // Example: php main.php fann_test_sigmoid
     case "fann_test_sigmoid":
+        (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
+        break;
+    // Example: php main.php fann_train_and_test_sigmoid
+    case "fann_train_and_test_sigmoid":
+        (new FannSigmoidTrainHelper())->train(200);
         (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
         break;
     default:

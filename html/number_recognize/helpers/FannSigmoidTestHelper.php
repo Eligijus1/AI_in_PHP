@@ -69,11 +69,19 @@ class FannSigmoidTestHelper
         HelperFunctions::printInfo("Done testing in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
         HelperFunctions::printInfo("Data location: " . FannHelper::DATA_LOCATION);
         HelperFunctions::printInfo("Used for testing {$imagesCount} images and {$labelsCount} labels.");
-        HelperFunctions::printInfo("Success guess amount: {$successGuessAmount} from {$imagesCount}.");
         HelperFunctions::printInfo("Learning rate: " . fann_get_learning_rate($ann));
         HelperFunctions::printInfo("Learning momentum: " . fann_get_learning_momentum($ann));
-        //HelperFunctions::printInfo("Epochs number: {$sigmoid->getMaxNumEpochs()}.");
-        //HelperFunctions::printInfo("Global error: {$sigmoid->getLatestTrainGlobalError()}.");
+        HelperFunctions::printInfo("Number of cascade candidate stagnation epochs: " . fann_get_cascade_candidate_stagnation_epochs($ann)); // The number of epochs training is allowed to continue without changing the MSE (mean square error) by a fraction
+        HelperFunctions::printInfo("Maximum candidate epochs: " . fann_get_cascade_max_cand_epochs($ann)); // The maximum candidate epochs determines the maximum number of epochs the input connections to the candidates may be trained before adding a new candidate neuron. The default max candidate epochs is 150.
+        HelperFunctions::printInfo("Maximum out epochs: " . fann_get_cascade_max_out_epochs($ann)); // Maximum number of epochs the output connections may be trained after adding a new candidate neuron. The default max out epochs is 150.
+        HelperFunctions::printInfo("Minimum candidate epochs: " . fann_get_cascade_min_cand_epochs($ann)); // Minimum number of epochs the input connections to the candidates may be trained before adding a new candidate neuron. The default min candidate epochs is 50.
+        HelperFunctions::printInfo("Minimum out epochs: " . fann_get_cascade_min_out_epochs($ann)); // Minimum number of epochs the output connections must be trained after adding a new candidate neuron. The default min out epochs is 50.
+        HelperFunctions::printInfo("Number of cascade output stagnation epochs: " . fann_get_cascade_output_stagnation_epochs($ann)); // Number of epochs training is allowed to continue without changing the MSE by a fraction of fann_get_cascade_output_change_fraction(). The default number of cascade output stagnation epochs is 12.
+        HelperFunctions::printInfo("Last error number: " . fann_get_errno($ann));
+        HelperFunctions::printInfo("Mean square error from in network: " . fann_get_MSE($ann)); // Reads the mean square error from the network. This value is calculated during training or testing and can therefore sometimes be a bit off if the weights have been changed since the last calculation of the value.
+        HelperFunctions::printInfo("Sarprop step error shift: " . fann_get_sarprop_step_error_shift($ann)); // Returns the sarprop step error shift. The default step error shift is 1.385.
+        HelperFunctions::printInfo("Sarprop step error threshold factor: " . fann_get_sarprop_step_error_threshold_factor($ann)); // The sarprop step error threshold factor. The default factor is 0.1.
+        HelperFunctions::printInfo("Success guess amount: {$successGuessAmount} from {$imagesCount}.");
 
         // Destroys the entire network and properly freeing all the associated memory:
         fann_destroy($ann);
