@@ -165,7 +165,7 @@ switch ($argv[1]) {
         break;
     // Example: php main.php fann_train_and_test_sigmoid
     case "fann_train_and_test_sigmoid":
-        (new FannSigmoidTrainHelper())->train(200);
+        (new FannSigmoidTrainHelper())->train(600);
         (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
         break;
     default:

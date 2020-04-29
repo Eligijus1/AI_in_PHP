@@ -29,6 +29,16 @@ class FannSigmoidTrainHelper
         // Print message, that starting loading:
         HelperFunctions::printInfo("Begin FANN sigmoid training.");
 
+        // Delete old training file if it exist:
+        if (is_file(FannHelper::NETWORK_CONFIGURATION_FILE)) {
+            // Use unlink() function to delete a file:
+            if (!unlink(FannHelper::NETWORK_CONFIGURATION_FILE)) {
+                HelperFunctions::printError("Old file '" . FannHelper::NETWORK_CONFIGURATION_FILE . "' cannot be deleted due to an error.");
+            } else {
+                HelperFunctions::printInfo("Old file '" . FannHelper::NETWORK_CONFIGURATION_FILE . "' has been deleted");
+            }
+        }
+
         /* Creates a standard fully connected back propagation neural network
          * There will be a bias neuron in each layer (except the output layer),
          * and this bias neuron will be connected to all neurons in the next layer.
