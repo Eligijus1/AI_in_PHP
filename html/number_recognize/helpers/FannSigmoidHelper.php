@@ -19,5 +19,8 @@ namespace number_recognize\helpers;
 
 class FannSigmoidHelper
 {
+    public function trainAndTest(int $maxEpochs)
+    {
 
+    }
 }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 ini_set('memory_limit', '6G');
 
 use number_recognize\helpers\FannHelper;
+use number_recognize\helpers\FannSigmoidHelper;
 use number_recognize\helpers\FannSigmoidTestHelper;
 use number_recognize\helpers\FannSigmoidTrainHelper;
 use number_recognize\helpers\HelperFunctions;
@@ -151,6 +152,7 @@ switch ($argv[1]) {
 
     // FANN:
     // http://leenissen.dk/fann/fann_1_2_0/r2030.html
+    // https://www.php.net/manual/en/function.fann-train-epoch.php
 
     // Example: php main.php fann_generate_training_data_file
     case "fann_generate_training_data_file":
@@ -170,7 +172,7 @@ switch ($argv[1]) {
         // (new FannSigmoidTrainHelper())->train(1000);
         // (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
         // v2:
-        (new FannSigmoidHelper)
+        (new FannSigmoidHelper)->trainAndTest(10000);
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
