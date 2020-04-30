@@ -40,6 +40,7 @@ require_once 'helpers/SoftmaxTestHelper.php';
 require_once 'helpers/FannSigmoidTrainHelper.php';
 require_once 'helpers/FannHelper.php';
 require_once 'helpers/FannSigmoidTestHelper.php';
+require_once 'helpers/FannSigmoidHelper.php';
 
 // Define constants:
 const COLOR_WHITE = "\033[0m";
@@ -163,10 +164,13 @@ switch ($argv[1]) {
     case "fann_test_sigmoid":
         (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
         break;
-    // Example: php main.php fann_train_and_test_sigmoid
-    case "fann_train_and_test_sigmoid":
-        (new FannSigmoidTrainHelper())->train(1000);
-        (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
+    // Example: php main.php fann_train_and_test
+    case "fann_train_and_test":
+        // v1:
+        // (new FannSigmoidTrainHelper())->train(1000);
+        // (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
+        // v2:
+        (new FannSigmoidHelper)
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
