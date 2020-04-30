@@ -19,7 +19,7 @@ namespace number_recognize\helpers;
 
 class FannSigmoidTestHelper
 {
-    public function test(string $imagePath, string $labelsPath)
+    public function test(string $imagePath, string $labelsPath): int
     {
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -85,6 +85,8 @@ class FannSigmoidTestHelper
 
         // Destroys the entire network and properly freeing all the associated memory:
         fann_destroy($ann);
+
+        return $successGuessAmount;
     }
 
     private function guessValueFromOutput(array $output): int

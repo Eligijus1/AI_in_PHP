@@ -22,6 +22,7 @@ namespace number_recognize\helpers;
 class FannHelper
 {
     public const DATA_LOCATION = "data/fann";
+    public const TRAINING_LOG_FILE = self::DATA_LOCATION . "/train_log.csv";
     public const TRAINING_DATA_FILE = self::DATA_LOCATION . "/train_data.fann";
     public const NETWORK_CONFIGURATION_FILE = self::DATA_LOCATION . "/fann_mnist_sigmoid.net";
     public const INPUT_NEURONS_AMOUNT = 784;

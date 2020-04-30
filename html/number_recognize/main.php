@@ -172,7 +172,8 @@ switch ($argv[1]) {
         // (new FannSigmoidTrainHelper())->train(1000);
         // (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
         // v2:
-        (new FannSigmoidHelper)->trainAndTest(10000);
+        (new FannSigmoidHelper)->trainAndTest(500);
+        //(new FannSigmoidHelper)->trainAndTest(10000);
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
