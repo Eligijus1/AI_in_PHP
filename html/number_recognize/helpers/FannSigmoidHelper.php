@@ -21,10 +21,22 @@ use DateTime;
 
 class FannSigmoidHelper
 {
-    public function trainAndTest(string $testImagesPath, string $testLabelsPath, int $maxEpochs)
-    {
-        // Define application start time:
-        $milliseconds = round(microtime(true) * 1000);
+    public function trainAndTest(
+        string $testImagesPath,
+        string $testLabelsPath,
+        int $maxEpochs,
+        int $hiddenLayersCount,
+        string $continueFromFannFile = null
+    ) {
+        // Declare and set variables:
+        $currentEpoch = 0;
+        $epochsBetweenSaves = 100;
+        $desiredError = 0.0001;
+        $psudoMseResult = $desiredError * 10000;
+        $epochsSinceLastSave = 0;
+        $bestSuccessGuessAmount = 0;
+        $saveFileName = FannHelper::NETWORK_CONFIGURATION_FILE;
+        $milliseconds = round(microtime(true) * 1000);// Define application start time
 
         // Print message, that starting loading:
         HelperFunctions::printInfo("Begin FANN sigmoid training.");
@@ -48,68 +60,36 @@ class FannSigmoidHelper
         $testLabels = HelperFunctions::readLabels($testLabelsPath);
         HelperFunctions::printInfo("Read test labels.");
 
-        /* Creates a standard fully connected back propagation neural network
-         * There will be a bias neuron in each layer (except the output layer),
-         * and this bias neuron will be connected to all neurons in the next layer.
-         * When running the network, the bias nodes always emits 1.
-         *
-         * Parameters:
-         * ===========
-         * 1 - The total number of layers including the input and the output layer.
-         * 2 - Number of neurons in the first (input) layer.
-         * 3 - Number of neurons in the second (hidden) layer (experimental way to decide).
-         * 4 - Number of neurons in the 3rd (Third) layer - output. (0 - 9)
-         */
-        $fann = fann_create_standard(3, FannHelper::INPUT_NEURONS_AMOUNT, 15, FannHelper::OUTPUT_NEURONS_AMOUNT);
-        if (!$fann) {
-            quit("ERROR: Error to get NN instance.");
-        }
-
-        if ($fann) {
-            HelperFunctions::printInfo("Training ANN...");
-
-            // Configure the ANN:
-
-            // Standard backpropagation algorithm, where the weights are updated after calculating the
-            // mean square error for the whole training set. This means that the weights are only updated
-            // once during a epoch. For this reason some problems, will train slower with this algorithm.
-            // But since the mean square error is calculated more correctly than in incremental training,
-            // some problems will reach a better solutions with this algorithm.
+        // Create FANN object:
+        $fann = null;
+        if ($continueFromFannFile) {
+            $fann = fann_create_from_file($continueFromFannFile);
+        } else {
+            $fann = fann_create_standard(3, FannHelper::INPUT_NEURONS_AMOUNT, $hiddenLayersCount,
+                FannHelper::OUTPUT_NEURONS_AMOUNT);
             fann_set_training_algorithm($fann, FANN_TRAIN_BATCH);
             fann_set_activation_function_hidden($fann, FANN_SIGMOID_SYMMETRIC);
             fann_set_activation_function_output($fann, FANN_SIGMOID_SYMMETRIC);
+        }
 
+        if ($fann) {
             // Read training data:
             $trainData = fann_read_train_from_file(FannHelper::TRAINING_DATA_FILE);
 
-            // Check if psudo_mse_result is greater than our desired_error
-            // if so keep training so long as we are also under max_epochs:
-            $currentEpoch = 0;
-            $epochsBetweenSaves = 100; // Minimum number of epochs between saves
-            $desiredError = 0.0001;
-            $psudoMseResult = $desiredError * 10000; // 1 - Initialize psudo mse (mean squared error) to a number greater than the desired_error this is what the network is trying to minimize.
-            $epochsSinceLastSave = 0;
-            //$bestMse = $psudoMseResult; // keep the last best seen MSE network score here.
-            $bestSuccessGuessAmount = 0;
             while (($psudoMseResult > $desiredError) && ($currentEpoch <= $maxEpochs)) {
                 $currentEpoch++;
                 $epochsSinceLastSave++;
 
-                // See: http://php.net/manual/en/function.fann-train-epoch.php
-                // Train one epoch with the training data stored in data.
-                //
-                // One epoch is where all of the training data is considered
-                // exactly once.
-                //
-                // This function returns the MSE error as it is calculated
-                // either before or during the actual training. This is not the
-                // actual MSE after the training epoch, but since calculating this
-                // will require to go through the entire training set once more.
-                // It is more than adequate to use this value during training.
+                // Train one epoch:
                 $psudoMseResult = fann_train_epoch($fann, $trainData);
 
                 // Extract success amount:
                 $successGuessAmount = $this->testNetwork($fann, $testImages, $testLabels);
+
+                // Define file name:
+                $saveFileName = str_replace('.net',
+                    "_{$successGuessAmount}_hidden_layers_{$hiddenLayersCount}_" . date_format(new DateTime(),
+                        'Y-m-d_H-i-s') . ".net", FannHelper::NETWORK_CONFIGURATION_FILE);
 
                 // Log data:
                 HelperFunctions::printInfo(sprintf("Epoch: %' 6s; MSE: %' -20s; Success guess amount: %' 6s;",
@@ -118,27 +98,23 @@ class FannSigmoidHelper
                     PHP_EOL . date_format(new DateTime(),
                         'Y-m-d H:i:s') . ",$currentEpoch,$psudoMseResult,$successGuessAmount");
 
-                // If we haven't saved the ANN in a while...
-                // and the current network is better then the previous best network
-                // as defined by the current MSE being less than the last best MSE
-                // Save it!
+                // Backup network:
                 if (($epochsSinceLastSave >= $epochsBetweenSaves) && ($successGuessAmount > $bestSuccessGuessAmount)) {
-                    //$bestMse = $psudoMseResult; // we have a new best mse (mean square error)
                     $bestSuccessGuessAmount = $successGuessAmount;
 
                     // Save a Snapshot of the ANN:
-                    // $temSaveFile = FannHelper::NETWORK_CONFIGURATION_FILE . date_format(new DateTime(), "_Y.m.d_H-i-s_SuccessGuessAmount_{$successGuessAmount}_Epoch_{$currentEpoch}");
-                    $temSaveFile = FannHelper::NETWORK_CONFIGURATION_FILE . "_success_{$successGuessAmount}_epoch_{$currentEpoch}";
-                    fann_save($fann, $temSaveFile);
-                    $epochsSinceLastSave = 0; // reset the count
+                    fann_save($fann, $saveFileName);
+                    $epochsSinceLastSave = 0;
                 }
-            } // While we"re training
+            }
 
             HelperFunctions::printInfo('Training Complete! Saving Final Network.');
 
             // Save the final network
-            fann_save($fann, FannHelper::NETWORK_CONFIGURATION_FILE);
+            fann_save($fann, $saveFileName);
             fann_destroy($fann); // free memory
+        } else {
+            quit("ERROR: Error to get NN instance.");
         }
 
         // Close log file:
@@ -150,7 +126,6 @@ class FannSigmoidHelper
         HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
         HelperFunctions::printInfo("Network configuration file location: " . FannHelper::NETWORK_CONFIGURATION_FILE);
         HelperFunctions::printInfo("Maximum number of epochs the training should continue: " . $maxEpochs);
-        //(new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
     }
 
     private function deleteOldFiles()
