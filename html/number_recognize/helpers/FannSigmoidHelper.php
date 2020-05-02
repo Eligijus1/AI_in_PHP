@@ -40,9 +40,9 @@ class FannSigmoidHelper
         $milliseconds = round(microtime(true) * 1000);
         $logFile = null;
         $fann = null;
-        $trainData = fann_read_train_from_file(FannHelper::TRAINING_DATA_FILE);
-        $testImages = HelperFunctions::readImagesDataAsFloatBetween0And1($testImagesPath);
-        $testLabels = HelperFunctions::readLabels($testLabelsPath);
+        $trainData = fann_read_train_from_file(FannHelper::TRAINING_DATA_FILE); // Read trains data (60 000) from fann file.
+        $testImages = HelperFunctions::readImagesDataAsFloatBetween0And1($testImagesPath); // Read test labels (10 000 images)
+        $testLabels = HelperFunctions::readLabels($testLabelsPath); // Read test labels
 
         HelperFunctions::printInfo("Begin FANN sigmoid training.");
 
