@@ -39,6 +39,10 @@ class FannSigmoidHelper
         $saveFileName = FannHelper::NETWORK_CONFIGURATION_FILE;
         $milliseconds = round(microtime(true) * 1000);
         $logFile = null;
+        $fann = null;
+        $trainData = fann_read_train_from_file(FannHelper::TRAINING_DATA_FILE);
+        $testImages = HelperFunctions::readImagesDataAsFloatBetween0And1($testImagesPath);
+        $testLabels = HelperFunctions::readLabels($testLabelsPath);
 
         HelperFunctions::printInfo("Begin FANN sigmoid training.");
 
@@ -55,16 +59,7 @@ class FannSigmoidHelper
             $logFile = fopen(FannHelper::TRAINING_LOG_FILE, 'a');
         }
 
-        // Extract test images array:
-        $testImages = HelperFunctions::readImagesDataAsFloatBetween0And1($testImagesPath);
-        HelperFunctions::printInfo("Read test images.");
-
-        // Extract test labels array:
-        $testLabels = HelperFunctions::readLabels($testLabelsPath);
-        HelperFunctions::printInfo("Read test labels.");
-
         // Create FANN object:
-        $fann = null;
         if ($continueFromFannFile) {
             $fann = fann_create_from_file($continueFromFannFile);
         } else {
@@ -76,9 +71,6 @@ class FannSigmoidHelper
         }
 
         if ($fann) {
-            // Read training data:
-            $trainData = fann_read_train_from_file(FannHelper::TRAINING_DATA_FILE);
-
             while (($psudoMseResult > $desiredError) && ($currentEpoch <= $maxEpochs)) {
                 $currentEpoch++;
                 $epochsSinceLastSave++;
