@@ -26,31 +26,34 @@ class FannSigmoidHelper
         string $testLabelsPath,
         int $maxEpochs,
         int $hiddenLayersCount,
+        bool $writeCsvLog,
         string $continueFromFannFile = null
     ) {
         // Declare and set variables:
         $currentEpoch = 0;
-        $epochsBetweenSaves = 100;
+        //$epochsBetweenSaves = 100;
         $desiredError = 0.0001;
         $psudoMseResult = $desiredError * 10000;
         $epochsSinceLastSave = 0;
         $bestSuccessGuessAmount = 0;
         $saveFileName = FannHelper::NETWORK_CONFIGURATION_FILE;
-        $milliseconds = round(microtime(true) * 1000);// Define application start time
+        $milliseconds = round(microtime(true) * 1000);
+        $logFile = null;
 
-        // Print message, that starting loading:
         HelperFunctions::printInfo("Begin FANN sigmoid training.");
 
         $this->deleteOldFiles();
 
         // Create log file:
-        if (!is_file(FannHelper::TRAINING_LOG_FILE)) {
-            file_put_contents(FannHelper::TRAINING_LOG_FILE, "DateTime,Epoch,MSE,SuccessGuessAmount");
-        } else {
-            HelperFunctions::printError("File " . FannHelper::TRAINING_LOG_FILE . " exist.");
-            return;
+        if ($writeCsvLog) {
+            if (!is_file(FannHelper::TRAINING_LOG_FILE)) {
+                file_put_contents(FannHelper::TRAINING_LOG_FILE, "DateTime,Epoch,MSE,SuccessGuessAmount");
+            } else {
+                HelperFunctions::printError("File " . FannHelper::TRAINING_LOG_FILE . " exist.");
+                return;
+            }
+            $logFile = fopen(FannHelper::TRAINING_LOG_FILE, 'a');
         }
-        $logFile = fopen(FannHelper::TRAINING_LOG_FILE, 'a');
 
         // Extract test images array:
         $testImages = HelperFunctions::readImagesDataAsFloatBetween0And1($testImagesPath);
@@ -88,18 +91,23 @@ class FannSigmoidHelper
 
                 // Define file name:
                 $saveFileName = str_replace('.net',
-                    "_{$successGuessAmount}_hidden_layers_{$hiddenLayersCount}_" . date_format(new DateTime(),
+                    "_success_{$successGuessAmount}_hidden_layers_{$hiddenLayersCount}_" . date_format(new DateTime(),
                         'Y-m-d_H-i-s') . ".net", FannHelper::NETWORK_CONFIGURATION_FILE);
 
                 // Log data:
                 HelperFunctions::printInfo(sprintf("Epoch: %' 6s; MSE: %' -20s; Success guess amount: %' 6s;",
                     $currentEpoch, $psudoMseResult, $successGuessAmount));
-                fwrite($logFile,
-                    PHP_EOL . date_format(new DateTime(),
-                        'Y-m-d H:i:s') . ",$currentEpoch,$psudoMseResult,$successGuessAmount");
 
-                // Backup network:
-                if (($epochsSinceLastSave >= $epochsBetweenSaves) && ($successGuessAmount > $bestSuccessGuessAmount)) {
+                // Write log:
+                if ($writeCsvLog) {
+                    fwrite($logFile,
+                        PHP_EOL . date_format(new DateTime(),
+                            'Y-m-d H:i:s') . ",$currentEpoch,$psudoMseResult,$successGuessAmount");
+                }
+
+                // Backup network conditions:
+                //if (($epochsSinceLastSave >= $epochsBetweenSaves) && ($successGuessAmount > $bestSuccessGuessAmount)) {
+                if ($successGuessAmount > 9000 && $successGuessAmount > $bestSuccessGuessAmount) {
                     $bestSuccessGuessAmount = $successGuessAmount;
 
                     // Save a Snapshot of the ANN:
@@ -108,19 +116,20 @@ class FannSigmoidHelper
                 }
             }
 
-            HelperFunctions::printInfo('Training Complete! Saving Final Network.');
-
             // Save the final network
             fann_save($fann, $saveFileName);
-            fann_destroy($fann); // free memory
+            fann_destroy($fann);
         } else {
             quit("ERROR: Error to get NN instance.");
         }
 
         // Close log file:
-        fclose($logFile);
+        if ($writeCsvLog) {
+            fclose($logFile);
+        }
 
         // Information about results:
+        HelperFunctions::printInfo('Training Complete!');
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
         HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
         HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));

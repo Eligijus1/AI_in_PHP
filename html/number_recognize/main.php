@@ -172,7 +172,8 @@ switch ($argv[1]) {
         // (new FannSigmoidTrainHelper())->train(1000);
         // (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
         // v2:
-        (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 30000, 15);
+        (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 1000, 15, true);
+        //(new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 200, 15, FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9375_hidden_layers_15.net");
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
