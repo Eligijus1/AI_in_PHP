@@ -19,7 +19,7 @@ namespace number_recognize\helpers;
 
 class FannSigmoidTestHelper
 {
-    public function test(string $imagePath, string $labelsPath): int
+    public function test(string $imagePath, string $labelsPath, string $networkConfigurationFile): int
     {
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -38,12 +38,12 @@ class FannSigmoidTestHelper
         HelperFunctions::printInfo("Read test labels.");
 
         // Interrupt application if train file not exist:
-        if (!is_file(FannHelper::NETWORK_CONFIGURATION_FILE)) {
-            die("The file xor_float.net has not been created! Please run simple_train.php to generate it");
+        if (!is_file($networkConfigurationFile)) {
+            die("The file '{$networkConfigurationFile}' has not been created! Please run simple_train.php to generate it.");
         }
 
         // Constructs a backpropagation neural network from a configuration file:
-        $ann = fann_create_from_file(FannHelper::NETWORK_CONFIGURATION_FILE);
+        $ann = fann_create_from_file($networkConfigurationFile);
 
         // Check if neural network created:
         if (!$ann) {

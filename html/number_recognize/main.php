@@ -162,13 +162,19 @@ switch ($argv[1]) {
     case "fann_train_sigmoid": // Sigmoid activation function. One of the most used activation functions. This activation function gives output that is between 0 and 1.
         (new FannSigmoidTrainHelper())->train(150);
         break;
-    // Example: php main.php fann_test_sigmoid
+    // Example: php main.php fann_test_sigmoid fann_mnist_sigmoid_success_9306_hidden_layers_15_2020-05-03_13-01-31.net
     case "fann_test_sigmoid":
-        (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
+        if (empty($argv[2])) {
+            HelperFunctions::printError("Please specify network file from directory '" . FannHelper::DATA_LOCATION . "/'.");
+        } else {
+            (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath,
+                FannHelper::DATA_LOCATION . '/' . $argv[2]);
+        }
         break;
     // Example: php main.php fann_train_and_test
     case "fann_train_and_test":
-        (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 10000, 15, false, FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9258_hidden_layers_15_2020-05-02_23-49-34.net");
+        (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 10000, 15, false,
+            FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9258_hidden_layers_15_2020-05-02_23-49-34.net");
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
