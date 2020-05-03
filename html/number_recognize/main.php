@@ -168,13 +168,7 @@ switch ($argv[1]) {
         break;
     // Example: php main.php fann_train_and_test
     case "fann_train_and_test":
-        // v1:
-        // (new FannSigmoidTrainHelper())->train(1000);
-        // (new FannSigmoidTestHelper())->test(testImagePath, testLabelPath);
-        // v2:
-        //(new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 1000, 15, true);
-        //(new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 1000, 15, false, FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9073_hidden_layers_15_2020-05-02_19-39-13.net");
-        (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 10000, 15, false, FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9143_hidden_layers_15_2020-05-02_20-14-32.net");
+        (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 10000, 15, false, FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9258_hidden_layers_15_2020-05-02_23-49-34.net");
         break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
