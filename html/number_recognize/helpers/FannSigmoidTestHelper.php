@@ -27,6 +27,17 @@ class FannSigmoidTestHelper
         // Print message, that starting loading:
         HelperFunctions::printInfo("Begin FANN sigmoid testing.");
 
+        // Check if all required files available:
+        if (!is_file($imagePath)) {
+            die("The file '{$imagePath}' not found! Please download 'test set images' file from http://yann.lecun.com/exdb/mnist/.");
+        }
+        if (!is_file($labelsPath)) {
+            die("The file '{$labelsPath}' not found! Please download 'test set labels' from from http://yann.lecun.com/exdb/mnist/.");
+        }
+        if (!is_file($imagePath)) {
+            die("The file '{$imagePath}' has not been created! First train network.");
+        }
+
         // Extract test images array:
         $images = HelperFunctions::readImagesDataAsFloatBetween0And1($imagePath);
         $imagesCount = count($images);
@@ -36,11 +47,6 @@ class FannSigmoidTestHelper
         $labels = HelperFunctions::readLabels($labelsPath);
         $labelsCount = count($labels);
         HelperFunctions::printInfo("Read test labels.");
-
-        // Interrupt application if train file not exist:
-        if (!is_file($networkConfigurationFile)) {
-            die("The file '{$networkConfigurationFile}' has not been created! Please run simple_train.php to generate it.");
-        }
 
         // Constructs a backpropagation neural network from a configuration file:
         $ann = fann_create_from_file($networkConfigurationFile);

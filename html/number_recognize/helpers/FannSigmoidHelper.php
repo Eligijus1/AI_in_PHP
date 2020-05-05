@@ -29,6 +29,17 @@ class FannSigmoidHelper
         bool $writeCsvLog,
         string $continueFromFannFile = null
     ) {
+        // Check if all required files available:
+        if (!is_file(FannHelper::TRAINING_DATA_FILE)) {
+            die("The file '" . FannHelper::TRAINING_DATA_FILE . "' not found! First generate it by using 'training set images' and 'training set labels' from http://yann.lecun.com/exdb/mnist/. After run 'php main.php fann_generate_training_data_file'.");
+        }
+        if (!is_file($testImagesPath)) {
+            die("The file '{$testImagesPath}' not found! Please download 'test set images' file from http://yann.lecun.com/exdb/mnist/.");
+        }
+        if (!is_file($testLabelsPath)) {
+            die("The file '{$testLabelsPath}' not found! Please download 'test set labels' from from http://yann.lecun.com/exdb/mnist/.");
+        }
+
         // Declare and set variables:
         $currentEpoch = 0;
         //$epochsBetweenSaves = 100;
