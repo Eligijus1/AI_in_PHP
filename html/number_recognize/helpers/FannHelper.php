@@ -30,6 +30,14 @@ class FannHelper
 
     public function generateTrainingDataFile(string $imagePath, string $labelsPath)
     {
+        // Check if required files available:
+        if (!is_file($imagePath)) {
+            die("The file '{$imagePath}' not found! Please download 'training set images' from from http://yann.lecun.com/exdb/mnist/.");
+        }
+        if (!is_file($labelsPath)) {
+            die("The file '{$labelsPath}' not found! Please download 'training set labels' from from http://yann.lecun.com/exdb/mnist/.");
+        }
+
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
