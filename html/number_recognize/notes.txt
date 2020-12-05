@@ -70,6 +70,136 @@ $ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate
 2020.12.05 12:15:58 INFO: Success guess amount: 7904 from 10000.
 
 $ php main.php fann_train_sigmoid 30
+2020.12.05 18:19:30 INFO: Begin FANN sigmoid training.
+2020.12.05 18:20:20 INFO: Memory used: 2 MB
+2020.12.05 18:20:20 INFO: Peak of memory allocated by PHP: 2 MB
+2020.12.05 18:20:20 INFO: Network configuration file location: data/fann/fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_30_epochs_php_version_7.4.3.dat
+2020.12.05 18:20:20 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 18:20:20 INFO: Maximum number of epochs the training should continue: 30
+2020.12.05 18:20:20 INFO: Done training in 0:00:50.445
+
+$ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_30_epochs_php_version_7.4.3.dat
+2020.12.05 18:21:22 INFO: Begin FANN sigmoid testing.
+2020.12.05 18:21:24 INFO: Read test images.
+2020.12.05 18:21:24 INFO: Read test labels.
+2020.12.05 18:21:24 INFO: Finished testing.
+2020.12.05 18:21:24 INFO: Memory used: 360 MB
+2020.12.05 18:21:24 INFO: Peak of memory allocated by PHP: 360 MB
+2020.12.05 18:21:24 INFO: Done testing in 0:00:01.995
+2020.12.05 18:21:24 INFO: Data location: data/fann
+2020.12.05 18:21:24 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.05 18:21:24 INFO: Learning rate: 0.20000000298023
+2020.12.05 18:21:24 INFO: Learning momentum: 0.69999998807907
+2020.12.05 18:21:24 INFO: Number of cascade candidate stagnation epochs: 12
+2020.12.05 18:21:24 INFO: Maximum candidate epochs: 150
+2020.12.05 18:21:24 INFO: Maximum out epochs: 150
+2020.12.05 18:21:24 INFO: Minimum candidate epochs: 50
+2020.12.05 18:21:24 INFO: Minimum out epochs: 50
+2020.12.05 18:21:24 INFO: Number of cascade output stagnation epochs: 12
+2020.12.05 18:21:24 INFO: Last error number: 0
+2020.12.05 18:21:24 INFO: Mean square error from in network: 0
+2020.12.05 18:21:24 INFO: Sarprop step error shift: 1.3849999904633
+2020.12.05 18:21:24 INFO: Sarprop step error threshold factor: 0.10000000149012
+2020.12.05 18:21:24 INFO: Success guess amount: 7758 from 10000.
+
+$ php main.php fann_train_sigmoid 50
+2020.12.05 18:48:10 INFO: Begin FANN sigmoid training.
+2020.12.05 18:49:25 INFO: Memory used: 2 MB
+2020.12.05 18:49:25 INFO: Peak of memory allocated by PHP: 2 MB
+2020.12.05 18:49:25 INFO: Network configuration file location: data/fann/fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_50_epochs_php_version_7.4.3.dat
+2020.12.05 18:49:25 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 18:49:25 INFO: Maximum number of epochs the training should continue: 50
+2020.12.05 18:49:25 INFO: Done training in 0:01:14.347
+
+$ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_50_epochs_php_version_7.4.3.dat
+2020.12.05 19:23:44 INFO: Begin FANN sigmoid testing.
+2020.12.05 19:23:45 INFO: Read test images.
+2020.12.05 19:23:45 INFO: Read test labels.
+2020.12.05 19:23:46 INFO: Finished testing.
+2020.12.05 19:23:46 INFO: Memory used: 360 MB
+2020.12.05 19:23:46 INFO: Peak of memory allocated by PHP: 360 MB
+2020.12.05 19:23:46 INFO: Done testing in 0:00:02.007
+2020.12.05 19:23:46 INFO: Data location: data/fann
+2020.12.05 19:23:46 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.05 19:23:46 INFO: Learning rate: 0.20000000298023
+2020.12.05 19:23:46 INFO: Learning momentum: 0.69999998807907
+2020.12.05 19:23:46 INFO: Number of cascade candidate stagnation epochs: 12
+2020.12.05 19:23:46 INFO: Maximum candidate epochs: 150
+2020.12.05 19:23:46 INFO: Maximum out epochs: 150
+2020.12.05 19:23:46 INFO: Minimum candidate epochs: 50
+2020.12.05 19:23:46 INFO: Minimum out epochs: 50
+2020.12.05 19:23:46 INFO: Number of cascade output stagnation epochs: 12
+2020.12.05 19:23:46 INFO: Last error number: 0
+2020.12.05 19:23:46 INFO: Mean square error from in network: 0
+2020.12.05 19:23:46 INFO: Sarprop step error shift: 1.3849999904633
+2020.12.05 19:23:46 INFO: Sarprop step error threshold factor: 0.10000000149012
+2020.12.05 19:23:46 INFO: Success guess amount: 8619 from 10000.
+
+$ php main.php fann_train_sigmoid 100
+2020.12.05 19:24:14 INFO: Begin FANN sigmoid training.
+2020.12.05 19:26:22 INFO: Memory used: 2 MB
+2020.12.05 19:26:22 INFO: Peak of memory allocated by PHP: 2 MB
+2020.12.05 19:26:22 INFO: Network configuration file location: data/fann/fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_100_epochs_php_version_7.4.3.dat
+2020.12.05 19:26:22 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 19:26:22 INFO: Maximum number of epochs the training should continue: 100
+2020.12.05 19:26:22 INFO: Done training in 0:02:07.902
+
+$ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_100_epochs_php_version_7.4.3.dat
+2020.12.05 20:08:26 INFO: Begin FANN sigmoid testing.
+2020.12.05 20:08:28 INFO: Read test images.
+2020.12.05 20:08:28 INFO: Read test labels.
+2020.12.05 20:08:28 INFO: Finished testing.
+2020.12.05 20:08:28 INFO: Memory used: 360 MB
+2020.12.05 20:08:28 INFO: Peak of memory allocated by PHP: 360 MB
+2020.12.05 20:08:28 INFO: Done testing in 0:00:01.979
+2020.12.05 20:08:28 INFO: Data location: data/fann
+2020.12.05 20:08:28 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.05 20:08:28 INFO: Learning rate: 0.20000000298023
+2020.12.05 20:08:28 INFO: Learning momentum: 0.69999998807907
+2020.12.05 20:08:28 INFO: Number of cascade candidate stagnation epochs: 12
+2020.12.05 20:08:28 INFO: Maximum candidate epochs: 150
+2020.12.05 20:08:28 INFO: Maximum out epochs: 150
+2020.12.05 20:08:28 INFO: Minimum candidate epochs: 50
+2020.12.05 20:08:28 INFO: Minimum out epochs: 50
+2020.12.05 20:08:28 INFO: Number of cascade output stagnation epochs: 12
+2020.12.05 20:08:28 INFO: Last error number: 0
+2020.12.05 20:08:28 INFO: Mean square error from in network: 0
+2020.12.05 20:08:28 INFO: Sarprop step error shift: 1.3849999904633
+2020.12.05 20:08:28 INFO: Sarprop step error threshold factor: 0.10000000149012
+2020.12.05 20:08:28 INFO: Success guess amount: 9123 from 10000.
+
+$ php main.php fann_train_sigmoid 200
+2020.12.05 20:08:55 INFO: Begin FANN sigmoid training.
+2020.12.05 20:12:57 INFO: Memory used: 2 MB
+2020.12.05 20:12:57 INFO: Peak of memory allocated by PHP: 2 MB
+2020.12.05 20:12:57 INFO: Network configuration file location: data/fann/fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_200_epochs_php_version_7.4.3.dat
+2020.12.05 20:12:57 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 20:12:57 INFO: Maximum number of epochs the training should continue: 200
+2020.12.05 20:12:57 INFO: Done training in 0:04:02.616
+
+$ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_200_epochs_php_version_7.4.3.dat
+2020.12.05 22:11:20 INFO: Begin FANN sigmoid testing.
+2020.12.05 22:11:22 INFO: Read test images.
+2020.12.05 22:11:22 INFO: Read test labels.
+2020.12.05 22:11:22 INFO: Finished testing.
+2020.12.05 22:11:22 INFO: Memory used: 360 MB
+2020.12.05 22:11:22 INFO: Peak of memory allocated by PHP: 360 MB
+2020.12.05 22:11:22 INFO: Done testing in 0:00:02.
+2020.12.05 22:11:22 INFO: Data location: data/fann
+2020.12.05 22:11:22 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.05 22:11:22 INFO: Learning rate: 0.20000000298023
+2020.12.05 22:11:22 INFO: Learning momentum: 0.69999998807907
+2020.12.05 22:11:22 INFO: Number of cascade candidate stagnation epochs: 12
+2020.12.05 22:11:22 INFO: Maximum candidate epochs: 150
+2020.12.05 22:11:22 INFO: Maximum out epochs: 150
+2020.12.05 22:11:22 INFO: Minimum candidate epochs: 50
+2020.12.05 22:11:22 INFO: Minimum out epochs: 50
+2020.12.05 22:11:22 INFO: Number of cascade output stagnation epochs: 12
+2020.12.05 22:11:22 INFO: Last error number: 0
+2020.12.05 22:11:22 INFO: Mean square error from in network: 0
+2020.12.05 22:11:22 INFO: Sarprop step error shift: 1.3849999904633
+2020.12.05 22:11:22 INFO: Sarprop step error threshold factor: 0.10000000149012
+2020.12.05 22:11:22 INFO: Success guess amount: 9219 from 10000.
 
 #####
 ##### PHP 8.0.0
