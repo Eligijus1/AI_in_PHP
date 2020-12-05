@@ -2,39 +2,36 @@
 #####
 ##### PHP 7.4.3
 #####
-PHP 7.4.3 (cli) (built: Feb 18 2020 17:29:46) ( ZTS Visual C++ 2017 x64 )
-Copyright (c) The PHP Group
-Zend Engine v3.4.0, Copyright (c) Zend Technologies
+$ php main.php train_sigmoid 20
+2020.12.05 12:23:32 INFO: Begin training with sigmoid.
+2020.12.05 12:23:32 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
+2020.12.05 12:23:32 INFO: Created Sigmoid object.
+2020.12.05 12:23:32 INFO: Read train labels.
+2020.12.05 12:23:45 INFO: Read train images.
+2020.12.05 12:23:59 INFO: Prepared training DataSet.
+2020.12.05 15:00:32 INFO: Training finished.
+2020.12.05 15:00:32 INFO: Memory used: 2.56 GB
+2020.12.05 15:00:32 INFO: Peak of memory allocated by PHP: 4.2 GB
+2020.12.05 15:00:32 INFO: Network configuration file location: data/train_sigmoid/sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_20_epochs_php_version_7.4.3.dat
+2020.12.05 15:00:32 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 15:00:32 INFO: Maximum number of epochs the training should continue: 20
+2020.12.05 15:00:32 INFO: Done training in 2:36:59.379
 
-2020.12.04 21:31:42 INFO: Begin training with sigmoid.
-2020.12.04 21:31:42 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
-2020.12.04 21:31:42 INFO: Created Sigmoid object.
-2020.12.04 21:31:42 INFO: Read train labels.
-2020.12.04 21:32:05 INFO: Read train images.
-2020.12.04 21:32:21 INFO: Prepared training DataSet.
-2020.12.04 23:55:36 INFO: Training finished.
-2020.12.04 23:55:36 INFO: Memory used: 2.55 GB
-2020.12.04 23:55:36 INFO: Peak of memory allocated by PHP:: 4.2 GB
-2020.12.04 23:55:36 INFO: Done training in 2:23:54.43
-2020.12.04 23:55:36 INFO: Data location: data/train_sigmoid
-2020.12.04 23:55:36 INFO: Used for train 60000 images and 60000 labels.
-2020.12.04 23:55:36 INFO: Train global error is 0.0091368313596848.
-
-$ php main.php test_sigmoid sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.005_min_error_20_epochs.dat
-2020.12.05 11:40:20 INFO: Begin testing with sigmoid.
-2020.12.05 11:40:22 INFO: Read test images.
-2020.12.05 11:40:22 INFO: Read test labels.
-2020.12.05 11:40:43 INFO: Prepared testing DataSet.
-2020.12.05 11:40:43 INFO: Memory used: 22 MB
-2020.12.05 11:40:43 INFO: Peak of memory allocated by PHP: 362 MB
-2020.12.05 11:40:43 INFO: Done testing in 0:00:22.708
-2020.12.05 11:40:43 INFO: Data location: data/train_sigmoid
-2020.12.05 11:40:43 INFO: Used for testing 10000 images and 10000 labels.
-2020.12.05 11:40:43 INFO: Success guess amount: 9243.
-2020.12.05 11:40:43 INFO: Learning rate: 0.2.
-2020.12.05 11:40:43 INFO: Momentum: 0.7.
-2020.12.05 11:40:43 INFO: Epochs number: 20.
-2020.12.05 11:40:43 INFO: Global error: 0.0098059390760014.
+$ php main.php test_sigmoid sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_20_epochs_php_version_7.4.3.dat
+2020.12.05 15:33:32 INFO: Begin testing with sigmoid.
+2020.12.05 15:33:34 INFO: Read test images.
+2020.12.05 15:33:34 INFO: Read test labels.
+2020.12.05 15:33:54 INFO: Prepared testing DataSet.
+2020.12.05 15:33:54 INFO: Memory used: 22 MB
+2020.12.05 15:33:54 INFO: Peak of memory allocated by PHP: 362 MB
+2020.12.05 15:33:54 INFO: Done testing in 0:00:21.809
+2020.12.05 15:33:54 INFO: Data location: data/train_sigmoid
+2020.12.05 15:33:54 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.05 15:33:54 INFO: Learning rate: 0.2.
+2020.12.05 15:33:54 INFO: Momentum: 0.7.
+2020.12.05 15:33:54 INFO: Epochs number: 20.
+2020.12.05 15:33:54 INFO: Global error: 0.0099729706161409.
+2020.12.05 15:33:54 INFO: Success guess amount: 9214 from 10000.
 
 #####
 ##### PHP 7.4.3 and FANN
@@ -72,30 +69,43 @@ $ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate
 2020.12.05 12:15:58 INFO: Sarprop step error threshold factor: 0.10000000149012
 2020.12.05 12:15:58 INFO: Success guess amount: 7904 from 10000.
 
+$ php main.php fann_train_sigmoid 30
+
 #####
 ##### PHP 8.0.0
 #####
-PHP 8.0.0 (cli) (built: Nov 24 2020 22:02:57) ( ZTS Visual C++ 2019 x64 )
-Copyright (c) The PHP Group
-Zend Engine v4.0.0-dev, Copyright (c) Zend Technologies
+$ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php train_sigmoid 20
+2020.12.05 13:35:51 INFO: Begin training with sigmoid.
+2020.12.05 13:35:51 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
+2020.12.05 13:35:51 INFO: Created Sigmoid object.
+2020.12.05 13:35:51 INFO: Read train labels.
+2020.12.05 13:35:58 INFO: Read train images.
+2020.12.05 13:36:12 INFO: Prepared training DataSet.
+2020.12.05 16:07:11 INFO: Training finished.
+2020.12.05 16:07:11 INFO: Memory used: 2.56 GB
+2020.12.05 16:07:11 INFO: Peak of memory allocated by PHP: 4.2 GB
+2020.12.05 16:07:11 INFO: Network configuration file location: data/train_sigmoid/sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_20_epochs_php_version_8.0.0.dat
+2020.12.05 16:07:11 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 16:07:11 INFO: Maximum number of epochs the training should continue: 20
+2020.12.05 16:07:11 INFO: Done training in 2:31:20.156
 
-2020.12.05 05:15:38 INFO: Begin training with sigmoid.
-2020.12.05 05:15:38 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
-2020.12.05 05:15:38 INFO: Created Sigmoid object.
-2020.12.05 05:15:38 INFO: Read train labels.
-2020.12.05 05:15:44 INFO: Read train images.
-2020.12.05 05:15:59 INFO: Prepared training DataSet.
-2020.12.05 07:40:15 INFO: Training finished.
-2020.12.05 07:40:15 INFO: Memory used: 2.55 GB
-2020.12.05 07:40:15 INFO: Peak of memory allocated by PHP:: 4.2 GB
-2020.12.05 07:40:15 INFO: Done training in 2:24:37.37
-2020.12.05 07:40:15 INFO: Data location: data/train_sigmoid
-2020.12.05 07:40:15 INFO: Used for train 60000 images and 60000 labels.
-2020.12.05 07:40:15 INFO: Train global error is 0.0098059390760014.
-
-$ /c/Programs/php-8.0.0-Win32-vs16-x64/php 
+$ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php test_sigmoid sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_20_epochs_php_version_8.0.0.dat
+2020.12.05 16:17:23 INFO: Begin testing with sigmoid.
+2020.12.05 16:17:24 INFO: Read test images.
+2020.12.05 16:17:24 INFO: Read test labels.
+2020.12.05 16:17:45 INFO: Prepared testing DataSet.
+2020.12.05 16:17:45 INFO: Memory used: 22 MB
+2020.12.05 16:17:45 INFO: Peak of memory allocated by PHP: 362 MB
+2020.12.05 16:17:45 INFO: Done testing in 0:00:21.348
+2020.12.05 16:17:45 INFO: Data location: data/train_sigmoid
+2020.12.05 16:17:45 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.05 16:17:45 INFO: Learning rate: 0.2.
+2020.12.05 16:17:45 INFO: Momentum: 0.7.
+2020.12.05 16:17:45 INFO: Epochs number: 20.
+2020.12.05 16:17:45 INFO: Global error: 0.010336682082723.
+2020.12.05 16:17:45 INFO: Success guess amount: 9311 from 10000.
 
 #####
 ##### Results:
 #####
-/c/Programs/php-8.0.0-Win32-vs16-x64/php -r 'echo phpversion();'
+
