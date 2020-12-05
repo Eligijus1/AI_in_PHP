@@ -98,15 +98,27 @@ switch ($argv[1]) {
         (new PerceptronFormulaGenerator())((int)$argv[2]);
         break;
 
-    // Example: php main.php train_sigmoid
+    // Example: php main.php train_sigmoid 20
     case 'train_sigmoid':
-        (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, 0.2, 0.7, 20);
+        if (empty($argv[2])) {
+            HelperFunctions::printError("Please specify 'max epochs number'.");
+        } else {
+            (new SigmoidTrainHelper())->train(trainImagePath, trainLabelPath, 0.2, 0.7, (int)$argv[2]);
+        }
         break;
 
     // Example: php main.php test_sigmoid
     case 'test_sigmoid':
+        /*
         (new SigmoidTestHelper())->test(testImagePath, testLabelPath,
             'C:\Projects\AI_in_PHP\html\number_recognize\data\train_sigmoid\Backups\00065_sigmoid_9451.dat');
+        */
+        if (empty($argv[2])) {
+            HelperFunctions::printError("Please specify network file from directory '" . SigmoidTestHelper::DATA_LOCATION . "/'.");
+        } else {
+            (new SigmoidTestHelper())->test(testImagePath, testLabelPath,
+                SigmoidTestHelper::DATA_LOCATION . '/' . $argv[2]);
+        }
         break;
 
     // Example: php main.php train_softmax
@@ -158,9 +170,13 @@ switch ($argv[1]) {
     case "fann_generate_training_data_file":
         (new FannHelper())->generateTrainingDataFile(trainImagePath, trainLabelPath);
         break;
-    // Example: php main.php fann_train_sigmoid
+    // Example: php main.php fann_train_sigmoid 20
     case "fann_train_sigmoid": // Sigmoid activation function. One of the most used activation functions. This activation function gives output that is between 0 and 1.
-        (new FannSigmoidTrainHelper())->train(20);
+        if (empty($argv[2])) {
+            HelperFunctions::printError("Please specify 'max epochs number'.");
+        } else {
+            (new FannSigmoidTrainHelper())->train((int)$argv[2]);
+        }
         break;
     // Example: php main.php fann_test_sigmoid fann_mnist_sigmoid_success_9316_hidden_layers_15_2020-05-05_01-22-58.net
     case "fann_test_sigmoid":

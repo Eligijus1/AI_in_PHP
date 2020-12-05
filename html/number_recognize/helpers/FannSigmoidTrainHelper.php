@@ -21,8 +21,10 @@ namespace number_recognize\helpers;
 
 class FannSigmoidTrainHelper
 {
-    public function train(int $maxEpochs)
+    public function train(int $maxEpochs, float $learningRate = 0.2, float $momentum = 0.7, $minimumError = 0.001)
     {
+        $dataFile = FannHelper::DATA_LOCATION . "/fann_sigmoid_15_hidden_layers_{$learningRate}_learning_rate_{$momentum}_momentum_{$minimumError}_min_error_{$maxEpochs}_epochs_php_version_" . phpversion() . ".dat";
+
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
 
@@ -30,12 +32,12 @@ class FannSigmoidTrainHelper
         HelperFunctions::printInfo("Begin FANN sigmoid training.");
 
         // Delete old training file if it exist:
-        if (is_file(FannHelper::NETWORK_CONFIGURATION_FILE)) {
+        if (is_file($dataFile)) {
             // Use unlink() function to delete a file:
-            if (!unlink(FannHelper::NETWORK_CONFIGURATION_FILE)) {
-                HelperFunctions::printError("Old file '" . FannHelper::NETWORK_CONFIGURATION_FILE . "' cannot be deleted due to an error.");
+            if (!unlink($dataFile)) {
+                HelperFunctions::printError("Old file '" . $dataFile . "' cannot be deleted due to an error.");
             } else {
-                HelperFunctions::printInfo("Old file '" . FannHelper::NETWORK_CONFIGURATION_FILE . "' has been deleted");
+                HelperFunctions::printInfo("Old file '" . $dataFile . "' has been deleted");
             }
         }
 
@@ -71,6 +73,12 @@ class FannSigmoidTrainHelper
 //                return true;
 //            });
 
+        // Set the learning momentum:
+        fann_set_learning_momentum($fann, $momentum);
+
+        // Sets the learning rate:
+        fann_set_learning_rate($fann, $learningRate);
+
         /*
          * Trains on an entire dataset, which is read from file, for a period of time.
          *
@@ -82,9 +90,9 @@ class FannSigmoidTrainHelper
          * 4 - The number of epochs between calling a user function. A value of zero means that user function is not called.
          * 5 - It mean 1 error in 1000 samples, like 1 mistake in 1000 tries.
          */
-        if (fann_train_on_file($fann, FannHelper::TRAINING_DATA_FILE, $maxEpochs, 1, 0.001)) {
+        if (fann_train_on_file($fann, FannHelper::TRAINING_DATA_FILE, $maxEpochs, 1, $minimumError)) {
             // Saves the entire network to a configuration file:
-            fann_save($fann, FannHelper::NETWORK_CONFIGURATION_FILE);
+            fann_save($fann, $dataFile);
         }
 
         // Destroys the entire network and properly freeing all the associated memory:
@@ -92,9 +100,10 @@ class FannSigmoidTrainHelper
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
-        HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
-        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
-        HelperFunctions::printInfo("Network configuration file location: " . FannHelper::NETWORK_CONFIGURATION_FILE);
+        HelperFunctions::printInfo("Peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
+        HelperFunctions::printInfo("Network configuration file location: " . $dataFile);
+        HelperFunctions::printInfo("Used for train 60000 images and 60000 labels.");
         HelperFunctions::printInfo("Maximum number of epochs the training should continue: " . $maxEpochs);
+        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
     }
 }

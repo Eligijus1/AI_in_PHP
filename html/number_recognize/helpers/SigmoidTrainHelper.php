@@ -16,10 +16,9 @@ class SigmoidTrainHelper
         float $learningRate = 0.2,
         float $momentum = 0.7,
         int $maxNumEpochs = 20,
-        float $minimumError = 0.005
+        float $minimumError = 0.001
     ): void {
-        $dataFile = self::DATA_LOCATION . "/sigmoid.dat";
-        $dataFileBackup = self::DATA_LOCATION . "/sigmoid_15_hidden_layers_{$learningRate}_learning_rate_{$momentum}_momentum_{$minimumError}_min_error_{$maxNumEpochs}_epochs.dat";
+        $dataFile = self::DATA_LOCATION . "/sigmoid_15_hidden_layers_{$learningRate}_learning_rate_{$momentum}_momentum_{$minimumError}_min_error_{$maxNumEpochs}_epochs_php_version_" . phpversion() . ".dat";
 
         // Define application start time:
         $milliseconds = round(microtime(true) * 1000);
@@ -96,15 +95,14 @@ class SigmoidTrainHelper
         // Save object to disc:
         $s = serialize($sigmoid);
         file_put_contents($dataFile, $s);
-        file_put_contents($dataFileBackup, $s);
 
         // Information about results:
         HelperFunctions::printInfo("Memory used: " . HelperFunctions::formatBytes(memory_get_usage(true)));
-        HelperFunctions::printInfo("Peak of memory allocated by PHP:: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
-        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
-        HelperFunctions::printInfo("Data location: " . self::DATA_LOCATION);
+        HelperFunctions::printInfo("Peak of memory allocated by PHP: " . HelperFunctions::formatBytes(memory_get_peak_usage(true)));
+        HelperFunctions::printInfo("Network configuration file location: " . $dataFile);
         HelperFunctions::printInfo("Used for train {$imagesCount} images and {$labelsCount} labels.");
-        HelperFunctions::printInfo("Train global error is {$globalError}.");
+        HelperFunctions::printInfo("Maximum number of epochs the training should continue: " . $maxNumEpochs);
+        HelperFunctions::printInfo("Done training in " . HelperFunctions::formatMilliseconds(round(microtime(true) * 1000) - $milliseconds));
     }
 
     public function getTrainingDataSet(string $imagePath, string $labelsPath): array

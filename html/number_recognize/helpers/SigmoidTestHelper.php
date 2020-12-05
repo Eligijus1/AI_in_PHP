@@ -8,7 +8,7 @@ use number_recognize\neuralnetwork\Sigmoid;
 
 class SigmoidTestHelper
 {
-    private const DATA_LOCATION = "data/train_sigmoid";
+    public const DATA_LOCATION = "data/train_sigmoid";
 
     public function test(string $imagePath, string $labelsPath, ?string $networkFile = null): int
     {
