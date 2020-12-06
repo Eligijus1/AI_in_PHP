@@ -192,6 +192,13 @@ switch ($argv[1]) {
         (new FannSigmoidHelper)->trainAndTest(testImagePath, testLabelPath, 30000, 15, false,
             FannHelper::DATA_LOCATION . "/fann_mnist_sigmoid_success_9317_hidden_layers_15_2020-05-06_05-43-38.net");
         break;
+    case "check_jit":
+        if (version_compare(phpversion(), '8.0.0', '>=')) {
+            print_r(opcache_get_status()['jit']);
+        } else {
+            HelperFunctions::printError("Your version of PHP is too old. Need at least 8.0.0.");
+        }
+        break;
     default:
         HelperFunctions::printError("Unhandled action '{$argv[1]}'");
         return;

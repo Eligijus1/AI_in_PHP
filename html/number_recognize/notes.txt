@@ -1,7 +1,16 @@
+CONTENT
+=======
+1.  PHP 7.4.3
+2.  PHP 7.4.3 and FANN
+3.  PHP 8.0.0
+4.  PHP 7.4.3, FANN and 400 epochs
+5.  PHP 7.4.3, FANN and 800 epochs
+6.  PHP 8.0.0 + JIT
+99. Results
 
-#####
-##### PHP 7.4.3
-#####
+###########################################################################################################################
+######################################## 1.  PHP 7.4.3 ####################################################################
+###########################################################################################################################
 $ php main.php train_sigmoid 20
 2020.12.05 12:23:32 INFO: Begin training with sigmoid.
 2020.12.05 12:23:32 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
@@ -33,9 +42,9 @@ $ php main.php test_sigmoid sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momen
 2020.12.05 15:33:54 INFO: Global error: 0.0099729706161409.
 2020.12.05 15:33:54 INFO: Success guess amount: 9214 from 10000.
 
-#####
-##### PHP 7.4.3 and FANN
-#####
+###########################################################################################################################
+######################################## 2.  PHP 7.4.3 and FANN ###########################################################
+###########################################################################################################################
 $ php main.php fann_train_sigmoid 20
 2020.12.05 12:14:18 INFO: Begin FANN sigmoid training.
 2020.12.05 12:14:58 INFO: Memory used: 2 MB
@@ -201,9 +210,9 @@ $ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate
 2020.12.05 22:11:22 INFO: Sarprop step error threshold factor: 0.10000000149012
 2020.12.05 22:11:22 INFO: Success guess amount: 9219 from 10000.
 
-#####
-##### PHP 8.0.0
-#####
+###########################################################################################################################
+######################################## 3.  PHP 8.0.0 ####################################################################
+###########################################################################################################################
 $ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php train_sigmoid 20
 2020.12.05 13:35:51 INFO: Begin training with sigmoid.
 2020.12.05 13:35:51 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
@@ -235,7 +244,119 @@ $ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php test_sigmoid sigmoid_15_hidd
 2020.12.05 16:17:45 INFO: Global error: 0.010336682082723.
 2020.12.05 16:17:45 INFO: Success guess amount: 9311 from 10000.
 
-#####
-##### Results:
-#####
+###########################################################################################################################
+######################################## 4.  PHP 7.4.3, FANN and 400 epochs ###############################################
+###########################################################################################################################
+$ php main.php fann_train_sigmoid 400
+2020.12.05 22:16:25 INFO: Begin FANN sigmoid training.
+2020.12.05 22:24:09 INFO: Memory used: 2 MB
+2020.12.05 22:24:09 INFO: Peak of memory allocated by PHP: 2 MB
+2020.12.05 22:24:09 INFO: Network configuration file location: data/fann/fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_400_epochs_php_version_7.4.3.dat
+2020.12.05 22:24:09 INFO: Used for train 60000 images and 60000 labels.
+2020.12.05 22:24:09 INFO: Maximum number of epochs the training should continue: 400
+2020.12.05 22:24:09 INFO: Done training in 0:07:44.617
 
+$ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_400_epochs_php_version_7.4.3.dat
+2020.12.06 09:29:15 INFO: Begin FANN sigmoid testing.
+2020.12.06 09:29:17 INFO: Read test images.
+2020.12.06 09:29:17 INFO: Read test labels.
+2020.12.06 09:29:17 INFO: Finished testing.
+2020.12.06 09:29:17 INFO: Memory used: 360 MB
+2020.12.06 09:29:17 INFO: Peak of memory allocated by PHP: 360 MB
+2020.12.06 09:29:17 INFO: Done testing in 0:00:02.032
+2020.12.06 09:29:17 INFO: Data location: data/fann
+2020.12.06 09:29:17 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.06 09:29:17 INFO: Learning rate: 0.20000000298023
+2020.12.06 09:29:17 INFO: Learning momentum: 0.69999998807907
+2020.12.06 09:29:17 INFO: Number of cascade candidate stagnation epochs: 12
+2020.12.06 09:29:17 INFO: Maximum candidate epochs: 150
+2020.12.06 09:29:17 INFO: Maximum out epochs: 150
+2020.12.06 09:29:17 INFO: Minimum candidate epochs: 50
+2020.12.06 09:29:17 INFO: Minimum out epochs: 50
+2020.12.06 09:29:17 INFO: Number of cascade output stagnation epochs: 12
+2020.12.06 09:29:17 INFO: Last error number: 0
+2020.12.06 09:29:17 INFO: Mean square error from in network: 0
+2020.12.06 09:29:17 INFO: Sarprop step error shift: 1.3849999904633
+2020.12.06 09:29:17 INFO: Sarprop step error threshold factor: 0.10000000149012
+2020.12.06 09:29:17 INFO: Success guess amount: 8400 from 10000.
+
+###########################################################################################################################
+######################################## 5.  PHP 7.4.3, FANN and 800 epochs ###############################################
+###########################################################################################################################
+$ php main.php fann_train_sigmoid 800
+2020.12.06 09:31:58 INFO: Begin FANN sigmoid training.
+2020.12.06 09:46:57 INFO: Memory used: 2 MB
+2020.12.06 09:46:57 INFO: Peak of memory allocated by PHP: 2 MB
+2020.12.06 09:46:57 INFO: Network configuration file location: data/fann/fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_800_epochs_php_version_7.4.3.dat
+2020.12.06 09:46:57 INFO: Used for train 60000 images and 60000 labels.
+2020.12.06 09:46:57 INFO: Maximum number of epochs the training should continue: 800
+2020.12.06 09:46:57 INFO: Done training in 0:14:59.432
+
+$ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_800_epochs_php_version_7.4.3.dat
+2020.12.06 11:59:32 INFO: Begin FANN sigmoid testing.
+2020.12.06 11:59:34 INFO: Read test images.
+2020.12.06 11:59:34 INFO: Read test labels.
+2020.12.06 11:59:34 INFO: Finished testing.
+2020.12.06 11:59:34 INFO: Memory used: 360 MB
+2020.12.06 11:59:34 INFO: Peak of memory allocated by PHP: 360 MB
+2020.12.06 11:59:34 INFO: Done testing in 0:00:02.06
+2020.12.06 11:59:34 INFO: Data location: data/fann
+2020.12.06 11:59:34 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.06 11:59:34 INFO: Learning rate: 0.20000000298023
+2020.12.06 11:59:34 INFO: Learning momentum: 0.69999998807907
+2020.12.06 11:59:34 INFO: Number of cascade candidate stagnation epochs: 12
+2020.12.06 11:59:34 INFO: Maximum candidate epochs: 150
+2020.12.06 11:59:34 INFO: Maximum out epochs: 150
+2020.12.06 11:59:34 INFO: Minimum candidate epochs: 50
+2020.12.06 11:59:34 INFO: Minimum out epochs: 50
+2020.12.06 11:59:34 INFO: Number of cascade output stagnation epochs: 12
+2020.12.06 11:59:34 INFO: Last error number: 0
+2020.12.06 11:59:34 INFO: Mean square error from in network: 0
+2020.12.06 11:59:34 INFO: Sarprop step error shift: 1.3849999904633
+2020.12.06 11:59:34 INFO: Sarprop step error threshold factor: 0.10000000149012
+2020.12.06 11:59:34 INFO: Success guess amount: 8604 from 10000.
+
+###########################################################################################################################
+######################################## 6.  PHP 8.0.0 + JIT ##############################################################
+###########################################################################################################################
+$ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php train_sigmoid 20
+
+###########################################################################################################################
+######################################## 99. Results ######################################################################
+###########################################################################################################################
+#####
+##### 2020.12.06 - PHP 8.0.0 + JIT.
+#####
+Atlikau eksperimentą kaip įtakoja PHP versija ir JIT ANN mokymą.
+Naudojau MNIST 60 000 ranka rašytų skaičių (24x24px) DB.
+Sigmoid aktyvacijos funkciją, 3 sluoksnių tinklą su 15 hidden sluoksnių.
+Mokymui naudojau 20 epochų.
+
+Su PHP 7.4.3 viskas truko: 2:36:59
+Su PHP 8.0.0 viskas truko: 2:31:20
+
+Skirtumas nelabai įspūdingas, tad pradėjau aiškintis:
+
+1. JIT will only work if opcache is enabled
+php -dopcache.enable=1 -dopcache.jit_buffer_size=100M
+
+/c/Programs/php-8.0.0-Win32-vs16-x64/php -dopcache.enable=1 -dopcache.jit_buffer_size=100M
+/c/Programs/php-8.0.0-Win32-vs16-x64/php -dopcache.enable_cli=1 -dopcache.jit_buffer_size=100M
+
+$ vi /c/Programs/php-8.0.0-Win32-vs16-x64/php.ini
+
+...
+extension_dir = "ext"
+opcache.enable=On
+opcache.enable_cli=On
+zend_extension=opcache
+opcache.jit_buffer_size=100M
+...
+
+----------------------------------------------------------------
+
+/c/Programs/php-8.0.0-Win32-vs16-x64/php -i | grep "Loaded Configuration File"
+
+/c/Programs/php-8.0.0-Win32-vs16-x64/php main.php check_jit
+
+----------------------------------------------------------------
