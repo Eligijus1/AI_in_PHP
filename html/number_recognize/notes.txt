@@ -320,6 +320,36 @@ $ php main.php fann_test_sigmoid fann_sigmoid_15_hidden_layers_0.2_learning_rate
 ######################################## 6.  PHP 8.0.0 + JIT ##############################################################
 ###########################################################################################################################
 $ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php train_sigmoid 20
+2020.12.06 12:03:32 INFO: Begin training with sigmoid.
+2020.12.06 12:03:32 INFO: Learning rate: 0.2; Momentum: 0.7; Max epochs: 20
+2020.12.06 12:03:32 INFO: Created Sigmoid object.
+2020.12.06 12:03:32 INFO: Read train labels.
+2020.12.06 12:03:38 INFO: Read train images.
+2020.12.06 12:03:53 INFO: Prepared training DataSet.
+2020.12.06 12:45:44 INFO: Training finished.
+2020.12.06 12:45:44 INFO: Memory used: 2.55 GB
+2020.12.06 12:45:44 INFO: Peak of memory allocated by PHP: 4.2 GB
+2020.12.06 12:45:44 INFO: Network configuration file location: data/train_sigmoid/sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_20_epochs_php_version_8.0.0.dat
+2020.12.06 12:45:44 INFO: Used for train 60000 images and 60000 labels.
+2020.12.06 12:45:44 INFO: Maximum number of epochs the training should continue: 20
+2020.12.06 12:45:44 INFO: Done training in 0:42:12.351
+
+$ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php test_sigmoid sigmoid_15_hidden_layers_0.2_learning_rate_0.7_momentum_0.001_min_error_20_epochs_php_version_8.0.0.dat
+2020.12.06 14:33:43 INFO: Begin testing with sigmoid.
+2020.12.06 14:33:44 INFO: Read test images.
+2020.12.06 14:33:44 INFO: Read test labels.
+2020.12.06 14:33:49 INFO: Prepared testing DataSet.
+2020.12.06 14:33:49 INFO: Memory used: 20 MB
+2020.12.06 14:33:49 INFO: Peak of memory allocated by PHP: 362 MB
+2020.12.06 14:33:49 INFO: Done testing in 0:00:06.494
+2020.12.06 14:33:49 INFO: Data location: data/train_sigmoid
+2020.12.06 14:33:49 INFO: Used for testing 10000 images and 10000 labels.
+2020.12.06 14:33:49 INFO: Learning rate: 0.2.
+2020.12.06 14:33:49 INFO: Momentum: 0.7.
+2020.12.06 14:33:49 INFO: Epochs number: 20.
+2020.12.06 14:33:49 INFO: Global error: 0.010256099812712.
+2020.12.06 14:33:49 INFO: Success guess amount: 9299 from 10000.
+
 
 ###########################################################################################################################
 ######################################## 99. Results ######################################################################
@@ -330,12 +360,17 @@ $ /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php train_sigmoid 20
 Atlikau eksperimentą kaip įtakoja PHP versija ir JIT ANN mokymą.
 Naudojau MNIST 60 000 ranka rašytų skaičių (24x24px) DB.
 Sigmoid aktyvacijos funkciją, 3 sluoksnių tinklą su 15 hidden sluoksnių.
-Mokymui naudojau 20 epochų.
+Mokymui naudojau 20 epochų su savo rašytu lib (pranešime kur pasakojau).
 
 Su PHP 7.4.3 viskas truko: 2:36:59
 Su PHP 8.0.0 viskas truko: 2:31:20
+Su PHP 8.0.0 + JIT: 0:42:12
+Pagerėjimas akivaizdus.
 
-Skirtumas nelabai įspūdingas, tad pradėjau aiškintis:
+Iš kitos pusės su tais pačiais parametrais panaudojau PHP 7.4.3 su FANN biblioteka (https://www.php.net/manual/en/book.fann.php),
+tai užteko 39 sekundžių :)
+
+----------------------------------------------------------------
 
 1. JIT will only work if opcache is enabled
 php -dopcache.enable=1 -dopcache.jit_buffer_size=100M
@@ -360,3 +395,4 @@ opcache.jit_buffer_size=100M
 /c/Programs/php-8.0.0-Win32-vs16-x64/php main.php check_jit
 
 ----------------------------------------------------------------
+
