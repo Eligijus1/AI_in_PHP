@@ -8,9 +8,9 @@ Vagrant.require_version ">= 1.8"
 Vagrant.configure("2") do |config|
     config.ssh.forward_agent = true
 
-    # Configure our project to use Official Ubuntu Server 18.04 LTS 
+    # Configure our project to use Official Ubuntu 20.04.1 LTS
     # (Trusty Tahr) build as a base:
-    config.vm.box = "ubuntu/bionic64"
+    config.vm.box = "ubuntu/focal64"
 
     # The hostname the machine should have. Defaults to nil. If nil, 
     # Vagrant will not manage the hostname. If set to a string, the 
