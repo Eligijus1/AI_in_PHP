@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 echo "# IPv4 and IPv6 localhost aliases:" | sudo tee /etc/hosts
-echo "127.0.0.1 vagrant.RavenDB.test.com  vagrant.RavenDB.test  localhost" | sudo tee -a /etc/hosts
-echo "::1       vagrant.RavenDB.test.com  vagrant.RavenDB.test  localhost" | sudo tee -a /etc/hosts
-echo "10.0.2.15 vagrant.RavenDB.test.com  vagrant.RavenDB.test  localhost" | sudo tee -a /etc/hosts
+echo "127.0.0.1 vagrant.ai.test.com  vagrant.ai.test  localhost" | sudo tee -a /etc/hosts
+echo "::1       vagrant.ai.test.com  vagrant.ai.test  localhost" | sudo tee -a /etc/hosts
+echo "10.0.2.15 vagrant.ai.test.com  vagrant.ai.test  localhost" | sudo tee -a /etc/hosts
 
 # Update packages:
 apt-get update
@@ -18,7 +18,7 @@ if ! [ -L /var/www ]; then
   ln -fs /vagrant /var/www
 fi
 
-# Installing PHP 7.2 and some extra libraries:
+# Installing PHP and some extra libraries:
 sudo apt-get install -y php
 sudo apt-get install -y php-curl
 sudo apt-get install -y php-gd
@@ -41,7 +41,6 @@ sudo apt-get install -y git
 
 # Install PHP FANN:
 sudo apt-get install -y libfann*
-
 cd /tmp/
 wget http://pecl.php.net/get/fann
 mkdir fann-latest
@@ -55,7 +54,6 @@ make
 sudo cp -R /tmp/fann-latest/modules/* /usr/lib/php/20170718/
 sudo sh -c "echo 'extension=fann.so' > /etc/php/7.2/mods-available/fann.ini"
 sudo phpenmod fann
-
 sudo ln -s /etc/php/7.2/mods-available/fann.ini /etc/php/7.2/apache2/conf.d/30-fann.ini
 sudo service apache2 restart
 
