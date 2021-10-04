@@ -13,9 +13,11 @@ sudo apt-get install -y nmap
 
 # Apache install:
 apt-get install -y apache2
+
+# Make in Apache available all source (html) directory:
 if ! [ -L /var/www ]; then
-  rm -rf /var/www
-  ln -fs /vagrant /var/www
+  rm -rf /var/www/html
+  ln -fs /vagrant/html /var/www/html
 fi
 
 # Installing PHP and some extra libraries:
@@ -51,10 +53,10 @@ export LC_ALL=en_US.UTF-8
 phpize
 ./configure
 make
-sudo cp -R /tmp/fann-latest/modules/* /usr/lib/php/20170718/
-sudo sh -c "echo 'extension=fann.so' > /etc/php/7.2/mods-available/fann.ini"
+sudo cp -R /tmp/fann-latest/modules/* /usr/lib/php/20190902/
+sudo sh -c "echo 'extension=fann.so' > /etc/php/7.4/mods-available/fann.ini"
 sudo phpenmod fann
-sudo ln -s /etc/php/7.2/mods-available/fann.ini /etc/php/7.2/apache2/conf.d/30-fann.ini
+sudo ln -s /etc/php/7.4/mods-available/fann.ini /etc/php/7.4/apache2/conf.d/30-fann.ini
 sudo service apache2 restart
 
 # Check loaded PHP modules:
