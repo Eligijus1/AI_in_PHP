@@ -59,6 +59,24 @@ sudo phpenmod fann
 sudo ln -s /etc/php/7.4/mods-available/fann.ini /etc/php/7.4/apache2/conf.d/30-fann.ini
 sudo service apache2 restart
 
+# Install PHP opencv:
+cd /tmp/
+wget https://raw.githubusercontent.com/php-opencv/php-opencv-packages/master/opencv_4.5.0_amd64.deb
+sudo dpkg -i opencv_4.5.0_amd64.deb
+rm -f opencv_4.5.0_amd64.deb
+
+sudo apt install -y pkg-config cmake git php-dev
+git clone https://github.com/php-opencv/php-opencv.git
+cd php-opencv
+git checkout php7.4
+phpize
+./configure --with-php-config=/usr/bin/php-config
+make
+sudo make install
+
+sudo sh -c "echo 'extension=opencv.so' > /etc/php/7.4/mods-available/opencv.ini"
+sudo phpenmod opencv
+
 # Check loaded PHP modules:
 echo "Loaded PHP extensions:"
 php -m
